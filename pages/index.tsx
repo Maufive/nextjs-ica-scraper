@@ -1,58 +1,32 @@
-import React from "react";
-import { GetStaticProps } from "next";
-import Layout from "../components/Layout";
-import Post, { PostProps } from "../components/Post";
-import prisma from '../lib/prisma'
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   const feed = await prisma.post.findMany({
-//     where: {
-//       published: true,
-//     },
-//     include: {
-//       author: {
-//         select: {
-//           name: true,
-//         },
-//       },
-//     },
-//   });
-//   return {
-//     props: { feed },
-//   };
-// };
-
-type Props = {
-  feed: PostProps[];
-};
+import React from 'react';
+import Layout from '../components/Layout';
 
 const Blog: React.FC = () => {
-
-
   const postRecipie = async () => {
     const ICA_URL = 'https://www.ica.se/recept/varldens-godaste-appelsmulpaj-714125/';
     const body = { url: ICA_URL };
 
-    const response = await fetch(`http://localhost:3000/api/recipies`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('http://localhost:3000/api/recipies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
     const json = await response.json();
 
     console.log(json);
-  }
+  };
 
   return (
     <Layout>
       <div className="page">
         <h1>Public Feed</h1>
         <main>
-          <button onClick={postRecipie}>CLICK ME</button>
+          <button type="button" onClick={postRecipie}>CLICK ME</button>
         </main>
       </div>
-      <style jsx>{`
+      <style jsx>
+        {`
         .post {
           background: white;
           transition: box-shadow 0.1s ease-in;
@@ -65,7 +39,8 @@ const Blog: React.FC = () => {
         .post + .post {
           margin-top: 2rem;
         }
-      `}</style>
+      `}
+      </style>
     </Layout>
   );
 };

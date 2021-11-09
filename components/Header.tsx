@@ -1,23 +1,23 @@
-import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/client";
+import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { signOut, useSession } from 'next-auth/client';
 
 const Header: React.FC = () => {
   const router = useRouter();
-  const isActive: (pathname: string) => boolean = (pathname) =>
-    router.pathname === pathname;
+  const isActive: (pathname: string) => boolean = (pathname) => router.pathname === pathname;
 
   const [session, loading] = useSession();
 
   let left = (
     <div className="left">
       <Link href="/">
-        <a className="bold" data-active={isActive("/")}>
+        <a className="bold" data-active={isActive('/')} href="/">
           Feed
         </a>
       </Link>
-      <style jsx>{`
+      <style jsx>
+        {`
         .bold {
           font-weight: bold;
         }
@@ -35,7 +35,8 @@ const Header: React.FC = () => {
         a + a {
           margin-left: 1rem;
         }
-      `}</style>
+      `}
+      </style>
     </div>
   );
 
@@ -45,11 +46,12 @@ const Header: React.FC = () => {
     left = (
       <div className="left">
         <Link href="/">
-          <a className="bold" data-active={isActive("/")}>
+          <a className="bold" data-active={isActive('/')} href="/">
             Feed
           </a>
         </Link>
-        <style jsx>{`
+        <style jsx>
+          {`
           .bold {
             font-weight: bold;
           }
@@ -67,17 +69,20 @@ const Header: React.FC = () => {
           a + a {
             margin-left: 1rem;
           }
-        `}</style>
+        `}
+        </style>
       </div>
     );
     right = (
       <div className="right">
         <p>Validating session ...</p>
-        <style jsx>{`
+        <style jsx>
+          {`
           .right {
             margin-left: auto;
           }
-        `}</style>
+        `}
+        </style>
       </div>
     );
   }
@@ -86,9 +91,10 @@ const Header: React.FC = () => {
     right = (
       <div className="right">
         <Link href="/api/auth/signin">
-          <a data-active={isActive("/signup")}>Log in</a>
+          <a href="/" data-active={isActive('/signup')}>Log in</a>
         </Link>
-        <style jsx>{`
+        <style jsx>
+          {`
           a {
             text-decoration: none;
             color: #000;
@@ -108,7 +114,8 @@ const Header: React.FC = () => {
             padding: 0.5rem 1rem;
             border-radius: 3px;
           }
-        `}</style>
+        `}
+        </style>
       </div>
     );
   }
@@ -117,14 +124,15 @@ const Header: React.FC = () => {
     left = (
       <div className="left">
         <Link href="/">
-          <a className="bold" data-active={isActive("/")}>
+          <a href="/" className="bold" data-active={isActive('/')}>
             Feed
           </a>
         </Link>
         <Link href="/drafts">
-          <a data-active={isActive("/drafts")}>My drafts</a>
+          <a href="/" data-active={isActive('/drafts')}>My drafts</a>
         </Link>
-        <style jsx>{`
+        <style jsx>
+          {`
           .bold {
             font-weight: bold;
           }
@@ -142,23 +150,29 @@ const Header: React.FC = () => {
           a + a {
             margin-left: 1rem;
           }
-        `}</style>
+        `}
+        </style>
       </div>
     );
     right = (
       <div className="right">
         <p>
-          {session.user.name} ({session.user.email})
+          {session.user.name}
+          {' '}
+          (
+          {session.user.email}
+          )
         </p>
         <Link href="/create">
-          <button>
-            <a>New post</a>
+          <button type="button">
+            New post
           </button>
         </Link>
-        <button onClick={() => signOut()}>
-          <a>Log out</a>
+        <button type="button" onClick={() => signOut()}>
+          Log out
         </button>
-        <style jsx>{`
+        <style jsx>
+          {`
           a {
             text-decoration: none;
             color: #000;
@@ -188,7 +202,8 @@ const Header: React.FC = () => {
           button {
             border: none;
           }
-        `}</style>
+        `}
+        </style>
       </div>
     );
   }
@@ -197,13 +212,15 @@ const Header: React.FC = () => {
     <nav>
       {left}
       {right}
-      <style jsx>{`
+      <style jsx>
+        {`
         nav {
           display: flex;
           padding: 2rem;
           align-items: center;
         }
-      `}</style>
+      `}
+      </style>
     </nav>
   );
 };

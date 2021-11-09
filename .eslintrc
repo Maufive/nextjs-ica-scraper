@@ -1,0 +1,13 @@
+{
+    "extends": [
+        "airbnb",
+        "airbnb-typescript"
+    ],
+      "rules": {
+          "import/no-mutable-exports": "off",
+          "consistent-return": "off"
+    },
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    }
+}
