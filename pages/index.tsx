@@ -1,55 +1,29 @@
 import React from 'react';
+import { Flex } from '@chakra-ui/react';
 import Layout from '../components/Layout';
+import { useAppSelector, useAppDispatch } from '../state/redux-hooks';
+import { submitNewRecipe, selectRecipeLoading, selectRecipe } from '../components/Submit/SubmitRecipeSlice';
+import SubmitRecipe from '../components/Submit/SubmitRecipe';
 
-const Blog: React.FC = () => {
-  const [value, setValue] = React.useState('');
+const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector(selectRecipeLoading);
+  const recipe = useAppSelector(selectRecipe);
 
-  const postRecipie = React.useCallback(async () => {
-    // const ICA_URL = 'https://www.ica.se/recept/varldens-godaste-appelsmulpaj-714125/';
-    const body = { url: value };
+  const handleSubmit = React.useCallback((url: string) => {
+    dispatch(submitNewRecipe(url));
+  }, [dispatch]);
 
-    console.log(body);
-
-    const response = await fetch('http://localhost:3000/api/recipies', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-
-    const json = await response.json();
-
-    console.log(json);
-  }, [value]);
+  console.log(recipe);
+  console.log(loading);
 
   return (
     <Layout>
-      <div className="page">
-        <h1>Public Feed</h1>
-        <main>
-          <form onSubmit={postRecipie}>
-            <input type="text" value={value} onChange={(e) => setValue(e.target.value)} />
-            <button type="submit">CLICK ME</button>
-          </form>
-        </main>
-      </div>
-      <style jsx>
-        {`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}
-      </style>
+      <Flex w="100%" align="center" justify="center">
+        <SubmitRecipe handleSubmit={handleSubmit} isLoading={loading} />
+      </Flex>
     </Layout>
   );
 };
 
-export default Blog;
+export default Home;
