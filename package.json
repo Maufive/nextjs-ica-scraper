@@ -11,13 +11,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.1.0",
+    "@chakra-ui/react": "^1.7.0",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
     "@prisma/client": "3.4.1",
-    "chrome-aws-lambda": "^10.1.0",
+    "@reduxjs/toolkit": "^1.6.2",
+    "framer-motion": "^4.1.17",
     "next": "12.0.0",
     "next-auth": "3.29.0",
-    "puppeteer-core": "^10.4.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-redux": "^7.2.6"
   },
   "devDependencies": {
     "@types/next-auth": "3.13.0",
@@ -35,8 +40,5 @@
     "prisma": "3.4.1",
     "ts-node": "10.4.0",
     "typescript": "4.4.4"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   }
 }

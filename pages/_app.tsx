@@ -1,11 +1,18 @@
 import React from 'react';
 import { Provider } from 'next-auth/client';
 import { AppProps } from 'next/app';
+import { ChakraProvider } from '@chakra-ui/react';
+import { Provider as StateProvider } from 'react-redux';
+import { store } from '../state/store';
 
 const App = ({ Component, pageProps }: AppProps) => (
-  <Provider session={pageProps.session}>
-    <Component />
-  </Provider>
+  <StateProvider store={store}>
+    <Provider session={pageProps.session}>
+      <ChakraProvider>
+        <Component />
+      </ChakraProvider>
+    </Provider>
+  </StateProvider>
 );
 
 export default App;

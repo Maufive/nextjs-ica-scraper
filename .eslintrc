@@ -5,7 +5,8 @@
     ],
       "rules": {
           "import/no-mutable-exports": "off",
-          "consistent-return": "off"
+          "consistent-return": "off",
+          "no-param-reassign": "off"
     },
     "parserOptions": {
         "project": "./tsconfig.json"
