@@ -68,7 +68,7 @@ const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) 
               pattern="https://www.ica.se/recept/.*"
               aria-label="Länk till recept"
               value={value}
-              disabled={isLoading !== 'idle'}
+              disabled={isLoading === 'pending'}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
             />
           </FormControl>
@@ -83,15 +83,14 @@ const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) 
             </Button>
           </FormControl>
         </Stack>
-        <Text
-          mt={2}
-          textAlign="center"
-          color={isLoading === 'failed' ? 'red.500' : 'gray.500'}
-        >
-          {isLoading === 'failed'
-            ? 'Åh nej, något gick fel! 😢 Prova igen snart.'
-            : ''}
-        </Text>
+        {isLoading === 'failed' && (
+          <Text
+            mt={2}
+            color={isLoading === 'failed' ? 'red.500' : 'gray.500'}
+          >
+            Åh nej, något gick fel! 😢 Prova igen snart.
+          </Text>
+        )}
       </Container>
     </Flex>
   );

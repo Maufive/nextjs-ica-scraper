@@ -4,6 +4,7 @@ export interface NavItem {
   children?: Array<NavItem>;
   href?: string;
   disabled?: boolean;
+  promoted?: boolean;
 }
 
 const NAV_ITEMS: Array<NavItem> = [
@@ -20,6 +21,7 @@ const NAV_ITEMS: Array<NavItem> = [
   {
     label: 'Skapa matkasse',
     href: '/matkasse',
+    promoted: true,
   },
 ];
 

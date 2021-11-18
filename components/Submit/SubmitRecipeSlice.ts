@@ -1,31 +1,14 @@
 import {
   createSlice,
-  //   PayloadAction,
+  PayloadAction,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../state/store';
-
-interface Ingredient {
-  amount: string;
-  name: string;
-}
-
-interface Recipe {
-  title: String;
-  description: string | null;
-  imageSrc: string | null;
-  ratings: string;
-  time: string;
-  difficulty: string;
-  amountOfIngredients: string;
-  ingredients: Ingredient[];
-  url: string;
-  categories: string[];
-}
+import { Recipe } from '../../types/recipe';
 
 export type RecipeState = {
   recipe: Recipe | {};
-  loading: 'pending' | 'success' | 'failed' | 'idle';
+  loading: 'pending' | 'success' | 'failed' | 'idle' | 'duplicate';
   error: string | null;
 };
 
@@ -35,7 +18,7 @@ const initialState: RecipeState = {
   error: null,
 };
 
-export const submitNewRecipe = createAsyncThunk('recipe/recipe', async (url: string) => {
+export const submitNewRecipe = createAsyncThunk('submit/submitNewRecipe', async (url: string) => {
   const body = { url };
 
   try {
@@ -47,27 +30,22 @@ export const submitNewRecipe = createAsyncThunk('recipe/recipe', async (url: str
       body: JSON.stringify(body),
     });
 
-    const json = await response.json();
-    return json;
+    const data = await response.json();
+
+    return data;
   } catch (error) {
     console.error(error);
     return 'Det gick inte att spara receptet';
   }
 });
 
-export const recipeSlice = createSlice({
+export const submitSlice = createSlice({
   name: 'recipe',
   initialState,
   reducers: {
-    // increment: (state) => {
-    //   state.value += 1;
-    // },
-    // decrement: (state) => {
-    //   state.value -= 1;
-    // },
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload;
-    // },
+    resetLoading: (state, action: PayloadAction<'idle'>) => {
+      state.loading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -78,19 +56,21 @@ export const recipeSlice = createSlice({
         state.loading = 'failed';
       })
       .addCase(submitNewRecipe.fulfilled, (state, { payload }) => {
+        if (payload.status && payload.status === 409) {
+          state.loading = 'duplicate';
+          return;
+        }
         state.recipe = payload;
         state.loading = 'success';
       });
   },
 });
 
-// export const {
-//   increment,
-//   decrement,
-//   incrementByAmount,
-// } = recipeSlice.actions;
+export const {
+  resetLoading,
+} = submitSlice.actions;
 
-export const selectRecipe = (state: RootState) => state.recipe.recipe;
-export const selectRecipeLoading = (state: RootState) => state.recipe.loading;
+export const selectRecipe = (state: RootState) => state.submit.recipe;
+export const selectRecipeLoading = (state: RootState) => state.submit.loading;
 
-export default recipeSlice.reducer;
+export default submitSlice.reducer;

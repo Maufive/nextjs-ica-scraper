@@ -13,6 +13,7 @@ import NAV_ITEMS from './nav-items';
 const DesktopNav = () => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
+  const promotedLinkColor = useColorModeValue('blue.500', 'blue.300');
 
   return (
     <Stack direction="row" spacing={4} align="center">
@@ -24,8 +25,8 @@ const DesktopNav = () => {
                 <LinkStyles
                   p={2}
                   fontSize="sm"
-                  fontWeight={500}
-                  color={linkColor}
+                  fontWeight={navItem.promoted ? 600 : 500}
+                  color={navItem.promoted ? promotedLinkColor : linkColor}
                   _hover={{
                     textDecoration: 'none',
                     color: linkHoverColor,

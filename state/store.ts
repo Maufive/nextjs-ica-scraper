@@ -3,11 +3,13 @@ import {
   configureStore,
   ThunkAction,
 } from '@reduxjs/toolkit';
-import recipe from '../components/Submit/SubmitRecipeSlice';
+import submit from '../components/Submit/SubmitRecipeSlice';
+import recipes from './recipe-duck';
 
 export const store = configureStore({
   reducer: {
-    recipe,
+    submit,
+    recipes,
   },
 });
 

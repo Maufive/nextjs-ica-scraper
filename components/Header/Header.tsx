@@ -13,19 +13,31 @@ import {
   useBreakpointValue,
   useDisclosure,
   useColorMode,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  Center,
+  MenuItem,
+  MenuDivider,
+  Avatar,
 } from '@chakra-ui/react';
 import {
-  HamburgerIcon,
-  CloseIcon,
-  MoonIcon,
-  SunIcon,
-} from '@chakra-ui/icons';
+  MoonIcon, MenuIcon, XIcon,
+} from '@heroicons/react/solid';
+import { SunIcon } from '@heroicons/react/outline';
+import { signIn, signOut, useSession } from 'next-auth/client';
 import DesktopNav from './Desktop';
 import MobileNav from './Mobile';
 
 export default function Header() {
+  const [session] = useSession();
   const { isOpen, onToggle } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const handleSignInClick = () => {
+    signIn();
+  };
 
   return (
     <Box width="100%">
@@ -48,7 +60,7 @@ export default function Header() {
           <IconButton
             onClick={onToggle}
             icon={
-              isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
+              isOpen ? <Icon as={XIcon} w={3} h={3} /> : <Icon as={MenuIcon} w={5} h={5} />
             }
             variant="ghost"
             aria-label="Toggle Navigation"
@@ -78,7 +90,7 @@ export default function Header() {
 
         <Flex mr="6" display={{ base: 'none', md: 'inline-flex' }}>
           <Button onClick={toggleColorMode}>
-            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            {colorMode === 'light' ? <Icon as={MoonIcon} /> : <Icon as={SunIcon} />}
           </Button>
         </Flex>
 
@@ -88,28 +100,52 @@ export default function Header() {
           direction="row"
           spacing={6}
         >
-          <Button
-            as="a"
-            fontSize="sm"
-            fontWeight={400}
-            variant="link"
-            href="#"
-          >
-            Sign In
-          </Button>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize="sm"
-            fontWeight={600}
-            color="gray.50"
-            bg="green.400"
-            href="#"
-            _hover={{
-              bg: 'green.300',
-            }}
-          >
-            Sign Up
-          </Button>
+          {session?.user ? (
+            <Menu>
+              <MenuButton
+                as={Button}
+                rounded="full"
+                variant="link"
+                cursor="pointer"
+                minW={0}
+              >
+                <Avatar
+                  size="sm"
+                  src={session.user.image}
+                />
+              </MenuButton>
+              <MenuList alignItems="center">
+                <br />
+                <Center>
+                  <Avatar
+                    size="lg"
+                    src={session.user.image}
+                  />
+                </Center>
+                <br />
+                <Center>
+                  <p>{session.user.name}</p>
+                </Center>
+                <br />
+                <MenuDivider />
+                <MenuItem onClick={() => signOut()}><p>Logout</p></MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <Button
+              onClick={handleSignInClick}
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize="sm"
+              fontWeight={600}
+              color="gray.50"
+              bg="green.400"
+              _hover={{
+                bg: 'green.300',
+              }}
+            >
+              Logga in
+            </Button>
+          )}
         </Stack>
       </Flex>
 
