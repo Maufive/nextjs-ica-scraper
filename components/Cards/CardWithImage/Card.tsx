@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import {
   Box,
+  Flex,
   Heading,
   Text,
   Stack,
@@ -33,13 +34,11 @@ const Card: React.FC<CardProps> = ({
   onClickFetchNewRecipe,
   id,
 }) => (
-  <Box
-    py={6}
+  <Flex
     _notLast={{ marginRight: '1.5rem' }}
   >
     <Box
-      maxW="375px"
-      w={{ base: '325px', md: '245px' }}
+      w="350px"
       bg={useColorModeValue('white', 'gray.900')}
       boxShadow="2xl"
       rounded="md"
@@ -75,7 +74,7 @@ const Card: React.FC<CardProps> = ({
         </HStack>
         <Heading
           color={useColorModeValue('gray.700', 'white')}
-          fontSize="md"
+          fontSize="xl"
           fontFamily="body"
           isTruncated
         >
@@ -88,18 +87,19 @@ const Card: React.FC<CardProps> = ({
           onClick={() => toggleLockRecipe(id)}
           icon={isLocked ? <Icon as={LockClosedIcon} /> : <Icon as={LockOpenIcon} />}
           aria-label="Lås recept"
-          variant="outline"
+          variant={isLocked ? 'solid' : 'solid'}
         />
         <IconButton
           size="md"
           onClick={() => onClickFetchNewRecipe(id)}
           icon={<Icon as={RefreshIcon} />}
           aria-label="Byt ut recept"
-          variant="outline"
+          variant="solid"
+          disabled={isLocked}
         />
       </Stack>
     </Box>
-  </Box>
+  </Flex>
 );
 
 export default Card;

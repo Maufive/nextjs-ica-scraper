@@ -12,6 +12,7 @@ const Layout: React.FC<Props> = ({ children }) => (
     align="center"
     spacing={6}
     bg={useColorModeValue('gray.50', 'gray.800')}
+    minH="100vh"
   >
     <Header />
     <Flex p={{ base: 4, md: 6 }} w={{ base: '375px', md: '100%' }}>{children}</Flex>
