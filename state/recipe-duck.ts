@@ -38,6 +38,26 @@ export const fetchAllRecipes = createAsyncThunk('recipe/fetchAllRecipes', async 
   }
 });
 
+export const fetchManyRecipes = createAsyncThunk('recipe/fetchManyRecipes', async (filters: Filters) => {
+  try {
+    const body = JSON.stringify(filters);
+    const url = '/api/recipes/findMany';
+    const response = await fetch(url, {
+      method: 'POST',
+      body,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const recipes: Recipe[] = await response.json();
+    const { idsToReplace } = filters;
+
+    return { idsToReplace, recipes };
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 export const fetchSingleRecipe = createAsyncThunk('recipe/fetchSingleRecipe', async (filters: Filters) => {
   try {
     const body = JSON.stringify(filters);
@@ -49,15 +69,11 @@ export const fetchSingleRecipe = createAsyncThunk('recipe/fetchSingleRecipe', as
         'Content-Type': 'application/json',
       },
     });
-    const json = await response.json();
-    const data = {
-      idToReplace: filters.idToReplace,
-      ...json,
-    };
-    return data;
+    const newRecipe = await response.json();
+
+    return { idToReplace: filters.idToReplace, newRecipe };
   } catch (error) {
     console.error(error);
-    return 'Det gick inte att hämta recepten';
   }
 });
 
@@ -87,12 +103,32 @@ export const recipesSlice = createSlice({
       .addCase(fetchSingleRecipe.rejected, (state) => {
         state.singleRecipeLoading = 'failed';
       })
-      .addCase(fetchSingleRecipe.fulfilled, (state, { payload: { idToReplace, ...rest } }) => {
+      .addCase(fetchSingleRecipe.fulfilled, (state, { payload: { idToReplace, newRecipe } }) => {
         const copy = [...state.recipes];
-        const newState = copy.map((recipe) => (recipe.id !== idToReplace ? recipe : { ...rest }));
+        const newState = copy
+          .map((recipe: Recipe) => {
+            if (recipe.id !== idToReplace) {
+              return recipe;
+            }
+
+            return newRecipe;
+          });
 
         state.recipes = newState;
         state.singleRecipeLoading = 'success';
+      })
+      .addCase(fetchManyRecipes.fulfilled, (state, { payload: { idsToReplace, recipes } }) => {
+        const currentRecipes = [...state.recipes];
+
+        const result = currentRecipes.map((currentRecipe: Recipe, index) => {
+          if (idsToReplace.includes(currentRecipe.id)) {
+            return recipes[index];
+          }
+
+          return currentRecipe;
+        });
+
+        state.recipes = result;
       });
   },
 });

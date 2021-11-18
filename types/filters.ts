@@ -4,4 +4,5 @@ export interface Filters {
   time?: string;
   ids?: string[];
   idToReplace?: string;
+  idsToReplace?: string[];
 }

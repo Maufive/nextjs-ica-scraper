@@ -14,6 +14,7 @@ import {
   selectRecipes,
   fetchAllRecipes,
   fetchSingleRecipe,
+  fetchManyRecipes,
   selectFilters,
   setFilters,
 } from '../state/recipe-duck';
@@ -37,6 +38,21 @@ const PageMatkasse: React.FC = () => {
   const [isSmaller] = useMediaQuery('(max-width: 480px)');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const onClickFetchManyRecipes = React.useCallback(() => {
+    const idsToReplace = recipes
+      .filter((recipe) => lockedRecipes.indexOf(recipe.id) === -1)
+      .map((recipe) => recipe.id);
+
+    dispatch(fetchManyRecipes({
+      ...filters,
+      recipeCount: idsToReplace.length,
+      // Make sure we dont get duplicates by sending all currently visible recipe ids
+      ids: recipes.map((recipe) => recipe.id),
+      // Array of IDs that are NOT currently locked
+      idsToReplace,
+    }));
+  }, [dispatch, recipes, lockedRecipes]);
 
   const onClickSaveFilters = React.useCallback((savedFilters) => {
     dispatch(setFilters(savedFilters));
@@ -68,14 +84,15 @@ const PageMatkasse: React.FC = () => {
   return (
     <Layout>
       <Stack>
-        <Box direction="column" mb={4}>
-          <Heading mb={2}>Skapa din Matkasse</Heading>
+        <Box direction="column" mb={6}>
+          <Heading mb={4}>Skapa din Matkasse</Heading>
           <Button aria-label="Filter" leftIcon={<Icon as={FilterIcon} />} colorScheme="green" variant="solid" onClick={() => onOpen()}>
             Filter
           </Button>
           <GroceryBagModal isOpen={isOpen} onClickSaveFilters={onClickSaveFilters} />
         </Box>
-        <Flex wrap="wrap">
+        <Button onClick={onClickFetchManyRecipes}>Try me</Button>
+        <Flex wrap="wrap" justify="space-evenly">
           {!recipes && (
             <SkeletonCards />
           )}
