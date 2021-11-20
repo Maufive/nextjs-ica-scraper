@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Heading, Stack, Box, Icon, Button, useDisclosure, SimpleGrid,
 } from '@chakra-ui/react';
@@ -29,16 +29,16 @@ const SkeletonCards: React.FC = () => {
   );
 };
 
-const PageMatkasse: React.FC = () => {
+const GroceryBag: React.FC = () => {
   const dispatch = useAppDispatch();
   const isRecipesLoading = useAppSelector(selectRecipesLoading);
   const filters = useAppSelector(selectFilters);
   const recipes = useAppSelector(selectRecipes);
-  const [lockedRecipes, setLockedRecipes] = React.useState<string[]>([]);
+  const [lockedRecipes, setLockedRecipes] = useState<string[]>([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const onClickFetchManyRecipes = React.useCallback(() => {
+  const onClickFetchManyRecipes = useCallback(() => {
     const idsToReplace = recipes
       .filter((recipe) => lockedRecipes.indexOf(recipe.id) === -1)
       .map((recipe) => recipe.id);
@@ -53,12 +53,12 @@ const PageMatkasse: React.FC = () => {
     }));
   }, [dispatch, recipes, lockedRecipes, filters]);
 
-  const onClickSaveFilters = React.useCallback((savedFilters) => {
+  const onClickSaveFilters = useCallback((savedFilters) => {
     dispatch(setFilters(savedFilters));
     onClose();
   }, [dispatch]);
 
-  const onClickFetchNewRecipe = React.useCallback((id) => {
+  const onClickFetchNewRecipe = useCallback((id) => {
     dispatch(fetchSingleRecipe({
       ids: recipes.map((recipe) => recipe.id),
       idToReplace: id,
@@ -66,7 +66,7 @@ const PageMatkasse: React.FC = () => {
     }));
   }, [dispatch, recipes, filters]);
 
-  const onClickLockRecipe = React.useCallback((id) => {
+  const onClickLockRecipe = useCallback((id) => {
     if (lockedRecipes.includes(id)) {
       return setLockedRecipes((prev) => prev.filter((i) => i !== id));
     }
@@ -74,13 +74,11 @@ const PageMatkasse: React.FC = () => {
     setLockedRecipes((prev) => [...prev, id]);
   }, [lockedRecipes]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchInitialRecipes());
   }, [dispatch]);
 
   if (isRecipesLoading === 'failed') return <p>something went wrong :(</p>;
-
-  console.log(recipes);
 
   return (
     <Layout>
@@ -115,4 +113,4 @@ const PageMatkasse: React.FC = () => {
   );
 };
 
-export default PageMatkasse;
+export default GroceryBag;
