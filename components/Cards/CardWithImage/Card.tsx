@@ -89,7 +89,7 @@ const Card: React.FC<CardProps> = ({
           {title}
         </Heading>
       </Stack>
-      <Stack mt={6} direction="row" spacing={4} align="center" justify={{ base: 'space-around', lg: 'start' }}>
+      <Stack mt={6} direction="row" align="center" spacing={4}>
         <IconButton
           size="md"
           onClick={() => toggleLockRecipe(id)}
