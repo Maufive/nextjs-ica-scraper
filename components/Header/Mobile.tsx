@@ -1,81 +1,216 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { motion, useViewportScroll } from 'framer-motion';
 import Link from 'next/link';
+import { signIn, signOut, useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 import {
-  useDisclosure,
   useColorModeValue,
   Stack,
   Flex,
   Text,
   Icon,
   Link as LinkStyles,
-  Collapse,
+  useBreakpointValue,
+  Box,
+  Menu,
+  MenuButton,
+  MenuList,
+  Center,
+  MenuItem,
+  MenuDivider,
+  Avatar,
+  Button,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import NAV_ITEMS, { NavItem } from './nav-items';
+import {
+  ClipboardListIcon, ShoppingBagIcon, BookOpenIcon,
+} from '@heroicons/react/solid';
 
-const MobileNavItem = ({ label, children }: NavItem) => {
-  const { isOpen, onToggle } = useDisclosure();
+const AnimatedStack = motion(Stack);
+
+interface TabItemProps {
+  href: string;
+  label: string;
+  isActive: boolean;
+  // icon: React.ReactElement<IconProps>
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+}
+
+const TabItem: React.FC<TabItemProps> = ({
+  href, icon, label, isActive,
+}) => {
+  const activeColor = useColorModeValue('gray.800', 'gray.100');
+  const inActiveColor = useColorModeValue('gray.100', 'gray.500');
 
   return (
-    <Stack spacing={4} onClick={children && onToggle}>
+    <Link href={href}>
       <Flex
-        py={2}
-        justify="space-between"
+        direction="column"
         align="center"
-        _hover={{
-          textDecoration: 'none',
-        }}
+        role="button"
+        as="button"
       >
+        <Icon as={icon} mb={2} color={isActive ? activeColor : inActiveColor} />
         <Text
-          fontWeight={600}
-          color={useColorModeValue('gray.600', 'gray.200')}
+          textTransform="uppercase"
+          fontWeight={700}
+          fontSize="xs"
+          color={isActive ? activeColor : inActiveColor}
         >
           {label}
         </Text>
-        {children && (
-        <Icon
-          as={ChevronDownIcon}
-          transition="all .25s ease-in-out"
-          transform={isOpen ? 'rotate(180deg)' : ''}
-          w={6}
-          h={6}
-        />
-        )}
       </Flex>
-
-      <Collapse in={isOpen} animateOpacity style={{ marginTop: '0!important' }}>
-        <Stack
-          mt={2}
-          pl={4}
-          borderLeft={1}
-          borderStyle="solid"
-          borderColor={useColorModeValue('gray.200', 'gray.700')}
-          align="start"
-        >
-          {children
-              && children.map((child) => (
-                <Link key={child.label} href={child.label}>
-                  <LinkStyles py={2}>
-                    {child.label}
-                  </LinkStyles>
-                </Link>
-              ))}
-        </Stack>
-      </Collapse>
-    </Stack>
+    </Link>
   );
 };
 
-const MobileNav = () => (
-  <Stack
-    bg={useColorModeValue('white', 'gray.800')}
-    p={4}
-    display={{ md: 'none' }}
-  >
-    {NAV_ITEMS.map((navItem) => (
-      <MobileNavItem key={navItem.label} label={navItem.label} />
-    ))}
-  </Stack>
-);
+const TabMenu = () => {
+  const { pathname } = useRouter();
+  const { scrollY } = useViewportScroll();
 
-export default MobileNav;
+  const [hidden, setHidden] = useState(false);
+
+  const update = useCallback(() => {
+    if (scrollY?.current < scrollY?.prev) {
+      setHidden(false);
+    } else if (scrollY?.current > 100 && scrollY?.current > scrollY?.prev) {
+      setHidden(true);
+    }
+  }, [scrollY]);
+
+  useEffect(() => scrollY.onChange(() => update()), [update]);
+
+  return (
+    <AnimatedStack
+      w="100%"
+      bg={useColorModeValue('gray.50', 'gray.900')}
+      color={useColorModeValue('gray.600', 'gray.50')}
+      minH="60px"
+      py={2}
+      px={4}
+      align="center"
+      justify="space-around"
+      position="fixed"
+      zIndex="2"
+      bottom="0px"
+      direction="row"
+      borderTop={1}
+      borderStyle="solid"
+      borderColor={useColorModeValue('gray.200', 'gray.800')}
+      animate={hidden ? {
+        y: 70,
+      } : {
+        y: 0,
+      }}
+    >
+      <TabItem
+        href="/matkasse"
+        label="Matkasse"
+        isActive={pathname === '/matkasse'}
+        icon={ShoppingBagIcon}
+      />
+      <TabItem
+        href="/inköpslistor"
+        label="Inköpslistor"
+        isActive={pathname === '/inköpslistor'}
+        icon={ClipboardListIcon}
+      />
+      <TabItem
+        href="/recept"
+        label="Recept"
+        isActive={pathname === '/recept'}
+        icon={BookOpenIcon}
+      />
+    </AnimatedStack>
+  );
+};
+
+const MobileHeader = () => {
+  const [session] = useSession();
+
+  const handleSignInClick = () => {
+    signIn();
+  };
+
+  return (
+    <Box width="100%">
+      <Flex
+        bg={useColorModeValue('gray.50', 'gray.800')}
+        color={useColorModeValue('gray.600', 'gray.50')}
+        minH="60px"
+        py={{ base: 2 }}
+        px={{ base: 4 }}
+        align="center"
+      >
+        <Flex flex={{ base: 1 }}>
+          <Link href="/">
+            <Text
+              as={LinkStyles}
+              _hover={{
+                textDecoration: 'none',
+              }}
+              textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
+              fontFamily="heading"
+              fontWeight="700"
+              color={useColorModeValue('gray.800', 'gray.50')}
+            >
+              Veckohandla
+            </Text>
+          </Link>
+        </Flex>
+        <Stack
+          flex={{ base: 1, md: 0 }}
+          justify="flex-end"
+          direction="row"
+          spacing={6}
+        >
+          {session?.user ? (
+            <Menu>
+              <MenuButton
+                as={Button}
+                rounded="full"
+                variant="link"
+                cursor="pointer"
+                minW={0}
+              >
+                <Avatar
+                  size="sm"
+                  src={session.user.image}
+                />
+              </MenuButton>
+              <MenuList alignItems="center">
+                <br />
+                <Center>
+                  <Avatar
+                    size="lg"
+                    src={session.user.image}
+                  />
+                </Center>
+                <br />
+                <Center>
+                  <p>{session.user.name}</p>
+                </Center>
+                <br />
+                <MenuDivider />
+                <MenuItem onClick={() => signOut()}><p>Logout</p></MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <Button
+              onClick={handleSignInClick}
+              fontSize="sm"
+              fontWeight={600}
+              color="gray.50"
+              bg="green.400"
+            >
+              Logga in
+            </Button>
+          )}
+        </Stack>
+      </Flex>
+    </Box>
+  );
+};
+
+export { TabMenu, MobileHeader };
+
+export default TabMenu;

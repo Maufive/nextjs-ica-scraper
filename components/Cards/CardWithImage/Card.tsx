@@ -65,7 +65,6 @@ const Card: React.FC<CardProps> = ({
         mx={-6}
         mb={4}
         pos="relative"
-        layoutId="image-container-1"
       >
         <Image
           src={imageSrc}

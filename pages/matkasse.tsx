@@ -84,14 +84,14 @@ const GroceryBag: React.FC = () => {
     <Layout>
       <Stack w="100%">
         <Box direction="column" mb={6}>
-          <Heading mb={4}>Skapa din Matkasse</Heading>
+          <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading>
           <Button aria-label="Filter" leftIcon={<Icon as={FilterIcon} />} variant="solid" onClick={() => onOpen()}>
             Filter
           </Button>
           <GroceryBagModal isOpen={isOpen} onClickSaveFilters={onClickSaveFilters} />
         </Box>
         <Button onClick={onClickFetchManyRecipes}>Try me</Button>
-        <SimpleGrid columns={[2, 3, 3]} spacingX={4} spacingY={6}>
+        <SimpleGrid columns={[2, 3, 3]} spacingX={{ base: 3, md: 4 }} spacingY={6}>
           {!recipes && (
             <SkeletonCards />
           )}
