@@ -12,12 +12,12 @@ import { useAppSelector, useAppDispatch } from '../state/redux-hooks';
 import {
   selectRecipesLoading,
   selectRecipes,
-  fetchAllRecipes,
+  fetchInitialRecipes,
   fetchSingleRecipe,
   fetchManyRecipes,
   selectFilters,
   setFilters,
-} from '../state/recipe-duck';
+} from '../state/grocery-bag-duck';
 import GroceryBagModal from '../features/grocery-bag/grocery-bag-modal';
 
 const SkeletonCards: React.FC = () => {
@@ -76,10 +76,12 @@ const PageMatkasse: React.FC = () => {
   }, [lockedRecipes]);
 
   React.useEffect(() => {
-    dispatch(fetchAllRecipes());
+    dispatch(fetchInitialRecipes());
   }, [dispatch]);
 
   if (isRecipesLoading === 'failed') return <p>something went wrong :(</p>;
+
+  console.log(recipes);
 
   return (
     <Layout>

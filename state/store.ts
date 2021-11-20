@@ -4,12 +4,12 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit';
 import submit from '../components/Submit/SubmitRecipeSlice';
-import recipes from './recipe-duck';
+import groceryBag from './grocery-bag-duck';
 
 export const store = configureStore({
   reducer: {
     submit,
-    recipes,
+    groceryBag,
   },
 });
 

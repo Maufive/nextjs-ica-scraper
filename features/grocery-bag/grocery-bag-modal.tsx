@@ -24,7 +24,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { PlusIcon, MinusIcon, SaveIcon } from '@heroicons/react/solid';
-import { POPULAR_CATEGORIES } from '../../constants';
+import { POPULAR_CATEGORIES, GROCERY_BAG_INITIAL_FILTERS as INITIAL_FILTERS } from '../../constants';
 
 interface ModalProps {
   isOpen: boolean;
@@ -39,9 +39,9 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClickSaveFilters,
 }) => {
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [recipeCount, setRecipeCount] = useState<number>(3);
-  const [time, setTime] = useState<string>('');
+  const [selectedTags, setSelectedTags] = useState<string[]>(INITIAL_FILTERS.selectedTags);
+  const [recipeCount, setRecipeCount] = useState<number>(INITIAL_FILTERS.recipeCount);
+  const [time, setTime] = useState<string>(INITIAL_FILTERS.time);
 
   const {
     getInputProps,

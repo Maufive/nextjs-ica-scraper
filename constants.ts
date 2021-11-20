@@ -9,3 +9,9 @@ export const POPULAR_CATEGORIES = [
   'Tex-mex',
   'Medel',
 ];
+
+export const GROCERY_BAG_INITIAL_FILTERS = {
+  recipeCount: 3,
+  selectedTags: [],
+  time: '',
+};

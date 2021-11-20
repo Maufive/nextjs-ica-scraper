@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   createSlice,
   createAsyncThunk,
@@ -6,27 +7,36 @@ import type { RootState } from './store';
 import { Recipe } from '../types/recipe';
 import { Filters } from '../types/filters';
 
-// TODO Rename to grocery-bag-duck -- Make it only related to grocery-bag stuff
+const LoadingStates = {
+  PENDING: 'pending',
+  SUCCESS: 'success',
+  FAILED: 'failed',
+  IDLE: 'idle',
+};
 
-export type RecipeState = {
+export type GroceryBagState = {
   recipes: Recipe[] | null;
-  loading: 'pending' | 'success' | 'failed' | 'idle';
-  error: string | null;
-  singleRecipeLoading: 'pending' | 'success' | 'failed' | 'idle';
-  singleRecipeError: string | null;
+  fetchInitialRecipesLoading: string;
+  initialRecipesError: string | null;
+  fetchSingleRecipeLoading: string;
+  fetchSingleRecipeError: string | null;
+  fetchManyRecipesLoading: string;
+  fetchManyRecipesError: string | null;
   filters: Filters;
 };
 
-const initialState: RecipeState = {
+const initialState: GroceryBagState = {
   recipes: null,
-  loading: 'idle',
-  error: null,
-  singleRecipeLoading: 'idle',
-  singleRecipeError: null,
+  fetchInitialRecipesLoading: LoadingStates.IDLE,
+  initialRecipesError: null,
+  fetchSingleRecipeLoading: LoadingStates.IDLE,
+  fetchSingleRecipeError: null,
+  fetchManyRecipesLoading: LoadingStates.IDLE,
+  fetchManyRecipesError: null,
   filters: {},
 };
 
-export const fetchAllRecipes = createAsyncThunk('recipe/fetchAllRecipes', async () => {
+export const fetchInitialRecipes = createAsyncThunk('recipe/fetchInitialRecipes', async () => {
   try {
     const url = '/api/recipes';
     const response = await fetch(url);
@@ -77,8 +87,8 @@ export const fetchSingleRecipe = createAsyncThunk('recipe/fetchSingleRecipe', as
   }
 });
 
-export const recipesSlice = createSlice({
-  name: 'recipes',
+export const groceryBagSlice = createSlice({
+  name: 'grocery-bag',
   initialState,
   reducers: {
     setFilters: (state, { payload }) => {
@@ -87,21 +97,21 @@ export const recipesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllRecipes.pending, (state) => {
-        state.loading = 'pending';
+      .addCase(fetchInitialRecipes.pending, (state) => {
+        state.fetchInitialRecipesLoading = LoadingStates.PENDING;
       })
-      .addCase(fetchAllRecipes.rejected, (state) => {
-        state.loading = 'failed';
+      .addCase(fetchInitialRecipes.rejected, (state) => {
+        state.fetchInitialRecipesLoading = LoadingStates.FAILED;
       })
-      .addCase(fetchAllRecipes.fulfilled, (state, { payload }) => {
+      .addCase(fetchInitialRecipes.fulfilled, (state, { payload }) => {
         state.recipes = payload;
-        state.loading = 'success';
+        state.fetchInitialRecipesLoading = LoadingStates.SUCCESS;
       })
       .addCase(fetchSingleRecipe.pending, (state) => {
-        state.singleRecipeLoading = 'pending';
+        state.fetchSingleRecipeLoading = LoadingStates.PENDING;
       })
       .addCase(fetchSingleRecipe.rejected, (state) => {
-        state.singleRecipeLoading = 'failed';
+        state.fetchSingleRecipeLoading = LoadingStates.FAILED;
       })
       .addCase(fetchSingleRecipe.fulfilled, (state, { payload: { idToReplace, newRecipe } }) => {
         const copy = [...state.recipes];
@@ -115,19 +125,20 @@ export const recipesSlice = createSlice({
           });
 
         state.recipes = newState;
-        state.singleRecipeLoading = 'success';
+        state.fetchSingleRecipeLoading = LoadingStates.SUCCESS;
       })
       .addCase(fetchManyRecipes.fulfilled, (state, { payload: { idsToReplace, recipes } }) => {
         const currentRecipes = [...state.recipes];
 
-        const result = currentRecipes.map((currentRecipe: Recipe, index) => {
+        const result = currentRecipes.map((currentRecipe: Recipe) => {
           if (idsToReplace.includes(currentRecipe.id)) {
-            return recipes[index];
+            return recipes.pop();
           }
 
           return currentRecipe;
         });
 
+        state.fetchManyRecipesLoading = LoadingStates.SUCCESS;
         state.recipes = result;
       });
   },
@@ -135,10 +146,20 @@ export const recipesSlice = createSlice({
 
 export const {
   setFilters,
-} = recipesSlice.actions;
+} = groceryBagSlice.actions;
 
-export const selectRecipes = (state: RootState) => state.recipes.recipes;
-export const selectRecipesLoading = (state: RootState) => state.recipes.loading;
-export const selectFilters = (state: RootState) => state.recipes.filters;
+const selectRecipes = (state: RootState) => state.groceryBag.recipes;
+const selectRecipesLoading = (state: RootState) => state.groceryBag.fetchInitialRecipesLoading;
+const selectFetchManyRecipesLoading = (state: RootState) => state.groceryBag.fetchManyRecipesLoading;
+const selectFetchSingleRecipeLoading = (state: RootState) => state.groceryBag.fetchSingleRecipeLoading;
+const selectFilters = (state: RootState) => state.groceryBag.filters;
 
-export default recipesSlice.reducer;
+export {
+  selectRecipes,
+  selectRecipesLoading,
+  selectFetchManyRecipesLoading,
+  selectFetchSingleRecipeLoading,
+  selectFilters,
+};
+
+export default groceryBagSlice.reducer;
