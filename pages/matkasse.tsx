@@ -1,12 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {
-  Flex, Heading, Stack, Box, useMediaQuery, Icon, Button, useDisclosure,
+  Heading, Stack, Box, Icon, Button, useDisclosure, SimpleGrid,
 } from '@chakra-ui/react';
 import { FilterIcon } from '@heroicons/react/solid';
 import Layout from '../components/Layout';
 import Card from '../components/Cards/CardWithImage/Card';
-import CardMobile from '../components/Cards/CardWithImage/Mobile';
 import CardSkeleton from '../components/Cards/CardWithImage/CardSkeleton';
 import { useAppSelector, useAppDispatch } from '../state/redux-hooks';
 import {
@@ -19,9 +18,10 @@ import {
   setFilters,
 } from '../state/grocery-bag-duck';
 import GroceryBagModal from '../features/grocery-bag/grocery-bag-modal';
+import { GROCERY_BAG_INITIAL_FILTERS } from '../constants';
 
 const SkeletonCards: React.FC = () => {
-  const arr = Array(5).fill(null);
+  const arr = Array(GROCERY_BAG_INITIAL_FILTERS.recipeCount).fill(null);
   return (
     <>
       {arr.map((_, index) => <CardSkeleton key={index} />)}
@@ -34,8 +34,7 @@ const PageMatkasse: React.FC = () => {
   const isRecipesLoading = useAppSelector(selectRecipesLoading);
   const filters = useAppSelector(selectFilters);
   const recipes = useAppSelector(selectRecipes);
-  const [lockedRecipes, setLockedRecipes] = React.useState<string[]>(['']);
-  const [isSmaller] = useMediaQuery('(max-width: 480px)');
+  const [lockedRecipes, setLockedRecipes] = React.useState<string[]>([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -46,13 +45,13 @@ const PageMatkasse: React.FC = () => {
 
     dispatch(fetchManyRecipes({
       ...filters,
-      recipeCount: idsToReplace.length,
+      recipeCount: filters.recipeCount - lockedRecipes.length,
       // Make sure we dont get duplicates by sending all currently visible recipe ids
       ids: recipes.map((recipe) => recipe.id),
       // Array of IDs that are NOT currently locked
       idsToReplace,
     }));
-  }, [dispatch, recipes, lockedRecipes]);
+  }, [dispatch, recipes, lockedRecipes, filters]);
 
   const onClickSaveFilters = React.useCallback((savedFilters) => {
     dispatch(setFilters(savedFilters));
@@ -85,45 +84,32 @@ const PageMatkasse: React.FC = () => {
 
   return (
     <Layout>
-      <Stack>
+      <Stack w="100%">
         <Box direction="column" mb={6}>
           <Heading mb={4}>Skapa din Matkasse</Heading>
-          <Button aria-label="Filter" leftIcon={<Icon as={FilterIcon} />} colorScheme="green" variant="solid" onClick={() => onOpen()}>
+          <Button aria-label="Filter" leftIcon={<Icon as={FilterIcon} />} variant="solid" onClick={() => onOpen()}>
             Filter
           </Button>
           <GroceryBagModal isOpen={isOpen} onClickSaveFilters={onClickSaveFilters} />
         </Box>
         <Button onClick={onClickFetchManyRecipes}>Try me</Button>
-        <Flex wrap="wrap" justify="space-evenly">
+        <SimpleGrid columns={[2, 3, 3]} spacingX={4} spacingY={6}>
           {!recipes && (
             <SkeletonCards />
           )}
           {recipes?.map((recipe) => (
-            isSmaller ? (
-              <CardMobile
-                key={recipe.id}
-                id={recipe.id}
-                title={recipe.title}
-                time={recipe.time}
-                imageSrc={recipe.imageSrc}
-                isLocked={lockedRecipes.includes(recipe.id)}
-                toggleLockRecipe={onClickLockRecipe}
-                onClickFetchNewRecipe={onClickFetchNewRecipe}
-              />
-            ) : (
-              <Card
-                key={recipe.id}
-                id={recipe.id}
-                title={recipe.title}
-                time={recipe.time}
-                imageSrc={recipe.imageSrc}
-                isLocked={lockedRecipes.includes(recipe.id)}
-                toggleLockRecipe={onClickLockRecipe}
-                onClickFetchNewRecipe={onClickFetchNewRecipe}
-              />
-            )
+            <Card
+              key={recipe.id}
+              id={recipe.id}
+              title={recipe.title}
+              time={recipe.time}
+              imageSrc={recipe.imageSrc}
+              isLocked={lockedRecipes.includes(recipe.id)}
+              toggleLockRecipe={onClickLockRecipe}
+              onClickFetchNewRecipe={onClickFetchNewRecipe}
+            />
           ))}
-        </Flex>
+        </SimpleGrid>
       </Stack>
     </Layout>
   );

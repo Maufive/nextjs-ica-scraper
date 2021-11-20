@@ -85,7 +85,7 @@ const Modal: React.FC<ModalProps> = ({
       onClose={onClickSave}
       isOpen={isOpen}
       motionPreset="slideInBottom"
-      size="xl"
+      size="lg"
     >
       <ModalOverlay />
       <ModalContent>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import {
   Box,
-  Flex,
   Heading,
   Text,
   Stack,
@@ -14,6 +14,8 @@ import {
 import {
   LockOpenIcon, LockClosedIcon, ClockIcon, RefreshIcon,
 } from '@heroicons/react/solid';
+
+const AnimatedBox = motion(Box);
 
 export interface CardProps {
   title: string;
@@ -33,25 +35,32 @@ const Card: React.FC<CardProps> = ({
   isLocked,
   onClickFetchNewRecipe,
   id,
-}) => (
-  <Flex
-    _notLast={{ marginRight: '1.5rem' }}
-  >
-    <Box
-      w="350px"
-      bg={useColorModeValue('white', 'gray.900')}
+}) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleOnClick = useCallback(() => {
+    onClickFetchNewRecipe(id);
+    setIsLoading(true);
+  }, [onClickFetchNewRecipe]);
+
+  return (
+    <AnimatedBox
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      bg={useColorModeValue('gray.100', 'gray.900')}
       boxShadow="2xl"
       rounded="md"
-      p={6}
+      p={{ base: 2, lg: 6 }}
       overflow="hidden"
+      minW={{ lg: '320px' }}
     >
-      <Box
-        h="210px"
+      <AnimatedBox
+        h={{ base: '150px', lg: '210px' }}
         bg="gray.100"
         mt={-6}
         mx={-6}
         mb={6}
         pos="relative"
+        layoutId="image-container-1"
       >
         <Image
           src={imageSrc}
@@ -59,29 +68,28 @@ const Card: React.FC<CardProps> = ({
           objectFit="cover"
           priority
         />
-      </Box>
-      <Stack>
+      </AnimatedBox>
+      <Stack minH={{ base: '65px' }}>
         <HStack>
-          <Icon as={ClockIcon} color="green.500" />
+          <Icon as={ClockIcon} color="green.500" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
           <Text
             color="green.500"
             textTransform="uppercase"
             fontWeight={800}
-            fontSize="sm"
+            fontSize="xs"
           >
             {time}
           </Text>
         </HStack>
         <Heading
-          color={useColorModeValue('gray.700', 'white')}
-          fontSize="xl"
-          fontFamily="body"
-          isTruncated
+          color={useColorModeValue('gray.700', 'gray.100')}
+          fontSize={{ base: 'sm', lg: 'xl' }}
+          noOfLines={[2, 2, 1]}
         >
           {title}
         </Heading>
       </Stack>
-      <Stack mt={6} direction="row" spacing={4} align="center">
+      <Stack mt={6} direction="row" spacing={4} align="center" justify={{ base: 'space-around', lg: 'start' }}>
         <IconButton
           size="md"
           onClick={() => toggleLockRecipe(id)}
@@ -91,15 +99,16 @@ const Card: React.FC<CardProps> = ({
         />
         <IconButton
           size="md"
-          onClick={() => onClickFetchNewRecipe(id)}
+          onClick={handleOnClick}
           icon={<Icon as={RefreshIcon} />}
           aria-label="Byt ut recept"
           variant="solid"
           disabled={isLocked}
+          isLoading={isLoading}
         />
       </Stack>
-    </Box>
-  </Flex>
-);
+    </AnimatedBox>
+  );
+};
 
 export default Card;

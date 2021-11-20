@@ -7,7 +7,6 @@ import {
   useColorModeValue,
   IconButton,
   Skeleton,
-  SkeletonText,
 } from '@chakra-ui/react';
 
 const CardSkeleton = () => (
@@ -41,7 +40,6 @@ const CardSkeleton = () => (
             title
           </Heading>
         </Skeleton>
-        <SkeletonText noOfLines={3} />
       </Stack>
       <Stack mt={6} direction="row" spacing={4} align="center">
         <Skeleton>
