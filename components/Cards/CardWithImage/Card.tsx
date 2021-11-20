@@ -10,9 +10,10 @@ import {
   IconButton,
   Icon,
   HStack,
+  Flex,
 } from '@chakra-ui/react';
 import {
-  LockOpenIcon, LockClosedIcon, ClockIcon, RefreshIcon,
+  LockOpenIcon, LockClosedIcon, ClockIcon, RefreshIcon, StarIcon,
 } from '@heroicons/react/solid';
 
 const AnimatedBox = motion(Box);
@@ -25,6 +26,8 @@ export interface CardProps {
   time: string;
   onClickFetchNewRecipe: (id: string) => void;
   id: string;
+  rating: string;
+  ratings: string;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -35,6 +38,8 @@ const Card: React.FC<CardProps> = ({
   isLocked,
   onClickFetchNewRecipe,
   id,
+  rating,
+  ratings,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleOnClick = useCallback(() => {
@@ -54,11 +59,11 @@ const Card: React.FC<CardProps> = ({
       minW={{ lg: '320px' }}
     >
       <AnimatedBox
-        h={{ base: '150px', lg: '210px' }}
+        h={{ base: '150px', md: '210px' }}
         bg="gray.100"
         mt={-6}
         mx={-6}
-        mb={6}
+        mb={4}
         pos="relative"
         layoutId="image-container-1"
       >
@@ -69,18 +74,44 @@ const Card: React.FC<CardProps> = ({
           priority
         />
       </AnimatedBox>
-      <Stack minH={{ base: '65px' }}>
-        <HStack>
-          <Icon as={ClockIcon} color="green.500" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
-          <Text
-            color="green.500"
-            textTransform="uppercase"
-            fontWeight={800}
-            fontSize="xs"
-          >
-            {time}
-          </Text>
-        </HStack>
+      <Stack minH={{ base: '80px' }}>
+        <Flex direction="column">
+          <HStack>
+            <Icon as={StarIcon} color="yellow.400" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
+            <Text
+              color="gray.400"
+              textTransform="uppercase"
+              fontWeight={500}
+              fontSize="xs"
+            >
+              {rating}
+              {' '}
+              / 5
+            </Text>
+            <Text
+              color="gray.600"
+              textTransform="uppercase"
+              fontWeight={500}
+              fontSize="xs"
+              marginLeft="0.25rem !important"
+            >
+              (
+              {ratings}
+              )
+            </Text>
+          </HStack>
+          <HStack>
+            <Icon as={ClockIcon} color="green.500" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
+            <Text
+              color="green.500"
+              textTransform="uppercase"
+              fontWeight={800}
+              fontSize="xs"
+            >
+              {time}
+            </Text>
+          </HStack>
+        </Flex>
         <Heading
           color={useColorModeValue('gray.700', 'gray.100')}
           fontSize={{ base: 'sm', lg: 'xl' }}
@@ -95,7 +126,7 @@ const Card: React.FC<CardProps> = ({
           onClick={() => toggleLockRecipe(id)}
           icon={isLocked ? <Icon as={LockClosedIcon} /> : <Icon as={LockOpenIcon} />}
           aria-label="Lås recept"
-          variant={isLocked ? 'solid' : 'solid'}
+          variant="solid"
         />
         <IconButton
           size="md"

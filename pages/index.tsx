@@ -10,7 +10,6 @@ import SubmitRecipe from '../components/Submit/SubmitRecipe';
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectRecipeLoading);
-  // const recipe = useAppSelector(selectRecipe);
   const toast = useToast();
 
   React.useEffect(() => {

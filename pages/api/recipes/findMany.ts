@@ -34,6 +34,9 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       imageSrc: true,
       title: true,
       time: true,
+      ratings: true,
+      rating: true,
+      url: true,
     },
   });
 

@@ -9,8 +9,11 @@ import {
   Text,
   Container,
   Flex,
+  Icon,
 } from '@chakra-ui/react';
-import { CheckIcon } from '@chakra-ui/icons';
+import { CheckIcon, PlusIcon } from '@heroicons/react/solid';
+import { useAppDispatch } from '../../state/redux-hooks';
+import { resetLoading } from './SubmitRecipeSlice';
 
 interface SubmitRecipeProps {
   handleSubmit: (url: string) => void;
@@ -18,7 +21,13 @@ interface SubmitRecipeProps {
 }
 
 const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) => {
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
+
+  const onClickAddAnother = () => {
+    dispatch(resetLoading());
+    setValue('');
+  };
 
   return (
     <Flex
@@ -79,7 +88,7 @@ const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) 
               w="100%"
               type={isLoading === 'success' ? 'button' : 'submit'}
             >
-              {isLoading === 'success' ? <CheckIcon /> : 'Submit'}
+              {isLoading === 'success' ? <Icon as={CheckIcon} /> : 'Submit'}
             </Button>
           </FormControl>
         </Stack>
@@ -90,6 +99,11 @@ const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) 
           >
             Åh nej, något gick fel! 😢 Prova igen snart.
           </Text>
+        )}
+        {isLoading === 'success' && (
+          <Button onClick={onClickAddAnother} size="sm" variant="ghost" mt={4} leftIcon={<Icon as={PlusIcon} />}>
+            Klicka här för att lägga till ännu ett recept
+          </Button>
         )}
       </Container>
     </Flex>

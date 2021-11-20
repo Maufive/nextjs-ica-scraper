@@ -7,6 +7,7 @@ export interface Recipe {
   title: string;
   description: string | null;
   imageSrc: string | null;
+  rating: string;
   ratings: string;
   time: string;
   difficulty: string;

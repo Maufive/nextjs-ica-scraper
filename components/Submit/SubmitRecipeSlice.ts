@@ -22,7 +22,7 @@ export const submitNewRecipe = createAsyncThunk('submit/submitNewRecipe', async 
   const body = { url };
 
   try {
-    const ASDF = 'http://localhost:3333/api/recipe';
+    const ASDF = 'http://localhost:3333/api/recipe'; // TODO FIX ME
     // const realUrl = 'https://ica-scraper.herokuapp.com/api/recipe'
     const response = await fetch(ASDF, {
       method: 'POST',

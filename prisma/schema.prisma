@@ -11,9 +11,9 @@ datasource db {
 model Ingredient {
   quantity String?
   name     String
-  id       String @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
-  Recipe   Recipe @relation(fields: [recipeId], references: [id])
-  recipeId String @unique @db.ObjectId
+  id       String  @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
+  Recipe   Recipe  @relation(fields: [recipeId], references: [id])
+  recipeId String  @unique @db.ObjectId
 }
 
 model Recipe {
@@ -21,6 +21,7 @@ model Recipe {
   title               String
   description         String
   imageSrc            String
+  rating              String
   ratings             String
   time                String
   amountOfIngredients String

@@ -101,6 +101,8 @@ const GroceryBag: React.FC = () => {
               id={recipe.id}
               title={recipe.title}
               time={recipe.time}
+              rating={recipe.rating}
+              ratings={recipe.ratings}
               imageSrc={recipe.imageSrc}
               isLocked={lockedRecipes.includes(recipe.id)}
               toggleLockRecipe={onClickLockRecipe}
