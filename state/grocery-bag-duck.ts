@@ -6,6 +6,7 @@ import {
 import type { RootState } from './store';
 import { Recipe } from '../types/recipe';
 import { Filters } from '../types/filters';
+import { GROCERY_BAG_INITIAL_FILTERS } from '../constants';
 
 const LoadingStates = {
   PENDING: 'pending',
@@ -33,7 +34,7 @@ const initialState: GroceryBagState = {
   fetchSingleRecipeError: null,
   fetchManyRecipesLoading: LoadingStates.IDLE,
   fetchManyRecipesError: null,
-  filters: {},
+  filters: GROCERY_BAG_INITIAL_FILTERS,
 };
 
 export const fetchInitialRecipes = createAsyncThunk('recipe/fetchInitialRecipes', async () => {
@@ -129,14 +130,8 @@ export const groceryBagSlice = createSlice({
       })
       .addCase(fetchManyRecipes.fulfilled, (state, { payload: { idsToReplace, recipes } }) => {
         const currentRecipes = [...state.recipes];
-
-        const result = currentRecipes.map((currentRecipe: Recipe) => {
-          if (idsToReplace.includes(currentRecipe.id)) {
-            return recipes.pop();
-          }
-
-          return currentRecipe;
-        });
+        const prunedRecipes = currentRecipes.filter((recipe: Recipe) => !idsToReplace.includes(recipe.id));
+        const result = [...prunedRecipes, ...recipes];
 
         state.fetchManyRecipesLoading = LoadingStates.SUCCESS;
         state.recipes = result;

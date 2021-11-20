@@ -1,6 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
+function randomNoRepeats(array) {
+  let copy = array.slice(0);
+  return () => {
+    if (copy.length < 1) { copy = array.slice(0); }
+    const index = Math.floor(Math.random() * copy.length);
+    const item = copy[index];
+    copy.splice(index, 1);
+    return item;
+  };
+}
+
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const {
     ids: currentlyShowingRecipeIds,
@@ -28,16 +39,10 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   const filteredResults = result
     .filter((item) => currentlyShowingRecipeIds.indexOf(item.id) === -1);
-  const recipes = filteredResults.map(() => {
-    // Find a random recipe in the filtered results
-    const randomRecipe = filteredResults[Math.floor(Math.random() * filteredResults.length)];
-    // Remove that recipe from the filtered results so it cannot be picked again
-    // Start by finding the randomRecipe index in the list of elgible recipes
-    const index = filteredResults.indexOf(randomRecipe);
-    filteredResults.splice(index, 1);
-    return randomRecipe;
-    // Only return the requested amount of recipes
-  }).slice(0, recipeCount);
+
+  const chooser = randomNoRepeats(filteredResults);
+
+  const recipes = filteredResults.map(() => chooser()).slice(0, recipeCount);
 
   return res.json(recipes);
 }
