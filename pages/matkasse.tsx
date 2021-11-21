@@ -17,7 +17,8 @@ import {
   selectFilters,
   setFilters,
 } from '../state/grocery-bag-duck';
-import GroceryBagModal from '../features/grocery-bag/grocery-bag-modal';
+import GroceryBagModal from '../features/grocery-bag/grocery-bag-filters-modal';
+import RecipeDetailsModal from '../components/modal/recipe-details-modal';
 import { GROCERY_BAG_INITIAL_FILTERS } from '../constants';
 
 const SkeletonCards: React.FC = () => {
@@ -35,8 +36,14 @@ const GroceryBag: React.FC = () => {
   const filters = useAppSelector(selectFilters);
   const recipes = useAppSelector(selectRecipes);
   const [lockedRecipes, setLockedRecipes] = useState<string[]>([]);
+  const [recipeDetails, setRecipeDetails] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenRecipeDetails,
+    onOpen: onOpenRecipeDetails,
+    onClose: onCloseRecipeDetails,
+  } = useDisclosure();
 
   const onClickFetchManyRecipes = useCallback(() => {
     const idsToReplace = recipes
@@ -74,6 +81,17 @@ const GroceryBag: React.FC = () => {
     setLockedRecipes((prev) => [...prev, id]);
   }, [lockedRecipes]);
 
+  const onClickRecipe = useCallback((id) => {
+    const details = recipes.find((recipe) => recipe.id === id);
+    setRecipeDetails(details);
+    onOpenRecipeDetails();
+  }, [recipes]);
+
+  const onCloseRecipeDetailsCb = useCallback(() => {
+    setRecipeDetails(null);
+    onCloseRecipeDetails();
+  }, []);
+
   useEffect(() => {
     dispatch(fetchInitialRecipes());
   }, [dispatch]);
@@ -89,6 +107,11 @@ const GroceryBag: React.FC = () => {
             Filter
           </Button>
           <GroceryBagModal isOpen={isOpen} onClickSaveFilters={onClickSaveFilters} />
+          <RecipeDetailsModal
+            isOpen={isOpenRecipeDetails}
+            onClose={onCloseRecipeDetailsCb}
+            details={recipeDetails}
+          />
         </Box>
         <Button onClick={onClickFetchManyRecipes}>Try me</Button>
         <SimpleGrid columns={[2, 3, 3]} spacingX={{ base: 3, md: 4 }} spacingY={6}>
@@ -107,6 +130,7 @@ const GroceryBag: React.FC = () => {
               isLocked={lockedRecipes.includes(recipe.id)}
               toggleLockRecipe={onClickLockRecipe}
               onClickFetchNewRecipe={onClickFetchNewRecipe}
+              onClick={onClickRecipe}
             />
           ))}
         </SimpleGrid>

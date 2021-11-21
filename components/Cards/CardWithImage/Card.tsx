@@ -28,6 +28,7 @@ export interface CardProps {
   id: string;
   rating: string;
   ratings: string;
+  onClick: (id: string) => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -40,6 +41,7 @@ const Card: React.FC<CardProps> = ({
   id,
   rating,
   ratings,
+  onClick,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleOnClick = useCallback(() => {
@@ -58,13 +60,14 @@ const Card: React.FC<CardProps> = ({
       overflow="hidden"
       minW={{ lg: '320px' }}
     >
-      <AnimatedBox
+      <Box
         h={{ base: '150px', md: '210px' }}
         bg="gray.100"
         mt={-6}
         mx={-6}
         mb={4}
         pos="relative"
+        onClick={() => onClick(id)}
       >
         <Image
           src={imageSrc}
@@ -72,31 +75,26 @@ const Card: React.FC<CardProps> = ({
           objectFit="cover"
           priority
         />
-      </AnimatedBox>
-      <Stack minH={{ base: '80px' }}>
+      </Box>
+      <Stack minH={{ base: '80px' }} onClick={() => onClick(id)}>
         <Flex direction="column">
           <HStack>
             <Icon as={StarIcon} color="yellow.400" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
             <Text
-              color="gray.400"
+              color="gray.300"
               textTransform="uppercase"
               fontWeight={500}
               fontSize="xs"
             >
-              {rating}
-              {' '}
-              / 5
+              {`${rating} / 5`}
             </Text>
             <Text
-              color="gray.600"
-              textTransform="uppercase"
-              fontWeight={500}
+              color="gray.500"
+              fontWeight={400}
               fontSize="xs"
               marginLeft="0.25rem !important"
             >
-              (
-              {ratings}
-              )
+              {`(${ratings})`}
             </Text>
           </HStack>
           <HStack>
@@ -125,14 +123,14 @@ const Card: React.FC<CardProps> = ({
           onClick={() => toggleLockRecipe(id)}
           icon={isLocked ? <Icon as={LockClosedIcon} /> : <Icon as={LockOpenIcon} />}
           aria-label="Lås recept"
-          variant="solid"
+          variant="ghost"
         />
         <IconButton
           size="md"
           onClick={handleOnClick}
           icon={<Icon as={RefreshIcon} />}
           aria-label="Byt ut recept"
-          variant="solid"
+          variant="ghost"
           disabled={isLocked}
           isLoading={isLoading}
         />

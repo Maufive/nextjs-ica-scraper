@@ -7,15 +7,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   // const session = await getSession({ req });
 
   const result = await prisma.recipe.findMany({
-    select: {
-      id: true,
-      imageSrc: true,
-      title: true,
-      time: true,
-      ratings: true,
-      rating: true,
-      url: true,
-    },
+
   });
 
   const recipes = result

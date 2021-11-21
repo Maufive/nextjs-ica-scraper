@@ -197,8 +197,8 @@ const MobileHeader = () => {
           ) : (
             <Button
               onClick={handleSignInClick}
-              fontSize="sm"
-              fontWeight={600}
+              size="sm"
+              fontWeight={700}
               color="gray.50"
               bg="green.400"
             >

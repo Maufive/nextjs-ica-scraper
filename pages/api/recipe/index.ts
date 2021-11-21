@@ -17,15 +17,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     where: {
       ...filters,
     },
-    select: {
-      id: true,
-      imageSrc: true,
-      title: true,
-      time: true,
-      ratings: true,
-      rating: true,
-      url: true,
-    },
   });
 
   const filteredResult = result.filter((item) => ids.indexOf(item.id) === -1);
