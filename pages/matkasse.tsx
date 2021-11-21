@@ -1,7 +1,10 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useCallback, useState, useEffect } from 'react';
+import React, {
+  useCallback, useState, useEffect, useMemo,
+} from 'react';
+import { useSession } from 'next-auth/client';
 import {
-  Heading, Stack, Box, Icon, Button, useDisclosure, SimpleGrid,
+  Heading, Stack, Box, Icon, Button, useDisclosure, SimpleGrid, useToast,
 } from '@chakra-ui/react';
 import { FilterIcon } from '@heroicons/react/solid';
 import Layout from '../components/Layout';
@@ -20,6 +23,7 @@ import {
 import GroceryBagModal from '../features/grocery-bag/grocery-bag-filters-modal';
 import RecipeDetailsModal from '../components/modal/recipe-details-modal';
 import { GROCERY_BAG_INITIAL_FILTERS } from '../constants';
+import FloatingButton from '../components/floating-button';
 
 const SkeletonCards: React.FC = () => {
   const arr = Array(GROCERY_BAG_INITIAL_FILTERS.recipeCount).fill(null);
@@ -31,6 +35,7 @@ const SkeletonCards: React.FC = () => {
 };
 
 const GroceryBag: React.FC = () => {
+  const [session] = useSession();
   const dispatch = useAppDispatch();
   const isRecipesLoading = useAppSelector(selectRecipesLoading);
   const filters = useAppSelector(selectFilters);
@@ -44,6 +49,7 @@ const GroceryBag: React.FC = () => {
     onOpen: onOpenRecipeDetails,
     onClose: onCloseRecipeDetails,
   } = useDisclosure();
+  const toast = useToast();
 
   const onClickFetchManyRecipes = useCallback(() => {
     const idsToReplace = recipes
@@ -65,7 +71,7 @@ const GroceryBag: React.FC = () => {
     onClose();
   }, [dispatch]);
 
-  const onClickFetchNewRecipe = useCallback((id) => {
+  const onClickFetchNewRecipe = useCallback((id: string) => {
     dispatch(fetchSingleRecipe({
       ids: recipes.map((recipe) => recipe.id),
       idToReplace: id,
@@ -73,7 +79,7 @@ const GroceryBag: React.FC = () => {
     }));
   }, [dispatch, recipes, filters]);
 
-  const onClickLockRecipe = useCallback((id) => {
+  const onClickLockRecipe = useCallback((id: string) => {
     if (lockedRecipes.includes(id)) {
       return setLockedRecipes((prev) => prev.filter((i) => i !== id));
     }
@@ -81,7 +87,7 @@ const GroceryBag: React.FC = () => {
     setLockedRecipes((prev) => [...prev, id]);
   }, [lockedRecipes]);
 
-  const onClickRecipe = useCallback((id) => {
+  const onClickRecipe = useCallback((id: string) => {
     const details = recipes.find((recipe) => recipe.id === id);
     setRecipeDetails(details);
     onOpenRecipeDetails();
@@ -92,6 +98,34 @@ const GroceryBag: React.FC = () => {
     onCloseRecipeDetails();
   }, []);
 
+  const onClickFloatingButton = useCallback(() => {
+    if (!session?.user) {
+      toast({
+        title: 'Inloggning krävs.',
+        description: 'Du måste vara inloggad för att skapa en inköpslista',
+        status: 'info',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    } else if (lockedRecipes.length !== filters.recipeCount) {
+      toast({
+        title: 'Obekräftade recept.',
+        description: 'Samtliga recept måste vara bekräftade innan en inköpslista kan skapas.',
+        status: 'info',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [session, lockedRecipes, filters.recipeCount, toast]);
+
+  const isCreateListAllowed = useMemo(() => {
+    const isAllRecipesLocked = lockedRecipes.length === filters.recipeCount;
+    const isUserLoggedIn = !!session?.user;
+    return isAllRecipesLocked && isUserLoggedIn;
+  }, [session, lockedRecipes, filters.recipeCount]);
+
   useEffect(() => {
     dispatch(fetchInitialRecipes());
   }, [dispatch]);
@@ -100,7 +134,7 @@ const GroceryBag: React.FC = () => {
 
   return (
     <Layout>
-      <Stack w="100%">
+      <Stack w="100%" pos="relative">
         <Box direction="column" mb={6}>
           <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading>
           <Button aria-label="Filter" leftIcon={<Icon as={FilterIcon} />} variant="solid" onClick={() => onOpen()}>
@@ -134,6 +168,7 @@ const GroceryBag: React.FC = () => {
             />
           ))}
         </SimpleGrid>
+        <FloatingButton isActive={isCreateListAllowed} onClick={onClickFloatingButton} />
       </Stack>
     </Layout>
   );

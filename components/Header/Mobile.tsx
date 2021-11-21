@@ -31,7 +31,6 @@ interface TabItemProps {
   href: string;
   label: string;
   isActive: boolean;
-  // icon: React.ReactElement<IconProps>
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
 }
 
