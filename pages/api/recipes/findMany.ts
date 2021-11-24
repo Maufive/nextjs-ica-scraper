@@ -29,6 +29,9 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     where: {
       ...filters,
     },
+    include: {
+      ingredients: true,
+    },
   });
 
   const filteredResults = result

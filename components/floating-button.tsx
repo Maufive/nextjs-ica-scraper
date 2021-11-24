@@ -54,7 +54,7 @@ const MobileButton: React.FC<Props> = ({ isActive, onClick }) => {
       pos="fixed"
       zIndex="2"
       right="20px"
-      initial={{ bottom: '75px' }}
+      bottom="75px"
       animate={{ bottom: hidden ? '20px' : '75px' }}
     >
       <AnimatedButton

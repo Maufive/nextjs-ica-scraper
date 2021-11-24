@@ -7,7 +7,9 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   // const session = await getSession({ req });
 
   const result = await prisma.recipe.findMany({
-
+    include: {
+      ingredients: true,
+    },
   });
 
   const recipes = result

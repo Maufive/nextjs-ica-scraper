@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { useSession } from 'next-auth/client';
 import {
-  Heading, Stack, Box, Icon, Button, useDisclosure, SimpleGrid, useToast,
+  Heading, Stack, Box, Icon, Button, useDisclosure, SimpleGrid,
 } from '@chakra-ui/react';
 import { FilterIcon } from '@heroicons/react/solid';
 import Layout from '../components/Layout';
@@ -23,7 +23,7 @@ import {
 import GroceryBagModal from '../features/grocery-bag/grocery-bag-filters-modal';
 import RecipeDetailsModal from '../components/modal/recipe-details-modal';
 import { GROCERY_BAG_INITIAL_FILTERS } from '../constants';
-import FloatingButton from '../components/floating-button';
+import CreateList from '../features/shopping-list/create-shopping-list';
 
 const SkeletonCards: React.FC = () => {
   const arr = Array(GROCERY_BAG_INITIAL_FILTERS.recipeCount).fill(null);
@@ -49,7 +49,6 @@ const GroceryBag: React.FC = () => {
     onOpen: onOpenRecipeDetails,
     onClose: onCloseRecipeDetails,
   } = useDisclosure();
-  const toast = useToast();
 
   const onClickFetchManyRecipes = useCallback(() => {
     const idsToReplace = recipes
@@ -97,28 +96,6 @@ const GroceryBag: React.FC = () => {
     setRecipeDetails(null);
     onCloseRecipeDetails();
   }, []);
-
-  const onClickFloatingButton = useCallback(() => {
-    if (!session?.user) {
-      toast({
-        title: 'Inloggning krävs.',
-        description: 'Du måste vara inloggad för att skapa en inköpslista',
-        status: 'info',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
-    } else if (lockedRecipes.length !== filters.recipeCount) {
-      toast({
-        title: 'Obekräftade recept.',
-        description: 'Samtliga recept måste vara bekräftade innan en inköpslista kan skapas.',
-        status: 'info',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
-    }
-  }, [session, lockedRecipes, filters.recipeCount, toast]);
 
   const isCreateListAllowed = useMemo(() => {
     const isAllRecipesLocked = lockedRecipes.length === filters.recipeCount;
@@ -168,7 +145,12 @@ const GroceryBag: React.FC = () => {
             />
           ))}
         </SimpleGrid>
-        <FloatingButton isActive={isCreateListAllowed} onClick={onClickFloatingButton} />
+        <CreateList
+          isCreateListAllowed={isCreateListAllowed}
+          recipeCount={filters.recipeCount}
+          lockedRecipesCount={lockedRecipes.length}
+          recipes={recipes}
+        />
       </Stack>
     </Layout>
   );

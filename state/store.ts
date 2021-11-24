@@ -5,11 +5,13 @@ import {
 } from '@reduxjs/toolkit';
 import submit from '../components/Submit/SubmitRecipeSlice';
 import groceryBag from './grocery-bag-duck';
+import shoppingListsReducer from '../features/shopping-list/shopping-list-duck';
 
 export const store = configureStore({
   reducer: {
     submit,
     groceryBag,
+    shoppingListsReducer,
   },
 });
 

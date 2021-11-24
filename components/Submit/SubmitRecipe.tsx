@@ -83,7 +83,8 @@ const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) 
           </FormControl>
           <FormControl w={{ base: '100%', md: '40%' }}>
             <Button
-              colorScheme={isLoading === 'success' ? 'green' : 'blue'}
+              isActive={value.length > 25}
+              colorScheme="green"
               isLoading={isLoading === 'pending'}
               w="100%"
               type={isLoading === 'success' ? 'button' : 'submit'}

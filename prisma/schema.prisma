@@ -8,6 +8,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model ShoppingListItem {
+  quantity       String?
+  name           String
+  id             String        @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
+  shoppingList   ShoppingList? @relation(fields: [shoppingListId], references: [id])
+  shoppingListId String?       @unique @db.ObjectId
+}
+
+model ShoppingList {
+  title     String
+  id        String             @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
+  createdAt DateTime           @default(now()) @map(name: "created_at")
+  recipes   Recipe[]           @relation(fields: [recipeIds], references: [id])
+  recipeIds String[]           @unique @db.ObjectId
+  items     ShoppingListItem[]
+  author    User?              @relation(fields: [authorId], references: [id])
+  authorId  String?            @db.ObjectId
+}
+
 model Ingredient {
   quantity String?
   name     String
@@ -17,7 +36,7 @@ model Ingredient {
 }
 
 model Recipe {
-  id                  String       @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
+  id                  String         @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
   title               String
   description         String
   imageSrc            String
@@ -26,16 +45,18 @@ model Recipe {
   time                String
   amountOfIngredients String
   difficulty          String
-  createdAt           DateTime     @default(now()) @map(name: "created_at")
+  createdAt           DateTime       @default(now()) @map(name: "created_at")
   ingredients         Ingredient[]
   categories          String[]
-  url                 String       @unique
+  url                 String         @unique
+  shoppingList        ShoppingList[]
+  steps               String[]
 }
 
 model Account {
-  id                 String       @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
+  id                 String    @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
   compoundId         String    @unique @map(name: "compound_id")
-  userId             String       @map(name: "user_id")
+  userId             String    @map(name: "user_id")
   providerType       String    @map(name: "provider_type")
   providerId         String    @map(name: "provider_id")
   providerAccountId  String    @map(name: "provider_account_id")
@@ -45,16 +66,16 @@ model Account {
   createdAt          DateTime  @default(now()) @map(name: "created_at")
   updatedAt          DateTime  @default(now()) @map(name: "updated_at")
 
+
   @@index([providerAccountId], name: "providerAccountId")
   @@index([providerId], name: "providerId")
   @@index([userId], name: "userId")
-
   @@map(name: "accounts")
 }
 
 model Session {
   id           String   @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
-  userId       String      @map(name: "user_id")
+  userId       String   @map(name: "user_id")
   expires      DateTime
   sessionToken String   @unique @map(name: "session_token")
   accessToken  String   @unique @map(name: "access_token")
@@ -65,13 +86,14 @@ model Session {
 }
 
 model User {
-  id            String       @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
+  id            String         @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map(name: "email_verified")
+  email         String?        @unique
+  emailVerified DateTime?      @map(name: "email_verified")
   image         String?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  createdAt     DateTime       @default(now()) @map(name: "created_at")
+  updatedAt     DateTime       @default(now()) @map(name: "updated_at")
+  shoppingLists ShoppingList[]
 
   @@map(name: "users")
 }
@@ -81,8 +103,8 @@ model VerificationRequest {
   identifier String
   token      String   @unique
   expires    DateTime
-  createdAt  DateTime  @default(now()) @map(name: "created_at")
-  updatedAt  DateTime  @default(now()) @map(name: "updated_at")
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "verification_requests")
 }

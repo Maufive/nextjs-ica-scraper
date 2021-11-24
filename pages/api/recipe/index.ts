@@ -17,6 +17,9 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     where: {
       ...filters,
     },
+    include: {
+      ingredients: true,
+    },
   });
 
   const filteredResult = result.filter((item) => ids.indexOf(item.id) === -1);

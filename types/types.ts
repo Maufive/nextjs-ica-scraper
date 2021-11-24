@@ -1,8 +1,6 @@
 export interface Ingredient {
   quantity: string;
   name: string;
-  id: string;
-  recipeId: string;
 }
 
 export interface Recipe {
@@ -19,4 +17,16 @@ export interface Recipe {
   categories: string[];
   id: string;
   steps?: string[];
+}
+
+export interface ShoppingListItem {
+  name: string;
+  quantity: string | null;
+  recipeId: string;
+}
+
+export interface ShoppingList {
+  title: string;
+  items: ShoppingListItem[];
+  recipeIds: string[];
 }
