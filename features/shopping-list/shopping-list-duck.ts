@@ -4,7 +4,7 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 // import type { RootState } from '../../state/store';
-import { ShoppingList } from '../../types/types';
+import { ShoppingList } from '../../types';
 
 const LoadingStates = {
   PENDING: 'pending',

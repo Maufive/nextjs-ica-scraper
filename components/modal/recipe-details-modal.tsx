@@ -21,7 +21,7 @@ import {
 import {
   ClockIcon, StarIcon, ShoppingCartIcon, ExternalLinkIcon,
 } from '@heroicons/react/solid';
-import { Recipe } from '../../types/recipe';
+import { Recipe } from '../../types/index';
 
 interface RecipeDetailsModalProps {
   isOpen: boolean;

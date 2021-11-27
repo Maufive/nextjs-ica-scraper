@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {
   Box,
@@ -7,6 +8,7 @@ import {
   IconButton,
   Skeleton,
 } from '@chakra-ui/react';
+import { GROCERY_BAG_INITIAL_FILTERS } from '../../../constants';
 
 const CardSkeleton = () => (
   <Box
@@ -58,4 +60,13 @@ const CardSkeleton = () => (
   </Box>
 );
 
-export default CardSkeleton;
+const SkeletonCards: React.FC = () => {
+  const arr = Array(GROCERY_BAG_INITIAL_FILTERS.recipeCount).fill(null);
+  return (
+    <>
+      {arr.map((_, index) => <CardSkeleton key={index} />)}
+    </>
+  );
+};
+
+export default SkeletonCards;

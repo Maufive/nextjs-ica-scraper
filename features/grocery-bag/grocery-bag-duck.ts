@@ -3,10 +3,9 @@ import {
   createSlice,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-import type { RootState } from './store';
-import { Recipe } from '../types/recipe';
-import { Filters } from '../types/filters';
-import { GROCERY_BAG_INITIAL_FILTERS } from '../constants';
+import type { RootState } from '../../state/store';
+import { Recipe, Filters } from '../../types/index';
+import { GROCERY_BAG_INITIAL_FILTERS } from '../../constants';
 
 const LoadingStates = {
   PENDING: 'pending',

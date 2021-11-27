@@ -4,7 +4,7 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../state/store';
-import { Recipe } from '../../types/recipe';
+import { Recipe } from '../../types/index';
 
 export type RecipeState = {
   recipe: Recipe | {};

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import prisma from '../../../lib/prisma';
-import { ShoppingListItem } from '../../../types/types';
+import { ShoppingListItem } from '../../../types';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req });

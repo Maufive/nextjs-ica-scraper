@@ -110,7 +110,7 @@ const TabMenu = () => {
       <TabItem
         href="/inköpslistor"
         label="Inköpslistor"
-        isActive={pathname === '/inköpslistor'}
+        isActive={pathname === '/inkopslistor'}
         icon={ClipboardListIcon}
       />
       <TabItem

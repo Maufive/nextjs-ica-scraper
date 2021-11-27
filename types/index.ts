@@ -30,3 +30,24 @@ export interface ShoppingList {
   items: ShoppingListItem[];
   recipeIds: string[];
 }
+
+export interface Session {
+  user?: User;
+  expires?: string;
+  accessToken?: string;
+}
+
+export interface User {
+  image?: string;
+  name?: string;
+  email?: string;
+}
+
+export interface Filters {
+  categories?: string[] | string;
+  recipeCount?: number;
+  time?: string;
+  ids?: string[];
+  idToReplace?: string;
+  idsToReplace?: string[];
+}

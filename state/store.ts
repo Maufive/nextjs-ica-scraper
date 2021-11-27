@@ -4,7 +4,7 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit';
 import submit from '../components/Submit/SubmitRecipeSlice';
-import groceryBag from './grocery-bag-duck';
+import groceryBag from '../features/grocery-bag/grocery-bag-duck';
 import shoppingListsReducer from '../features/shopping-list/shopping-list-duck';
 
 export const store = configureStore({

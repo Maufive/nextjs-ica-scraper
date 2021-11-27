@@ -28,7 +28,7 @@ import {
 import FloatingButton from '../../components/floating-button';
 import { useAppDispatch } from '../../state/redux-hooks';
 import { createShoppingList } from './shopping-list-duck';
-import { Recipe, Ingredient } from '../../types/recipe';
+import { Recipe, Ingredient } from '../../types/index';
 
 const EMOJIS = [
   '🧀', '🥦', '🍅',
@@ -52,14 +52,14 @@ function capitalizeFirstLetter(string) {
 interface Props {
   isCreateListAllowed: boolean;
   recipeCount: number;
-  lockedRecipesCount: number;
+  lockedRecipeIdsCount: number;
   recipes: Recipe[];
 }
 
 const CreateShoppingList: React.FC<Props> = ({
   isCreateListAllowed,
   recipeCount,
-  lockedRecipesCount,
+  lockedRecipeIdsCount,
   recipes,
 }) => {
   const today = new Date(Date.now());
@@ -106,7 +106,7 @@ const CreateShoppingList: React.FC<Props> = ({
         isClosable: true,
         position: 'top',
       });
-    } else if (lockedRecipesCount !== recipeCount) {
+    } else if (lockedRecipeIdsCount !== recipeCount) {
       toast({
         title: 'Obekräftade recept.',
         description: 'Samtliga recept måste vara bekräftade innan en inköpslista kan skapas.',
@@ -118,7 +118,7 @@ const CreateShoppingList: React.FC<Props> = ({
     } else {
       onOpen();
     }
-  }, [session, lockedRecipesCount, recipeCount, toast]);
+  }, [session, lockedRecipeIdsCount, recipeCount, toast]);
 
   const onSubmit = useCallback(({ itemNames, shoppingListTitle }): void => {
     const items = ingredients.filter((i) => itemNames.includes(i.name));
