@@ -3,7 +3,7 @@ import React, {
   useCallback, useState, useEffect, useMemo,
 } from 'react';
 import {
-  Heading, Stack, Box, Icon, Button, useDisclosure, Text,
+  Heading, Stack, Box, Icon, Button, useDisclosure, Text, HStack,
 } from '@chakra-ui/react';
 import { FilterIcon, RefreshIcon } from '@heroicons/react/solid';
 import { useAppSelector, useAppDispatch } from '../../state/redux-hooks';
@@ -104,29 +104,31 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
     <Stack w="100%" pos="relative">
       <Box direction="column" mb={6}>
         <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading>
-        <Button
-          aria-label="Slumpa alla"
-          onClick={onClickFetchManyRecipes}
-          leftIcon={<Icon as={RefreshIcon} />}
-          variant="solid"
-          colorScheme="green"
-          isActive={recipes?.length !== lockedRecipesIds.length}
-          isDisabled={recipes?.length === lockedRecipesIds.length}
-        >
-          Slumpa
-          <Text fontWeight={500} fontSize="sm" marginLeft={2}>
-            {`(${recipes?.length - lockedRecipesIds.length})`}
-          </Text>
-        </Button>
-        <Button
-          aria-label="Filter"
-          leftIcon={<Icon as={FilterIcon} />}
-          variant="ghost"
-          onClick={() => onOpen()}
-          marginRight={4}
-        >
-          Filter
-        </Button>
+        <HStack spacing={4}>
+          <Button
+            aria-label="Slumpa alla"
+            onClick={onClickFetchManyRecipes}
+            leftIcon={<Icon as={RefreshIcon} />}
+            variant="solid"
+            colorScheme="green"
+            isActive={recipes?.length !== lockedRecipesIds.length}
+            isDisabled={recipes?.length === lockedRecipesIds.length}
+          >
+            Slumpa
+            <Text fontWeight={500} fontSize="sm" marginLeft={2}>
+              {`(${recipes?.length - lockedRecipesIds.length})`}
+            </Text>
+          </Button>
+          <Button
+            aria-label="Filter"
+            leftIcon={<Icon as={FilterIcon} />}
+            variant="ghost"
+            onClick={() => onOpen()}
+            marginRight={4}
+          >
+            Filter
+          </Button>
+        </HStack>
         <GroceryBagModal isOpen={isOpen} onClickSaveFilters={onClickSaveFilters} />
         <RecipeDetailsModal
           isOpen={isOpenRecipeDetails}

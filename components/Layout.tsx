@@ -9,7 +9,7 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }) => (
   <Flex
     direction="column"
-    bg={useColorModeValue('gray.50', 'gray.800')}
+    bg={useColorModeValue('gray.100', 'gray.800')}
     minH="100vh"
   >
     <Navigation />

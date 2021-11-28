@@ -59,6 +59,7 @@ const MobileButton: React.FC<Props> = ({ isActive, onClick }) => {
     >
       <AnimatedButton
         size="lg"
+        isDisabled={!isActive}
         isActive={isActive}
         onClick={onClick}
         icon={<Icon as={PlusIcon} />}

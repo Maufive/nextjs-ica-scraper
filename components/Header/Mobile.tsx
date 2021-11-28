@@ -137,7 +137,7 @@ const MobileHeader = () => {
         color={useColorModeValue('gray.600', 'gray.50')}
         minH="60px"
         py={{ base: 2 }}
-        px={{ base: 4 }}
+        px={{ base: 2 }}
         align="center"
       >
         <Flex flex={{ base: 1 }}>

@@ -7,13 +7,13 @@ import {
   Text,
   Stack,
   useColorModeValue,
-  IconButton,
   Icon,
   HStack,
   Flex,
+  Button,
 } from '@chakra-ui/react';
 import {
-  LockOpenIcon, LockClosedIcon, ClockIcon, RefreshIcon, StarIcon,
+  ClockIcon, RefreshIcon, StarIcon, LockOpenIcon, LockClosedIcon,
 } from '@heroicons/react/solid';
 
 const AnimatedFlex = motion(Flex);
@@ -55,10 +55,10 @@ const Card: React.FC<CardProps> = ({
       animate={{ opacity: 1 }}
       flexDirection="column"
       flex="0 0 300px"
-      bg={useColorModeValue('gray.100', 'gray.900')}
-      boxShadow="2xl"
+      bg={useColorModeValue('gray.50', 'gray.900')}
+      boxShadow={{ base: '2xl', lg: 'md' }}
       rounded="md"
-      p={{ base: 2, lg: 6 }}
+      p={{ base: 2, lg: 4 }}
       overflow="hidden"
       css={{
         scrollSnapAlign: 'start',
@@ -83,9 +83,9 @@ const Card: React.FC<CardProps> = ({
       <Stack minH="100px" onClick={() => onClick(id)}>
         <Flex direction="column">
           <HStack>
-            <Icon as={StarIcon} color="yellow.400" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
+            <Icon as={StarIcon} color="yellow.400" w="4" h="4" />
             <Text
-              color="gray.300"
+              color={useColorModeValue('gray.800', 'gray.300')}
               textTransform="uppercase"
               fontWeight={500}
               fontSize="xs"
@@ -93,7 +93,7 @@ const Card: React.FC<CardProps> = ({
               {`${rating} / 5`}
             </Text>
             <Text
-              color="gray.500"
+              color={useColorModeValue('gray.600', 'gray.500')}
               fontWeight={400}
               fontSize="xs"
               marginLeft="0.25rem !important"
@@ -102,7 +102,7 @@ const Card: React.FC<CardProps> = ({
             </Text>
           </HStack>
           <HStack>
-            <Icon as={ClockIcon} color="green.500" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
+            <Icon as={ClockIcon} color="green.500" w="4" h="4" />
             <Text
               color="green.500"
               textTransform="uppercase"
@@ -121,24 +121,32 @@ const Card: React.FC<CardProps> = ({
           {title}
         </Heading>
       </Stack>
-      <Stack mt={6} direction="row" align="center" spacing={4}>
-        <IconButton
-          size="md"
+      <HStack mt={6} align="center" spacing={6}>
+        <Button
+          size="sm"
           onClick={() => toggleLockRecipe(id)}
-          icon={isLocked ? <Icon as={LockClosedIcon} /> : <Icon as={LockOpenIcon} />}
+          leftIcon={isLocked ? <Icon as={LockClosedIcon} /> : <Icon as={LockOpenIcon} />}
           aria-label="Lås recept"
           variant="ghost"
-        />
-        <IconButton
-          size="md"
+          colorScheme={!isLocked ? 'green' : 'orange'}
+          isDisabled={isLoading}
+          justifyContent="flex-start"
+        >
+          {isLocked ? 'Lås upp' : 'Lås'}
+        </Button>
+        <Button
+          size="sm"
           onClick={handleOnClick}
-          icon={<Icon as={RefreshIcon} />}
-          aria-label="Byt ut recept"
+          leftIcon={<Icon as={RefreshIcon} />}
+          aria-label="Slumpa recept"
           variant="ghost"
-          disabled={isLocked}
+          color={useColorModeValue('gray.500', 'gray.300')}
+          isDisabled={isLocked}
           isLoading={isLoading}
-        />
-      </Stack>
+        >
+          Slumpa
+        </Button>
+      </HStack>
     </AnimatedFlex>
   );
 };

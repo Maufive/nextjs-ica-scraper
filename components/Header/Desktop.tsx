@@ -43,7 +43,7 @@ const DesktopNav = () => {
   return (
     <Box width="100%">
       <Flex
-        bg={useColorModeValue('gray.50', 'gray.800')}
+        bg={useColorModeValue('gray.100', 'gray.800')}
         color={useColorModeValue('gray.600', 'gray.50')}
         minH="60px"
         py={{ base: 2 }}
@@ -96,7 +96,12 @@ const DesktopNav = () => {
         </Flex>
 
         <Flex mr="6" display={{ base: 'none', md: 'inline-flex' }}>
-          <Button onClick={toggleColorMode}>
+          <Button
+            onClick={toggleColorMode}
+            variant="ghost"
+            colorScheme={colorMode === 'light' && 'purple'}
+            isActive={colorMode === 'light'}
+          >
             {colorMode === 'light' ? <Icon as={MoonIcon} /> : <Icon as={SunIcon} />}
           </Button>
         </Flex>

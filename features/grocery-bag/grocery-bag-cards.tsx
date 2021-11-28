@@ -23,7 +23,7 @@ const GroceryBagCards: React.FC<Props> = ({
     flexWrap="nowrap"
     overflowX="auto"
     spacing={4}
-    paddingBottom={2}
+    minH="50vh"
     css={{
       scrollSnapType: 'x mandatory',
     }}
