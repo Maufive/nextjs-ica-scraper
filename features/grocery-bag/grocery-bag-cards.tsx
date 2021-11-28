@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimpleGrid } from '@chakra-ui/react';
+import { HStack } from '@chakra-ui/react';
 import Card from '../../components/Cards/CardWithImage/Card';
 import SkeletonCards from '../../components/Cards/CardWithImage/CardSkeleton';
 import { Recipe } from '../../types';
@@ -19,7 +19,15 @@ const GroceryBagCards: React.FC<Props> = ({
   handleFetchNewRecipe,
   handleClickRecipe,
 }) => (
-  <SimpleGrid columns={[2, 3, 3]} spacingX={{ base: 3, md: 4 }} spacingY={6}>
+  <HStack
+    flexWrap="nowrap"
+    overflowX="auto"
+    spacing={4}
+    paddingBottom={2}
+    css={{
+      scrollSnapType: 'x mandatory',
+    }}
+  >
     {!recipes && (
     <SkeletonCards />
     )}
@@ -38,7 +46,7 @@ const GroceryBagCards: React.FC<Props> = ({
         onClick={handleClickRecipe}
       />
     ))}
-  </SimpleGrid>
+  </HStack>
 );
 
 export default GroceryBagCards;

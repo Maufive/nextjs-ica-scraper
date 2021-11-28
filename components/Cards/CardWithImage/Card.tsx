@@ -16,7 +16,7 @@ import {
   LockOpenIcon, LockClosedIcon, ClockIcon, RefreshIcon, StarIcon,
 } from '@heroicons/react/solid';
 
-const AnimatedBox = motion(Box);
+const AnimatedFlex = motion(Flex);
 
 export interface CardProps {
   title: string;
@@ -50,18 +50,22 @@ const Card: React.FC<CardProps> = ({
   }, [onClickFetchNewRecipe]);
 
   return (
-    <AnimatedBox
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
+    <AnimatedFlex
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      flexDirection="column"
+      flex="0 0 300px"
       bg={useColorModeValue('gray.100', 'gray.900')}
       boxShadow="2xl"
       rounded="md"
       p={{ base: 2, lg: 6 }}
       overflow="hidden"
-      minW={{ lg: '320px' }}
+      css={{
+        scrollSnapAlign: 'start',
+      }}
     >
       <Box
-        h={{ base: '150px', md: '210px' }}
+        h="210px"
         bg="gray.100"
         mt={-6}
         mx={-6}
@@ -76,7 +80,7 @@ const Card: React.FC<CardProps> = ({
           priority
         />
       </Box>
-      <Stack minH={{ base: '80px' }} onClick={() => onClick(id)}>
+      <Stack minH="100px" onClick={() => onClick(id)}>
         <Flex direction="column">
           <HStack>
             <Icon as={StarIcon} color="yellow.400" w={{ base: 3, md: 4 }} h={{ base: 3, md: 4 }} />
@@ -111,7 +115,7 @@ const Card: React.FC<CardProps> = ({
         </Flex>
         <Heading
           color={useColorModeValue('gray.700', 'gray.100')}
-          fontSize={{ base: 'sm', lg: 'xl' }}
+          fontSize="lg"
           noOfLines={[2, 2, 1]}
         >
           {title}
@@ -135,7 +139,7 @@ const Card: React.FC<CardProps> = ({
           isLoading={isLoading}
         />
       </Stack>
-    </AnimatedBox>
+    </AnimatedFlex>
   );
 };
 

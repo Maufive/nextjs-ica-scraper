@@ -2,6 +2,7 @@
 import React from 'react';
 import {
   Box,
+  Flex,
   Heading,
   Stack,
   useColorModeValue,
@@ -11,16 +12,17 @@ import {
 import { GROCERY_BAG_INITIAL_FILTERS } from '../../../constants';
 
 const CardSkeleton = () => (
-  <Box
-    minW={{ lg: '320px' }}
-    bg={useColorModeValue('white', 'gray.900')}
+  <Flex
+    flexDirection="column"
+    flex="0 0 300px"
+    bg={useColorModeValue('gray.100', 'gray.900')}
     boxShadow="2xl"
     rounded="md"
     p={{ base: 2, lg: 6 }}
     overflow="hidden"
   >
     <Box
-      h={{ base: '150px', lg: '210px' }}
+      h="210px"
       bg="gray.100"
       mt={-6}
       mx={-6}
@@ -57,7 +59,7 @@ const CardSkeleton = () => (
         />
       </Skeleton>
     </Stack>
-  </Box>
+  </Flex>
 );
 
 const SkeletonCards: React.FC = () => {

@@ -142,7 +142,7 @@ export const {
   setFilters,
 } = groceryBagSlice.actions;
 
-const selectRecipes = (state: RootState) => state.groceryBag.recipes;
+const selectRecipes = (state: RootState) => state.groceryBag.recipes || [];
 const selectRecipesLoading = (state: RootState) => state.groceryBag.fetchInitialRecipesLoading;
 const selectFetchManyRecipesLoading = (state: RootState) => state.groceryBag.fetchManyRecipesLoading;
 const selectFetchSingleRecipeLoading = (state: RootState) => state.groceryBag.fetchSingleRecipeLoading;

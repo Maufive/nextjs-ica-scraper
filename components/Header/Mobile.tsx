@@ -108,7 +108,7 @@ const TabMenu = () => {
         icon={ShoppingBagIcon}
       />
       <TabItem
-        href="/inköpslistor"
+        href="/inkopslistor"
         label="Inköpslistor"
         isActive={pathname === '/inkopslistor'}
         icon={ClipboardListIcon}
