@@ -22,11 +22,10 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
           id: true,
         },
       },
-      ingredients: {
+      items: {
         select: {
-          quantity: true,
           name: true,
-          id: true,
+          quantity: true,
         },
       },
     },
