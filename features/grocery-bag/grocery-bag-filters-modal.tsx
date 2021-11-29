@@ -13,9 +13,6 @@ import {
   Heading,
   Text,
   Flex,
-  useNumberInput,
-  Input,
-  HStack,
   useColorModeValue,
   Tag,
   TagLeftIcon,
@@ -30,7 +27,6 @@ interface ModalProps {
   isOpen: boolean;
   onClickSaveFilters: ({
     selectedTags,
-    recipeCount,
     time,
   }) => void;
 }
@@ -40,25 +36,7 @@ const Modal: React.FC<ModalProps> = ({
   onClickSaveFilters,
 }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>(INITIAL_FILTERS.selectedTags);
-  const [recipeCount, setRecipeCount] = useState<number>(INITIAL_FILTERS.recipeCount);
   const [time, setTime] = useState<string>(INITIAL_FILTERS.time);
-
-  const {
-    getInputProps,
-    getIncrementButtonProps,
-    getDecrementButtonProps,
-  } = useNumberInput({
-    step: 1,
-    defaultValue: 3,
-    min: 1,
-    max: 7,
-    precision: 0,
-    onChange: (value: string) => setRecipeCount(parseInt(value, 10)),
-  });
-
-  const inc = getIncrementButtonProps();
-  const dec = getDecrementButtonProps();
-  const input = getInputProps({ readOnly: true });
 
   const handleChangeTimeRequired = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
     setTime(event.currentTarget.value);
@@ -76,8 +54,8 @@ const Modal: React.FC<ModalProps> = ({
   }, [selectedTags]);
 
   const onClickSave = useCallback(() => {
-    onClickSaveFilters({ recipeCount, time, selectedTags });
-  }, [onClickSaveFilters, time, selectedTags, recipeCount]);
+    onClickSaveFilters({ time, selectedTags });
+  }, [onClickSaveFilters, time, selectedTags]);
 
   return (
     <ChakraModal
@@ -103,14 +81,6 @@ const Modal: React.FC<ModalProps> = ({
               </Heading>
               <Text color={useColorModeValue('gray.700', 'gray.400')}>Här kan du sätta några filter för att bättre anpassa dina förslag på olika recept</Text>
             </Box>
-            <Flex direction="row" justify="space-between" align="center" mb={10}>
-              <Text fontWeight="700">Antal recept</Text>
-              <HStack w="10rem">
-                <Button {...dec}>-</Button>
-                <Input textAlign="center" {...input} />
-                <Button {...inc}>+</Button>
-              </HStack>
-            </Flex>
             <Flex w="100%" justify="space-between" align="center" mb={10}>
               <Text fontWeight="700">Tillagningstid</Text>
               <Select placeholder="Välj tillagningstid" w="12rem" onChange={handleChangeTimeRequired}>

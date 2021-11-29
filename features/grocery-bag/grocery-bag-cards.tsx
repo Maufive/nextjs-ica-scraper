@@ -23,7 +23,9 @@ const GroceryBagCards: React.FC<Props> = ({
     flexWrap="nowrap"
     overflowX="auto"
     spacing={4}
-    minH="50vh"
+    minH={{ base: '70vh', md: '60vh', lg: '50vh' }}
+    align="flex-start"
+    paddingBottom={4}
     css={{
       scrollSnapType: 'x mandatory',
     }}

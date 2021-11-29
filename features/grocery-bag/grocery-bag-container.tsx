@@ -3,7 +3,7 @@ import React, {
   useCallback, useState, useEffect, useMemo,
 } from 'react';
 import {
-  Heading, Stack, Box, Icon, Button, useDisclosure, Text, HStack,
+  Stack, Box, Icon, Button, useDisclosure, Text, HStack,
 } from '@chakra-ui/react';
 import { FilterIcon, RefreshIcon } from '@heroicons/react/solid';
 import { useAppSelector, useAppDispatch } from '../../state/redux-hooks';
@@ -21,6 +21,8 @@ import RecipeDetailsModal from '../../components/modal/recipe-details-modal';
 import CreateList from '../shopping-list/create-shopping-list';
 import { Session } from '../../types';
 import GroceryBagCards from './grocery-bag-cards';
+import RecipeCountPicker from './grocery-bag-recipe-count-picker';
+import { GROCERY_BAG_INITIAL_FILTERS as INITIAL_FILTERS } from '../../constants';
 
 interface GroceryBagContainerProps {
   session: Session | null;
@@ -33,6 +35,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   const recipes = useAppSelector(selectRecipes);
   const [lockedRecipesIds, setLockedRecipeIds] = useState<string[]>([]);
   const [recipeDetails, setRecipeDetails] = useState(null);
+  const [recipeCount, setRecipeCount] = useState<number>(INITIAL_FILTERS.recipeCount);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -48,18 +51,21 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
 
     dispatch(fetchManyRecipes({
       ...filters,
-      recipeCount: filters.recipeCount - lockedRecipesIds.length,
+      recipeCount: recipeCount - lockedRecipesIds.length,
       // Make sure we dont get duplicates by sending all currently visible recipe ids
       ids: recipes.map((recipe) => recipe.id),
       // Array of IDs that are NOT currently locked
       idsToReplace,
     }));
-  }, [dispatch, recipes, lockedRecipesIds, filters]);
+  }, [dispatch, recipes, lockedRecipesIds, filters, recipeCount]);
 
   const onClickSaveFilters = useCallback((savedFilters) => {
-    dispatch(setFilters(savedFilters));
+    dispatch(setFilters({
+      ...savedFilters,
+      recipeCount,
+    }));
     onClose();
-  }, [dispatch]);
+  }, [dispatch, recipeCount]);
 
   const handleFetchNewRecipe = useCallback((id: string) => {
     dispatch(fetchSingleRecipe({
@@ -103,7 +109,11 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   return (
     <Stack w="100%" pos="relative">
       <Box direction="column" mb={6}>
-        <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading>
+        {/* <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading> */}
+        <RecipeCountPicker
+          count={recipeCount}
+          setCount={setRecipeCount}
+        />
         <HStack spacing={4}>
           <Button
             aria-label="Slumpa alla"
@@ -116,7 +126,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
           >
             Slumpa
             <Text fontWeight={500} fontSize="sm" marginLeft={2}>
-              {`(${recipes?.length - lockedRecipesIds.length})`}
+              {`(${recipeCount - lockedRecipesIds.length})`}
             </Text>
           </Button>
           <Button
