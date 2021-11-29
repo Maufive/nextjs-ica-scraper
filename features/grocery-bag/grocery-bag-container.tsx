@@ -15,6 +15,8 @@ import {
   fetchManyRecipes,
   selectFilters,
   setFilters,
+  setLockedRecipeIds,
+  selectLockedRecipeIds,
 } from './grocery-bag-duck';
 import GroceryBagModal from './grocery-bag-filters-modal';
 import RecipeDetailsModal from '../../components/modal/recipe-details-modal';
@@ -22,7 +24,7 @@ import CreateList from '../shopping-list/create-shopping-list';
 import { Session } from '../../types';
 import GroceryBagCards from './grocery-bag-cards';
 import RecipeCountPicker from './grocery-bag-recipe-count-picker';
-import { GROCERY_BAG_INITIAL_FILTERS as INITIAL_FILTERS } from '../../constants';
+import { INITIAL_RECIPE_COUNT } from '../../constants';
 
 interface GroceryBagContainerProps {
   session: Session | null;
@@ -33,9 +35,12 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   const isRecipesLoading = useAppSelector(selectRecipesLoading);
   const filters = useAppSelector(selectFilters);
   const recipes = useAppSelector(selectRecipes);
-  const [lockedRecipesIds, setLockedRecipeIds] = useState<string[]>([]);
+  const lockedRecipeIds = useAppSelector(selectLockedRecipeIds);
   const [recipeDetails, setRecipeDetails] = useState(null);
-  const [recipeCount, setRecipeCount] = useState<number>(INITIAL_FILTERS.recipeCount);
+  const [recipeCount, setRecipeCount] = useState<number>(INITIAL_RECIPE_COUNT);
+
+  // console.log('recipes', recipes);
+  // console.log(filters);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -46,24 +51,21 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
 
   const onClickFetchManyRecipes = useCallback(() => {
     const idsToReplace = recipes
-      .filter((recipe) => lockedRecipesIds.indexOf(recipe.id) === -1)
+      .filter((recipe) => lockedRecipeIds.indexOf(recipe.id) === -1)
       .map((recipe) => recipe.id);
 
     dispatch(fetchManyRecipes({
       ...filters,
-      recipeCount: recipeCount - lockedRecipesIds.length,
+      recipeCount: recipeCount - lockedRecipeIds.length,
       // Make sure we dont get duplicates by sending all currently visible recipe ids
       ids: recipes.map((recipe) => recipe.id),
       // Array of IDs that are NOT currently locked
       idsToReplace,
     }));
-  }, [dispatch, recipes, lockedRecipesIds, filters, recipeCount]);
+  }, [dispatch, recipes, lockedRecipeIds, filters, recipeCount]);
 
   const onClickSaveFilters = useCallback((savedFilters) => {
-    dispatch(setFilters({
-      ...savedFilters,
-      recipeCount,
-    }));
+    dispatch(setFilters(savedFilters));
     onClose();
   }, [dispatch, recipeCount]);
 
@@ -76,12 +78,12 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   }, [dispatch, recipes, filters]);
 
   const handleClickLockRecipe = useCallback((id: string) => {
-    if (lockedRecipesIds.includes(id)) {
-      return setLockedRecipeIds((prev) => prev.filter((i) => i !== id));
+    if (lockedRecipeIds.includes(id)) {
+      return dispatch(setLockedRecipeIds(lockedRecipeIds.filter((i) => i !== id)));
     }
 
-    setLockedRecipeIds((prev) => [...prev, id]);
-  }, [lockedRecipesIds]);
+    dispatch(setLockedRecipeIds([...lockedRecipeIds, id]));
+  }, [dispatch, lockedRecipeIds]);
 
   const handleClickRecipe = useCallback((id: string) => {
     const details = recipes.find((recipe) => recipe.id === id);
@@ -95,13 +97,15 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   }, []);
 
   const isCreateListAllowed = useMemo(() => {
-    const isAllRecipesLocked = lockedRecipesIds.length === filters.recipeCount;
+    const isAllRecipesLocked = lockedRecipeIds.length === filters.recipeCount;
     const isUserLoggedIn = !!session?.user;
     return isAllRecipesLocked && isUserLoggedIn;
-  }, [session, lockedRecipesIds, filters.recipeCount]);
+  }, [session, lockedRecipeIds, filters.recipeCount]);
 
   useEffect(() => {
-    dispatch(fetchInitialRecipes());
+    if (!recipes || recipes.length === 0) {
+      dispatch(fetchInitialRecipes());
+    }
   }, [dispatch]);
 
   if (isRecipesLoading === 'failed') return <p>something went wrong :(</p>;
@@ -121,12 +125,12 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
             leftIcon={<Icon as={RefreshIcon} />}
             variant="solid"
             colorScheme="green"
-            isActive={recipes?.length !== lockedRecipesIds.length}
-            isDisabled={recipes?.length === lockedRecipesIds.length}
+            isActive={recipes?.length !== lockedRecipeIds.length}
+            isDisabled={recipes?.length === lockedRecipeIds.length}
           >
             Slumpa
             <Text fontWeight={500} fontSize="sm" marginLeft={2}>
-              {`(${recipeCount - lockedRecipesIds.length})`}
+              {`(${recipeCount - lockedRecipeIds.length})`}
             </Text>
           </Button>
           <Button
@@ -139,7 +143,11 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
             Filter
           </Button>
         </HStack>
-        <GroceryBagModal isOpen={isOpen} onClickSaveFilters={onClickSaveFilters} />
+        <GroceryBagModal
+          isOpen={isOpen}
+          onClickSaveFilters={onClickSaveFilters}
+          filters={filters}
+        />
         <RecipeDetailsModal
           isOpen={isOpenRecipeDetails}
           onClose={onCloseRecipeDetailsCb}
@@ -148,7 +156,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
       </Box>
       <GroceryBagCards
         recipes={recipes}
-        lockedRecipesIds={lockedRecipesIds}
+        lockedRecipeIds={lockedRecipeIds}
         handleClickLockRecipe={handleClickLockRecipe}
         handleFetchNewRecipe={handleFetchNewRecipe}
         handleClickRecipe={handleClickRecipe}
@@ -156,7 +164,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
       <CreateList
         isCreateListAllowed={isCreateListAllowed}
         recipeCount={filters.recipeCount}
-        lockedRecipeIdsCount={lockedRecipesIds.length}
+        lockedRecipeIdsCount={lockedRecipeIds.length}
         recipes={recipes}
       />
     </Stack>

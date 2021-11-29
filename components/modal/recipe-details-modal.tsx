@@ -34,9 +34,9 @@ const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
   onClose,
   details,
 }) => {
+  if (!details) return null;
   const initialRef = useRef();
 
-  if (!details) return null;
   return (
     <Modal
       isCentered

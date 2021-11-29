@@ -10,7 +10,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   const filters = {
     ...(time) && { time: { equals: time } },
-    ...(categories) && { categories: { hasSome: categories } },
+    ...(categories.length > 0) && { categories: { hasSome: categories } },
   };
 
   const result = await prisma.recipe.findMany({

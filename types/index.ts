@@ -44,7 +44,7 @@ export interface User {
 }
 
 export interface Filters {
-  categories?: string[] | string;
+  categories?: string[] | (() => string[]);
   recipeCount?: number;
   time?: string;
   ids?: string[];

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 // import { getSession } from 'next-auth/client';
 import prisma from '../../../lib/prisma';
-import { GROCERY_BAG_INITIAL_FILTERS as INITIAL_FILTERS } from '../../../constants';
+import { INITIAL_RECIPE_COUNT } from '../../../constants';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   // const session = await getSession({ req });
@@ -19,7 +19,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       result.splice(index, 1);
       return randomRecipe;
     })
-    .slice(0, INITIAL_FILTERS.recipeCount);
+    .slice(0, INITIAL_RECIPE_COUNT);
 
   return res.json(recipes);
 }

@@ -11,7 +11,8 @@ export const POPULAR_CATEGORIES = [
 ];
 
 export const GROCERY_BAG_INITIAL_FILTERS = {
-  recipeCount: 3,
   time: '',
-  selectedTags: [],
+  categories: [],
 };
+
+export const INITIAL_RECIPE_COUNT = 3;

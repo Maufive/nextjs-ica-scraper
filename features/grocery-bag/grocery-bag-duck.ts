@@ -23,6 +23,7 @@ export type GroceryBagState = {
   fetchManyRecipesLoading: string;
   fetchManyRecipesError: string | null;
   filters: Filters;
+  lockedRecipeIds: string[];
 };
 
 const initialState: GroceryBagState = {
@@ -34,6 +35,7 @@ const initialState: GroceryBagState = {
   fetchManyRecipesLoading: LoadingStates.IDLE,
   fetchManyRecipesError: null,
   filters: GROCERY_BAG_INITIAL_FILTERS,
+  lockedRecipeIds: [],
 };
 
 export const fetchInitialRecipes = createAsyncThunk('recipe/fetchInitialRecipes', async () => {
@@ -94,6 +96,9 @@ export const groceryBagSlice = createSlice({
     setFilters: (state, { payload }) => {
       state.filters = payload;
     },
+    setLockedRecipeIds: (state, { payload }) => {
+      state.lockedRecipeIds = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -140,6 +145,7 @@ export const groceryBagSlice = createSlice({
 
 export const {
   setFilters,
+  setLockedRecipeIds,
 } = groceryBagSlice.actions;
 
 const selectRecipes = (state: RootState) => state.groceryBag.recipes || [];
@@ -147,6 +153,7 @@ const selectRecipesLoading = (state: RootState) => state.groceryBag.fetchInitial
 const selectFetchManyRecipesLoading = (state: RootState) => state.groceryBag.fetchManyRecipesLoading;
 const selectFetchSingleRecipeLoading = (state: RootState) => state.groceryBag.fetchSingleRecipeLoading;
 const selectFilters = (state: RootState) => state.groceryBag.filters;
+const selectLockedRecipeIds = (state: RootState) => state.groceryBag.lockedRecipeIds;
 
 export {
   selectRecipes,
@@ -154,6 +161,7 @@ export {
   selectFetchManyRecipesLoading,
   selectFetchSingleRecipeLoading,
   selectFilters,
+  selectLockedRecipeIds,
 };
 
 export default groceryBagSlice.reducer;

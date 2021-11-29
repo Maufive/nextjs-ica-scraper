@@ -6,7 +6,7 @@ import { Recipe } from '../../types';
 
 interface Props {
   recipes: Recipe[];
-  lockedRecipesIds: string[];
+  lockedRecipeIds: string[];
   handleClickLockRecipe: (id: string) => void;
   handleFetchNewRecipe: (id: string) => void;
   handleClickRecipe: (id: string) => void;
@@ -14,7 +14,7 @@ interface Props {
 
 const GroceryBagCards: React.FC<Props> = ({
   recipes,
-  lockedRecipesIds,
+  lockedRecipeIds,
   handleClickLockRecipe,
   handleFetchNewRecipe,
   handleClickRecipe,
@@ -33,7 +33,7 @@ const GroceryBagCards: React.FC<Props> = ({
     {!recipes && (
     <SkeletonCards />
     )}
-    {recipes?.map((recipe) => (
+    {recipes.length > 0 && recipes.map((recipe) => (
       <Card
         key={recipe.id}
         id={recipe.id}
@@ -42,7 +42,7 @@ const GroceryBagCards: React.FC<Props> = ({
         rating={recipe.rating}
         ratings={recipe.ratings}
         imageSrc={recipe.imageSrc}
-        isLocked={lockedRecipesIds.includes(recipe.id)}
+        isLocked={lockedRecipeIds?.includes(recipe.id)}
         toggleLockRecipe={handleClickLockRecipe}
         onClickFetchNewRecipe={handleFetchNewRecipe}
         onClick={handleClickRecipe}

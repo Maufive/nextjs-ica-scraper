@@ -21,41 +21,44 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { PlusIcon, MinusIcon, SaveIcon } from '@heroicons/react/solid';
-import { POPULAR_CATEGORIES, GROCERY_BAG_INITIAL_FILTERS as INITIAL_FILTERS } from '../../constants';
+import { POPULAR_CATEGORIES } from '../../constants';
+import { Filters } from '../../types';
 
 interface ModalProps {
   isOpen: boolean;
   onClickSaveFilters: ({
-    selectedTags,
+    categories,
     time,
   }) => void;
+  filters: Filters;
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClickSaveFilters,
+  filters,
 }) => {
-  const [selectedTags, setSelectedTags] = useState<string[]>(INITIAL_FILTERS.selectedTags);
-  const [time, setTime] = useState<string>(INITIAL_FILTERS.time);
+  const [categories, setSelectedCatergories] = useState<string[]>([]);
+  const [time, setTime] = useState<string>(filters.time);
 
   const handleChangeTimeRequired = useCallback((event: React.FormEvent<HTMLSelectElement>) => {
     setTime(event.currentTarget.value);
   }, []);
 
   const handleClickTag = useCallback((tag: string) => {
-    const isActive = selectedTags.includes(tag);
+    const isActive = categories?.includes(tag);
 
     if (isActive) {
-      const newArr = selectedTags.filter((t) => t !== tag);
-      return setSelectedTags(newArr);
+      const newArr = categories.filter((t) => t !== tag);
+      return setSelectedCatergories(newArr);
     }
 
-    setSelectedTags((prev) => [...prev, tag]);
-  }, [selectedTags]);
+    setSelectedCatergories((prev) => [...prev, tag]);
+  }, [categories]);
 
   const onClickSave = useCallback(() => {
-    onClickSaveFilters({ time, selectedTags });
-  }, [onClickSaveFilters, time, selectedTags]);
+    onClickSaveFilters({ time, categories });
+  }, [onClickSaveFilters, time, categories]);
 
   return (
     <ChakraModal
@@ -83,9 +86,10 @@ const Modal: React.FC<ModalProps> = ({
             </Box>
             <Flex w="100%" justify="space-between" align="center" mb={10}>
               <Text fontWeight="700">Tillagningstid</Text>
-              <Select placeholder="Välj tillagningstid" w="12rem" onChange={handleChangeTimeRequired}>
+              <Select placeholder="Välj tillagningstid" w="12rem" onChange={handleChangeTimeRequired} value={time || ''}>
                 <option value="Under 30 min">Under 30 min</option>
                 <option value="Under 45 min">Under 45 min</option>
+                <option value="Under 60 min">Under 60 min</option>
                 <option value="Över 60 min">Över 60 min</option>
               </Select>
             </Flex>
@@ -93,7 +97,7 @@ const Modal: React.FC<ModalProps> = ({
               <Text fontWeight="700" mb={4}>Kategorier</Text>
               <Flex w="100%" wrap="wrap">
                 {POPULAR_CATEGORIES.map((category) => {
-                  const isActive = selectedTags.includes(category);
+                  const isActive = categories?.includes(category);
                   return (
                     <Tag
                       as={Button}
