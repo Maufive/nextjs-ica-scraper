@@ -1,16 +1,14 @@
 /* eslint-disable react/no-array-index-key */
 import React, {
-  useCallback, useState, useEffect, useMemo,
+  useCallback, useState, useMemo,
 } from 'react';
 import {
-  Stack, Box, Icon, Button, useDisclosure, Text, HStack,
+  Stack, Box, Icon, Button, useDisclosure, Text, HStack, Heading,
 } from '@chakra-ui/react';
 import { FilterIcon, RefreshIcon } from '@heroicons/react/solid';
 import { useAppSelector, useAppDispatch } from '../../state/redux-hooks';
 import {
-  selectRecipesLoading,
   selectRecipes,
-  fetchInitialRecipes,
   fetchSingleRecipe,
   fetchManyRecipes,
   selectFilters,
@@ -32,15 +30,11 @@ interface GroceryBagContainerProps {
 
 const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   const dispatch = useAppDispatch();
-  const isRecipesLoading = useAppSelector(selectRecipesLoading);
   const filters = useAppSelector(selectFilters);
   const recipes = useAppSelector(selectRecipes);
   const lockedRecipeIds = useAppSelector(selectLockedRecipeIds);
   const [recipeDetails, setRecipeDetails] = useState(null);
   const [recipeCount, setRecipeCount] = useState<number>(INITIAL_RECIPE_COUNT);
-
-  // console.log('recipes', recipes);
-  // console.log(filters);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -102,18 +96,10 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
     return isAllRecipesLocked && isUserLoggedIn;
   }, [session, lockedRecipeIds, filters.recipeCount]);
 
-  useEffect(() => {
-    if (!recipes || recipes.length === 0) {
-      dispatch(fetchInitialRecipes());
-    }
-  }, [dispatch]);
-
-  if (isRecipesLoading === 'failed') return <p>something went wrong :(</p>;
-
   return (
     <Stack w="100%" pos="relative">
       <Box direction="column" mb={6}>
-        {/* <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading> */}
+        <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading>
         <RecipeCountPicker
           count={recipeCount}
           setCount={setRecipeCount}
@@ -136,7 +122,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
           <Button
             aria-label="Filter"
             leftIcon={<Icon as={FilterIcon} />}
-            variant="ghost"
+            variant="solid"
             onClick={() => onOpen()}
             marginRight={4}
           >

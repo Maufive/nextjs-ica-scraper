@@ -9,7 +9,7 @@ const App = ({ Component, pageProps }: AppProps) => (
   <StateProvider store={store}>
     <Provider session={pageProps.session}>
       <ChakraProvider>
-        <Component />
+        <Component {...pageProps} />
       </ChakraProvider>
     </Provider>
   </StateProvider>
