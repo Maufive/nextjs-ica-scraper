@@ -14,6 +14,7 @@ model ShoppingListItem {
   id             String        @id @unique @default(dbgenerated()) @map("_id") @db.ObjectId
   shoppingList   ShoppingList? @relation(fields: [shoppingListId], references: [id])
   shoppingListId String?       @unique @db.ObjectId
+  checked        Boolean?
 }
 
 model ShoppingList {

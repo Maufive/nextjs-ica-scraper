@@ -7,7 +7,9 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       id: String(req.query.id),
     },
     include: {
-      items: true,
+      items: {
+        orderBy: { name: 'desc' }
+      },
       recipes: {
         select: {
           title: true,
@@ -19,12 +21,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     },
   });
 
-  shoppingList.createdAt = Date.parse(shoppingList.createdAt.toString());
-  shoppingList.items.sort((a, b) => {
-    if (a.name < b.name) { return -1; }
-    if (a.name > b.name) { return 1; }
-    return 0;
-  });
+  // shoppingList.createdAt = Date.parse(shoppingList.createdAt.toString());
+  // shoppingList.items.sort((a, b) => {
+  //   if (a.name < b.name) { return -1; }
+  //   if (a.name > b.name) { return 1; }
+  //   return 0;
+  // });
 
   return res.json(shoppingList);
 }

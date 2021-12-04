@@ -9,7 +9,7 @@ import {
   IconButton,
   Skeleton,
 } from '@chakra-ui/react';
-import { GROCERY_BAG_INITIAL_FILTERS } from '../../../constants';
+import { INITIAL_RECIPE_COUNT } from '../../../constants';
 
 const CardSkeleton = () => (
   <Flex
@@ -63,7 +63,7 @@ const CardSkeleton = () => (
 );
 
 const SkeletonCards: React.FC = () => {
-  const arr = Array(GROCERY_BAG_INITIAL_FILTERS.recipeCount).fill(null);
+  const arr = Array(INITIAL_RECIPE_COUNT).fill(null);
   return (
     <>
       {arr.map((_, index) => <CardSkeleton key={index} />)}
