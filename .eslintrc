@@ -1,13 +1,15 @@
 {
     "extends": [
         "airbnb",
-        "airbnb-typescript"
+        "airbnb-typescript",
+        "plugin:@next/next/recommended"
+
     ],
       "rules": {
           "import/no-mutable-exports": "off",
           "consistent-return": "off",
           "no-param-reassign": "off",
-          "eslintreact/prop-types": "off",
+          "eslintreact/prop-types": "off"
     },
     "parserOptions": {
         "project": "./tsconfig.json"
