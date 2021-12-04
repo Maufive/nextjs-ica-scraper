@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { motion, useViewportScroll } from 'framer-motion';
+import React from 'react';
 import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -24,8 +23,6 @@ import {
 import {
   ClipboardListIcon, ShoppingBagIcon, BookOpenIcon,
 } from '@heroicons/react/solid';
-
-const AnimatedStack = motion(Stack);
 
 interface TabItemProps {
   href: string;
@@ -64,22 +61,9 @@ const TabItem: React.FC<TabItemProps> = ({
 
 const TabMenu = () => {
   const { pathname } = useRouter();
-  const { scrollY } = useViewportScroll();
-
-  const [hidden, setHidden] = useState(false);
-
-  const update = useCallback(() => {
-    if (scrollY?.current < scrollY?.prev) {
-      setHidden(false);
-    } else if (scrollY?.current > 100 && scrollY?.current > scrollY?.prev) {
-      setHidden(true);
-    }
-  }, [scrollY]);
-
-  useEffect(() => scrollY.onChange(() => update()), [update]);
 
   return (
-    <AnimatedStack
+    <Stack
       w="100%"
       bg={useColorModeValue('gray.50', 'gray.900')}
       color={useColorModeValue('gray.600', 'gray.50')}
@@ -95,11 +79,6 @@ const TabMenu = () => {
       borderTop={1}
       borderStyle="solid"
       borderColor={useColorModeValue('gray.200', 'gray.800')}
-      animate={hidden ? {
-        y: 70,
-      } : {
-        y: 0,
-      }}
     >
       <TabItem
         href="/matkasse"
@@ -119,7 +98,7 @@ const TabMenu = () => {
         isActive={pathname === '/recept'}
         icon={BookOpenIcon}
       />
-    </AnimatedStack>
+    </Stack>
   );
 };
 

@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 // import { getSession } from 'next-auth/client';
 import prisma from '../../../lib/prisma';
-import { INITIAL_RECIPE_COUNT } from '../../../constants';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   // const session = await getSession({ req });

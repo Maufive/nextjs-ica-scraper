@@ -1,5 +1,3 @@
-import { ClipboardListIcon, ShoppingBagIcon, BookOpenIcon } from '@heroicons/react/solid';
-
 export interface NavItem {
   label: string;
   subLabel?: string;
@@ -7,7 +5,6 @@ export interface NavItem {
   href?: string;
   disabled?: boolean;
   promoted?: boolean;
-  icon: React.SVGProps<SVGSVGElement>
 }
 
 const NAV_ITEMS: Array<NavItem> = [
@@ -15,7 +12,6 @@ const NAV_ITEMS: Array<NavItem> = [
     label: 'Skapa matkasse',
     href: '/matkasse',
     promoted: true,
-    icon: ShoppingBagIcon,
   },
   {
     label: 'Recept',

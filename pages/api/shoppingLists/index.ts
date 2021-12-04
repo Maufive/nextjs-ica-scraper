@@ -17,13 +17,13 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     include: {
       _count: {
         select: {
-          items: true
-        }
-      }
+          items: true,
+        },
+      },
     },
     orderBy: {
-      createdAt: 'desc'
-    }
+      createdAt: 'desc',
+    },
   });
 
   return res.json(result);

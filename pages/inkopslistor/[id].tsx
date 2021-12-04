@@ -1,24 +1,19 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
-// import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { getSession } from 'next-auth/client';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import {
-  Heading, VStack, Flex, HStack, Box, useColorModeValue, Text, Button,
+  Heading, VStack, Flex,
 } from '@chakra-ui/react';
 import Layout from '../../components/Layout';
-import prisma from '../../lib/prisma';
 import { ShoppingList } from '../../types';
 import ShoppingListItem from '../../features/shopping-list/shopping-list-item';
 import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
 import {
-  selectShoppingList, 
-  selectShoppingListLoading, 
-  shoppingLists, 
-  LoadingStates, 
+  selectShoppingList,
+  selectShoppingListLoading,
+  LoadingStates,
   fetchShoppingList,
-  clearShoppingList,
 } from '../../features/shopping-list/shopping-list-duck';
 
 interface PageProps {
@@ -43,7 +38,7 @@ const ShoppingListPage: NextPage<PageProps> = () => {
           <Heading fontSize="2xl" mb={6}>Laddar...</Heading>
         </Flex>
       </Layout>
-    )
+    );
   }
 
   return (

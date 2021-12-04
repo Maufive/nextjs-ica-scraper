@@ -11,10 +11,10 @@ import { ShoppingList } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
 import {
   LoadingStates,
-  fetchAllShoppingLists, 
+  fetchAllShoppingLists,
   selectShoppingLists,
-   selectShoppingListsLoading,
-   clearShoppingList,
+  selectShoppingListsLoading,
+  clearShoppingList,
 } from '../../features/shopping-list/shopping-list-duck';
 
 interface PageProps {
@@ -33,7 +33,7 @@ const PageShoppingList: NextPage<PageProps> = () => {
 
   useEffect(() => {
     dispatch(clearShoppingList());
-  }, [dispatch])
+  }, [dispatch]);
 
   if (loading) {
     return (
@@ -65,6 +65,7 @@ const PageShoppingList: NextPage<PageProps> = () => {
           <ShoppingListCard
             key={list.id}
             title={list.title}
+            // eslint-disable-next-line no-underscore-dangle
             itemCount={list._count.items}
             id={list.id}
           />
