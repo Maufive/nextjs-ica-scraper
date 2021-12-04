@@ -38,7 +38,7 @@ const TabItem: React.FC<TabItemProps> = ({
   const inActiveColor = useColorModeValue('gray.100', 'gray.500');
 
   return (
-    <Link href={href}>
+    <Link href={href} passHref>
       <Flex
         direction="column"
         align="center"
@@ -59,7 +59,7 @@ const TabItem: React.FC<TabItemProps> = ({
   );
 };
 
-const TabMenu = () => {
+const TabMenu: React.FC = () => {
   const { pathname } = useRouter();
 
   return (
@@ -102,7 +102,7 @@ const TabMenu = () => {
   );
 };
 
-const MobileHeader = () => {
+const MobileHeader: React.FC = () => {
   const [session] = useSession();
 
   const handleSignInClick = () => {
@@ -120,7 +120,7 @@ const MobileHeader = () => {
         align="center"
       >
         <Flex flex={{ base: 1 }}>
-          <Link href="/">
+          <Link href="/" passHref>
             <Text
               as={LinkStyles}
               _hover={{
@@ -169,6 +169,7 @@ const MobileHeader = () => {
                 </Center>
                 <br />
                 <MenuDivider />
+                <Link href="/ladda-upp" passHref><MenuItem><p>Lägg till recept</p></MenuItem></Link>
                 <MenuItem onClick={() => signOut()}><p>Logout</p></MenuItem>
               </MenuList>
             </Menu>

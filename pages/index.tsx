@@ -1,51 +1,69 @@
 import React from 'react';
-import { Flex, useToast } from '@chakra-ui/react';
-import Layout from '../components/Layout';
-import { useAppSelector, useAppDispatch } from '../state/redux-hooks';
+import Link from 'next/link';
 import {
-  submitNewRecipe, selectRecipeLoading,
-} from '../components/Submit/SubmitRecipeSlice';
-import SubmitRecipe from '../components/Submit/SubmitRecipe';
+  Flex,
+  Box,
+  Heading,
+  Container,
+  Text,
+  Button,
+  Stack,
+} from '@chakra-ui/react';
+import Layout from '../components/Layout';
 
-const Home: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const loading = useAppSelector(selectRecipeLoading);
-  const toast = useToast();
-
-  React.useEffect(() => {
-    if (loading === 'success') {
-      toast({
-        title: 'Receptet har sparats',
-        description: 'Du kan nu lägga till receptet till din Matkasse',
-        status: 'success',
-        variant: 'left-accent',
-        duration: 9000,
-        isClosable: true,
-      });
-    }
-    if (loading === 'duplicate') {
-      toast({
-        title: 'Receptet finns redan',
-        description: 'Prova igen med ett annat recept',
-        status: 'warning',
-        variant: 'left-accent',
-        duration: 9000,
-        isClosable: true,
-      });
-    }
-  }, [loading, toast]);
-
-  const handleSubmit = React.useCallback((url: string) => {
-    dispatch(submitNewRecipe(url));
-  }, [dispatch]);
-
-  return (
-    <Layout>
-      <Flex w="100%" align="center" justify="center">
-        <SubmitRecipe handleSubmit={handleSubmit} isLoading={loading} />
-      </Flex>
-    </Layout>
-  );
-};
+const Home: React.FC = () => (
+  <Layout>
+    <Flex direction="column" w="100%">
+      <Container maxW="3xl">
+        <Stack
+          as={Box}
+          textAlign="center"
+          spacing={{ base: 8, md: 14 }}
+          py={{ base: 20, md: 36 }}
+        >
+          <Heading
+            fontWeight={600}
+            fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+            lineHeight="110%"
+          >
+            Planera veckohandlingen
+            <br />
+            <Text as="span" color="green.400">
+              snabbt och enkelt
+            </Text>
+          </Heading>
+          <Text color="gray.500">
+            Skräddarsy din egen matkasse och blanda dina favoritrecept tillsamans med nya recept.
+            Spara matkassen som en inköpslista för att veckohandlingen snabbt och enkelt.
+          </Text>
+          <Stack
+            direction="column"
+            spacing={3}
+            align="center"
+            alignSelf="center"
+            position="relative"
+          >
+            <Link href="/matkasse" passHref>
+              <Button
+                colorScheme="green"
+                bg="green.400"
+                rounded="full"
+                px={6}
+                _hover={{
+                  bg: 'green.500',
+                }}
+              >
+                Skapa matkasse
+              </Button>
+            </Link>
+            <Button variant="link" colorScheme="blue" size="sm">
+              Recept
+            </Button>
+          </Stack>
+        </Stack>
+      </Container>
+    </Flex>
+  </Layout>
+);
 
 export default Home;

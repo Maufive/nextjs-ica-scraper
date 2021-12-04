@@ -28,13 +28,14 @@ import { SunIcon } from '@heroicons/react/outline';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import NAV_ITEMS from './nav-items';
 
-const DesktopNav = () => {
+const DesktopNav: React.FC = () => {
   const [session] = useSession();
   const { colorMode, toggleColorMode } = useColorMode();
 
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
-  const promotedLinkColor = useColorModeValue('blue.500', 'blue.300');
+  const promotedLinkColor = useColorModeValue('green.500', 'green.400');
+  const promotedLinkHoverColor = useColorModeValue('green.400', 'green.300');
 
   const handleSignInClick = () => {
     signIn();
@@ -52,7 +53,7 @@ const DesktopNav = () => {
       >
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }} align="center">
 
-          <Link href="/">
+          <Link href="/" passHref>
             <Text
               as={LinkStyles}
               _hover={{
@@ -70,7 +71,7 @@ const DesktopNav = () => {
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <Stack direction="row" spacing={4} align="center">
               {NAV_ITEMS.map((navItem) => (
-                <Link key={navItem.label} href={navItem.disabled ? '/' : navItem.href}>
+                <Link key={navItem.label} href={navItem.disabled ? '/' : navItem.href} passHref>
                   <Box>
                     <Popover trigger="hover" placement="bottom-start">
                       <PopoverTrigger>
@@ -81,7 +82,7 @@ const DesktopNav = () => {
                           color={navItem.promoted ? promotedLinkColor : linkColor}
                           _hover={{
                             textDecoration: 'none',
-                            color: linkHoverColor,
+                            color: navItem.promoted ? promotedLinkHoverColor : linkHoverColor,
                           }}
                         >
                           {navItem.label}
@@ -140,7 +141,8 @@ const DesktopNav = () => {
                 </Center>
                 <br />
                 <MenuDivider />
-                <MenuItem onClick={() => signOut()}><p>Logout</p></MenuItem>
+                <Link href="/ladda-upp" passHref><MenuItem><p>Lägg till recept</p></MenuItem></Link>
+                <MenuItem onClick={() => signOut()}><p>Logga ut</p></MenuItem>
               </MenuList>
             </Menu>
           ) : (
