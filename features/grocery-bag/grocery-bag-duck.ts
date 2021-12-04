@@ -84,7 +84,6 @@ export const groceryBagSlice = createSlice({
       state.lockedRecipeIds = payload;
     },
     setRecipes: (state, { payload }) => {
-      console.log(payload);
       state.recipes = payload;
     },
   },

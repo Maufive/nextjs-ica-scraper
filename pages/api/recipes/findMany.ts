@@ -25,21 +25,29 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     ...(categories.length > 0) && { categories: { hasSome: categories } },
   };
 
+  const totalRecipeCount = await prisma.recipe.count();
+  const skip = Math.max(0, Math.floor(Math.random() * totalRecipeCount) - recipeCount);
+
   const result = await prisma.recipe.findMany({
+    take: recipeCount,
+    skip: skip,
     where: {
       ...filters,
+      id: {
+        notIn: currentlyShowingRecipeIds
+      }
     },
     include: {
       ingredients: true,
     },
   });
 
-  const filteredResults = result
-    .filter((item) => currentlyShowingRecipeIds.indexOf(item.id) === -1);
+  // const filteredResults = result
+  //   .filter((item) => currentlyShowingRecipeIds.indexOf(item.id) === -1);
 
-  const chooser = randomNoRepeats(filteredResults);
+  // const chooser = randomNoRepeats(filteredResults);
 
-  const recipes = filteredResults.map(() => chooser()).slice(0, recipeCount);
+  // const recipes = filteredResults.map(() => chooser()).slice(0, recipeCount);
 
-  return res.json(recipes);
+  return res.json(result);
 }

@@ -91,10 +91,10 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   }, []);
 
   const isCreateListAllowed = useMemo(() => {
-    const isAllRecipesLocked = lockedRecipeIds.length === filters.recipeCount;
+    const isAllRecipesLocked = lockedRecipeIds.length === recipeCount;
     const isUserLoggedIn = !!session?.user;
     return isAllRecipesLocked && isUserLoggedIn;
-  }, [session, lockedRecipeIds, filters.recipeCount]);
+  }, [session, lockedRecipeIds, recipeCount]);
 
   return (
     <Stack w="100%" pos="relative">
@@ -149,7 +149,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
       />
       <CreateList
         isCreateListAllowed={isCreateListAllowed}
-        recipeCount={filters.recipeCount}
+        recipeCount={recipeCount}
         lockedRecipeIdsCount={lockedRecipeIds.length}
         recipes={recipes}
       />

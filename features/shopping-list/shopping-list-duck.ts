@@ -3,10 +3,10 @@ import {
   createSlice,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-// import type { RootState } from '../../state/store';
+import type { RootState } from '../../state/store';
 import { ShoppingList } from '../../types';
 
-const LoadingStates = {
+export const LoadingStates = {
   PENDING: 'pending',
   SUCCESS: 'success',
   FAILED: 'failed',
@@ -14,30 +14,44 @@ const LoadingStates = {
 };
 
 export type ShoppingListState = {
-  loading: string;
+  createShoppingListLoading: string;
+  shoppingLists: ShoppingList[] | null;
+  shoppingListsLoading: string;
   shoppingList: ShoppingList | null;
+  shoppingListLoading: string;
 };
 
 const initialState: ShoppingListState = {
-  loading: LoadingStates.IDLE,
+  createShoppingListLoading: LoadingStates.IDLE,
+  shoppingLists: [],
+  shoppingListsLoading: LoadingStates.IDLE,
   shoppingList: null,
+  shoppingListLoading: LoadingStates.IDLE,
 };
 
-// export const fetchAllShoppingLists = createAsyncThunk('shoppingLists/fetchAllShoppingLists', async () => {
-//   try {
-//     const url = '/api/shopping-lists';
-//     const response = await fetch(url);
-//     const json = await response.json();
-//     return json;
-//   } catch (error) {
-//     console.error(error);
-//     return 'Det gick inte att hämta recepten';
-//   }
-// });
+export const fetchAllShoppingLists = createAsyncThunk('shoppingLists/fetchAllShoppingLists', async () => {
+  try {
+    const url = '/api/shoppingLists';
+    const response = await fetch(url).then((res) => res.json());
+    return { lists: response };
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const fetchShoppingList = createAsyncThunk('shoppingLists/fetchShoppingList', async (listId: string | string[]) => {
+  try {
+    const url = `/api/shoppingLists/${listId}`;
+    const response = await fetch(url).then((res) => res.json());
+    return { list: response };
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 export const createShoppingList = createAsyncThunk('shoppingLists/createShoppingList', async (shoppingList: ShoppingList) => {
   try {
-    const url = '/api/shopping-lists/create';
+    const url = '/api/shoppingLists/create';
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -54,17 +68,36 @@ export const createShoppingList = createAsyncThunk('shoppingLists/createShopping
 export const shoppingLists = createSlice({
   name: 'shopping-lists',
   initialState,
-  reducers: {},
+  reducers: {
+    clearShoppingList: (state) => {
+      state.shoppingListLoading = LoadingStates.IDLE;
+      state.shoppingList = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchAllShoppingLists.pending, (state) => {
+        state.shoppingListsLoading = LoadingStates.PENDING;
+      })
+      .addCase(fetchAllShoppingLists.fulfilled, (state, { payload: { lists } }) => {
+        state.shoppingLists = lists;
+        state.shoppingListsLoading = LoadingStates.SUCCESS;
+      })
+      .addCase(fetchShoppingList.pending, (state) => {
+        state.shoppingListLoading = LoadingStates.PENDING;
+      })
+      .addCase(fetchShoppingList.fulfilled, (state, { payload: { list } }) => {
+        state.shoppingList = list;
+        state.shoppingListLoading = LoadingStates.SUCCESS;
+      })
       .addCase(createShoppingList.pending, (state) => {
-        state.loading = 'pending';
+        state.createShoppingListLoading = 'pending';
       })
       .addCase(createShoppingList.rejected, (state) => {
-        state.loading = 'failed';
+        state.createShoppingListLoading = 'failed';
       })
       .addCase(createShoppingList.fulfilled, (state) => {
-        state.loading = 'success';
+        state.createShoppingListLoading = 'success';
       });
   },
 });
@@ -74,5 +107,22 @@ export const shoppingLists = createSlice({
 //   } = shoppingLists.actions;
 
 // const selectLoading = (state: RootState) => state.shoppingListsReducer.loading;
+const selectShoppingLists = (state: RootState) => state.shoppingListsReducer.shoppingLists;
+const selectShoppingListsLoading = (state: RootState) => state.shoppingListsReducer.shoppingListsLoading;
+const selectShoppingList = (state: RootState) => state.shoppingListsReducer.shoppingList;
+const selectShoppingListLoading = (state: RootState) => state.shoppingListsReducer.shoppingListLoading;
+const selectCreateShoppingListLoading = (state: RootState) => state.shoppingListsReducer.createShoppingListLoading;
+
+export {
+  selectShoppingLists,
+  selectShoppingListsLoading,
+  selectShoppingList,
+  selectShoppingListLoading,
+  selectCreateShoppingListLoading,
+};
+
+export const {
+  clearShoppingList
+} = shoppingLists.actions;
 
 export default shoppingLists.reducer;

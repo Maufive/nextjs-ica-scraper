@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, {
-  useCallback, useRef, useMemo,
+  useCallback, useRef, useMemo, useEffect,
 } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSession } from 'next-auth/client';
@@ -26,8 +26,8 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import FloatingButton from '../../components/floating-button';
-import { useAppDispatch } from '../../state/redux-hooks';
-import { createShoppingList } from './shopping-list-duck';
+import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
+import { createShoppingList, selectCreateShoppingListLoading, LoadingStates } from './shopping-list-duck';
 import { Recipe, Ingredient } from '../../types/index';
 
 const EMOJIS = [
@@ -69,6 +69,7 @@ const CreateShoppingList: React.FC<Props> = ({
     day: 'numeric',
   }).format(today);
   const dispatch = useAppDispatch();
+  const createShoppingListLoading = useAppSelector(selectCreateShoppingListLoading);
   const {
     register,
     handleSubmit,
@@ -135,6 +136,12 @@ const CreateShoppingList: React.FC<Props> = ({
 
     dispatch(createShoppingList(shoppingList));
   }, [ingredients, dispatch]);
+
+  useEffect(() => {
+    if (createShoppingListLoading === LoadingStates.SUCCESS) {
+      onClose();
+    }
+  }, [dispatch, createShoppingListLoading]);
 
   return (
     <>

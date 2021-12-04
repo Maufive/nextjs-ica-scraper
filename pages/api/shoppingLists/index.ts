@@ -15,20 +15,15 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       author: { email: session.user.email },
     },
     include: {
-      recipes: {
+      _count: {
         select: {
-          title: true,
-          imageSrc: true,
-          id: true,
-        },
-      },
-      items: {
-        select: {
-          name: true,
-          quantity: true,
-        },
-      },
+          items: true
+        }
+      }
     },
+    orderBy: {
+      createdAt: 'desc'
+    }
   });
 
   return res.json(result);
