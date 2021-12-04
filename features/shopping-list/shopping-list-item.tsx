@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Flex,
   Text,
@@ -9,16 +9,28 @@ import {
 interface Props {
   title: string;
   value: string;
-  isChecked?: boolean;
+  id: string;
+  initialChecked?: boolean;
+  updateItem: (itemId: string, checked: boolean) => void;
+  isDisabled: boolean;
 }
 
 const ShoppingListItem: React.FC<Props> = ({
   title,
   value,
+  id,
+  updateItem,
+  initialChecked,
+  isDisabled,
 }) => {
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(initialChecked);
   const checkedTitleColor = useColorModeValue('gray.600', 'gray.400');
   const unCheckedTitleColor = useColorModeValue('gray.800', 'gray.100');
+
+  const toggleItem = useCallback(() => {
+    setIsChecked((prev) => !prev);
+    updateItem(id, !isChecked);
+  }, [updateItem, isChecked, id]);
 
   return (
     <Flex
@@ -26,7 +38,8 @@ const ShoppingListItem: React.FC<Props> = ({
       bg={useColorModeValue('gray.200', 'gray.900')}
       w="100%"
       rounded="md"
-      onClick={() => setIsChecked((prev) => !prev)}
+      onClick={isDisabled ? undefined : toggleItem}
+      cursor={isDisabled && 'not-allowed'}
     >
       <Checkbox
         mr={6}
@@ -46,6 +59,10 @@ const ShoppingListItem: React.FC<Props> = ({
       </Flex>
     </Flex>
   );
+};
+
+ShoppingListItem.defaultProps = {
+  initialChecked: false,
 };
 
 export default ShoppingListItem;

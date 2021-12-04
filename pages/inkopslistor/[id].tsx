@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import {
@@ -21,6 +21,7 @@ interface PageProps {
 }
 
 const ShoppingListPage: NextPage<PageProps> = () => {
+  const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const shoppingList = useAppSelector(selectShoppingList);
@@ -30,6 +31,15 @@ const ShoppingListPage: NextPage<PageProps> = () => {
   useEffect(() => {
     dispatch(fetchShoppingList(query.id));
   }, [dispatch, query]);
+
+  const updateShoppingListItem = async (itemId: string, checked: boolean) => {
+    setIsUpdateLoading(true);
+    const url = `/api/shoppingLists/updateListItem?id=${itemId}&checked=${checked}`;
+    await fetch(url, {
+      method: 'PATCH',
+    }).then((res) => res.json());
+    setIsUpdateLoading(false);
+  };
 
   if (shoppingListLoading !== LoadingStates.SUCCESS) {
     return (
@@ -95,6 +105,10 @@ const ShoppingListPage: NextPage<PageProps> = () => {
               key={item.id}
               title={item.name}
               value={item.name}
+              id={item.id}
+              updateItem={updateShoppingListItem}
+              initialChecked={item.checked}
+              isDisabled={isUpdateLoading}
             />
           ))}
         </VStack>

@@ -26,6 +26,7 @@ export interface ShoppingListItem {
   quantity: string | null;
   recipeId: string;
   id: string;
+  checked?: boolean;
 }
 
 export interface ShoppingList {

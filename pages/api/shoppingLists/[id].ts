@@ -8,7 +8,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     },
     include: {
       items: {
-        orderBy: { name: 'desc' },
+        orderBy: { name: 'asc' },
       },
       recipes: {
         select: {
