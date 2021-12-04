@@ -5,11 +5,12 @@ import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Provider as StateProvider } from 'react-redux';
 import { store } from '../state/store';
+import theme from '../theme';
 
 const App = ({ Component, pageProps }: AppProps) => (
   <StateProvider store={store}>
     <Provider session={pageProps.session}>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
     </Provider>
