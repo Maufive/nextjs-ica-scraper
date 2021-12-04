@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
+<<<<<<< HEAD
 import { GetStaticProps, NextPage } from 'next';
+=======
+import { <GetStaticProps></GetStaticProps>, NextPage } from 'next';
+>>>>>>> 228678e658d20e1592a29db2a8e19907c863108f
 import { useSession } from 'next-auth/client';
 import Layout from '../components/Layout';
 import GroceryBagContainer from '../features/grocery-bag/grocery-bag-container';
@@ -32,7 +36,11 @@ const PageMatkasse: NextPage<PageProps> = ({ initialRecipes }) => {
   );
 };
 
+<<<<<<< HEAD
 export const getStaticProps: GetStaticProps = async () => {
+=======
+export const getStaticProps: <GetStaticProps></GetStaticProps> = async () => {
+>>>>>>> 228678e658d20e1592a29db2a8e19907c863108f
   const totalRecipeCount = await prisma.recipe.count();
   const skip = Math.max(0, Math.floor(Math.random() * totalRecipeCount) - INITIAL_RECIPE_COUNT);
 
