@@ -33,29 +33,31 @@ const PageMatkasse: NextPage<PageProps> = ({ initialRecipes }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
+  const totalRecipeCount = await prisma.recipe.count();
+  const skip = Math.max(0, Math.floor(Math.random() * totalRecipeCount) - INITIAL_RECIPE_COUNT);
+
   const result = await prisma.recipe.findMany({
-    include: {
+    take: INITIAL_RECIPE_COUNT,
+    skip,
+    select: {
+      createdAt: false,
+      id: true,
+      title: true,
+      description: true,
+      imageSrc: true,
+      rating: true,
+      ratings: true,
+      time: true,
+      amountOfIngredients: true,
+      difficulty: true,
       ingredients: true,
+      url: true,
     },
   });
 
-  const recipes = result
-    .map(() => {
-      const randomRecipe = result[Math.floor(Math.random() * result.length)];
-      const index = result.indexOf(randomRecipe);
-      result.splice(index, 1);
-      return randomRecipe;
-    })
-    .slice(0, INITIAL_RECIPE_COUNT);
-
-  const initialRecipes = recipes.map((r) => ({
-    ...r,
-    createdAt: Date.parse(r.createdAt.toString()),
-  }));
-
   return {
     props: {
-      initialRecipes,
+      initialRecipes: result,
     },
   };
 };
