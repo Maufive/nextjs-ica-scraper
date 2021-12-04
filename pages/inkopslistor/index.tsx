@@ -56,8 +56,6 @@ const PageShoppingList: NextPage<PageProps> = () => {
     );
   }
 
-  console.log(shoppingLists);
-
   return (
     <Layout>
       <VStack w="100%">

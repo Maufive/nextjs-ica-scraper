@@ -23,7 +23,7 @@ const ShoppingListCard: React.FC<Props> = ({
   itemCount,
   id,
 }) => (
-  <Link href={`/inkopslistor/${id}`}>
+  <Link href={`/inkopslistor/${id}`} passHref>
     <Flex
       width="100%"
       align="center"
