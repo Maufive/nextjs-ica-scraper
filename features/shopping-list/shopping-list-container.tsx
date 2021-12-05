@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { AnimatePresence } from 'framer-motion';
 import {
-  VStack, Flex, Heading, Text, useColorModeValue,
+  VStack, Flex, Heading, Text, useColorModeValue, Icon, Box,
 } from '@chakra-ui/react';
+import { BookOpenIcon } from '@heroicons/react/solid';
 import { ShoppingList } from '../../types';
 import ShoppingListItem from './shopping-list-item';
 
@@ -10,7 +13,7 @@ interface Props {
   shoppingList: ShoppingList
 }
 
-const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title } }) => {
+const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title, recipes } }) => {
   const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
   const [unCheckedItems, setUncheckedItems] = useState(items.filter((i) => !i.checked));
   const [checkedItems, setCheckedItems] = useState(items.filter((i) => i.checked));
@@ -42,7 +45,7 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title }
     <Flex direction="column" w="100%">
       <Heading fontSize="2xl" mb={6}>{title}</Heading>
       {showUncheckedItems && (
-        <Flex direction="column" w="100%" mb={4}>
+        <Flex direction="column" w="100%" mb={5}>
           <Text
             fontSize="sm"
             textTransform="uppercase"
@@ -69,7 +72,7 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title }
         </Flex>
       )}
       {showCheckedItems && (
-        <Flex direction="column" align="start" w="100%" mb={4}>
+        <Flex direction="column" align="start" w="100%" mb={5}>
           <Flex
             pos="sticky"
             top="-1px"
@@ -103,6 +106,45 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title }
           </VStack>
         </Flex>
       )}
+      <Flex direction="column" w="100%" mb={5}>
+        <Flex align="center" py={3}>
+          <Heading size="md" mr={2}>
+            Tillagda recept
+          </Heading>
+          <Icon as={BookOpenIcon} ml={1} h={5} w={5} />
+        </Flex>
+        <VStack spacing={2} align="flex-start" w="100%">
+          {recipes.map((recipe) => (
+            <Link passHref href={`/recept/${recipe.id}`}>
+              <Flex
+                key={recipe.id}
+                rounded="md"
+                justify="space-between"
+                w="100%"
+                bg={useColorModeValue('gray.100', 'gray.900')}
+                p={1}
+              >
+                <Flex p={2} flex="1">
+                  <Text fontSize="sm">{recipe.title}</Text>
+                </Flex>
+                <Box
+                  h="60px"
+                  w="60px"
+                  bg="gray.100"
+                  pos="relative"
+                >
+                  <Image
+                    src={recipe.imageSrc}
+                    layout="fill"
+                    objectFit="cover"
+                    priority
+                  />
+                </Box>
+              </Flex>
+            </Link>
+          ))}
+        </VStack>
+      </Flex>
     </Flex>
   );
 };
