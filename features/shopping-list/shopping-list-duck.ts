@@ -72,7 +72,7 @@ export const shoppingLists = createSlice({
     clearShoppingList: (state) => {
       state.shoppingListLoading = LoadingStates.IDLE;
       state.shoppingList = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -122,7 +122,7 @@ export {
 };
 
 export const {
-  clearShoppingList
+  clearShoppingList,
 } = shoppingLists.actions;
 
 export default shoppingLists.reducer;
