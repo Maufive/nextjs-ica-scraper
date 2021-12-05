@@ -179,8 +179,8 @@ const MobileHeader: React.FC = () => {
               onClick={handleSignInClick}
               size="sm"
               fontWeight={700}
-              color="gray.50"
-              bg="green.400"
+              colorScheme="green"
+              isActive
             >
               Logga in
             </Button>
