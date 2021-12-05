@@ -17,16 +17,12 @@ export type ShoppingListState = {
   createShoppingListLoading: string;
   shoppingLists: ShoppingList[] | null;
   shoppingListsLoading: string;
-  shoppingList: ShoppingList | null;
-  shoppingListLoading: string;
 };
 
 const initialState: ShoppingListState = {
   createShoppingListLoading: LoadingStates.IDLE,
   shoppingLists: [],
   shoppingListsLoading: LoadingStates.IDLE,
-  shoppingList: null,
-  shoppingListLoading: LoadingStates.IDLE,
 };
 
 export const fetchAllShoppingLists = createAsyncThunk('shoppingLists/fetchAllShoppingLists', async () => {
@@ -34,16 +30,6 @@ export const fetchAllShoppingLists = createAsyncThunk('shoppingLists/fetchAllSho
     const url = '/api/shoppingLists';
     const response = await fetch(url).then((res) => res.json());
     return { lists: response };
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-export const fetchShoppingList = createAsyncThunk('shoppingLists/fetchShoppingList', async (listId: string | string[]) => {
-  try {
-    const url = `/api/shoppingLists/${listId}`;
-    const response = await fetch(url).then((res) => res.json());
-    return { list: response };
   } catch (error) {
     console.error(error);
   }
@@ -68,12 +54,7 @@ export const createShoppingList = createAsyncThunk('shoppingLists/createShopping
 export const shoppingLists = createSlice({
   name: 'shopping-lists',
   initialState,
-  reducers: {
-    clearShoppingList: (state) => {
-      state.shoppingListLoading = LoadingStates.IDLE;
-      state.shoppingList = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllShoppingLists.pending, (state) => {
@@ -82,13 +63,6 @@ export const shoppingLists = createSlice({
       .addCase(fetchAllShoppingLists.fulfilled, (state, { payload: { lists } }) => {
         state.shoppingLists = lists;
         state.shoppingListsLoading = LoadingStates.SUCCESS;
-      })
-      .addCase(fetchShoppingList.pending, (state) => {
-        state.shoppingListLoading = LoadingStates.PENDING;
-      })
-      .addCase(fetchShoppingList.fulfilled, (state, { payload: { list } }) => {
-        state.shoppingList = list;
-        state.shoppingListLoading = LoadingStates.SUCCESS;
       })
       .addCase(createShoppingList.pending, (state) => {
         state.createShoppingListLoading = 'pending';
@@ -102,27 +76,14 @@ export const shoppingLists = createSlice({
   },
 });
 
-//   export const {
-//     setFilters,
-//   } = shoppingLists.actions;
-
-// const selectLoading = (state: RootState) => state.shoppingListsReducer.loading;
 const selectShoppingLists = (state: RootState) => state.shoppingListsReducer.shoppingLists;
 const selectShoppingListsLoading = (state: RootState) => state.shoppingListsReducer.shoppingListsLoading;
-const selectShoppingList = (state: RootState) => state.shoppingListsReducer.shoppingList;
-const selectShoppingListLoading = (state: RootState) => state.shoppingListsReducer.shoppingListLoading;
 const selectCreateShoppingListLoading = (state: RootState) => state.shoppingListsReducer.createShoppingListLoading;
 
 export {
   selectShoppingLists,
   selectShoppingListsLoading,
-  selectShoppingList,
-  selectShoppingListLoading,
   selectCreateShoppingListLoading,
 };
-
-export const {
-  clearShoppingList,
-} = shoppingLists.actions;
 
 export default shoppingLists.reducer;

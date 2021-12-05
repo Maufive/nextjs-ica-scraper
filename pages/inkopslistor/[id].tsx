@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-// import { useRouter } from 'next/router';
 import { NextPage, GetServerSideProps } from 'next';
 import {
   Heading, VStack, Flex,
@@ -9,13 +8,6 @@ import Layout from '../../components/Layout';
 import { ShoppingList } from '../../types';
 import prisma from '../../lib/prisma';
 import ShoppingListItem from '../../features/shopping-list/shopping-list-item';
-// import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
-// import {
-//   selectShoppingList,
-//   selectShoppingListLoading,
-//   LoadingStates,
-//   fetchShoppingList,
-// } from '../../features/shopping-list/shopping-list-duck';
 
 interface PageProps {
   shoppingList: ShoppingList;
@@ -23,15 +15,6 @@ interface PageProps {
 
 const ShoppingListPage: NextPage<PageProps> = ({ shoppingList }) => {
   const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
-  // const dispatch = useAppDispatch();
-  // const router = useRouter();
-  // const shoppingList = useAppSelector(selectShoppingList);
-  // const shoppingListLoading = useAppSelector(selectShoppingListLoading);
-  // const { query } = router;
-
-  // useEffect(() => {
-  //   dispatch(fetchShoppingList(query.id));
-  // }, [dispatch, query]);
 
   const updateShoppingListItem = async (itemId: string, checked: boolean) => {
     setIsUpdateLoading(true);
@@ -41,16 +24,6 @@ const ShoppingListPage: NextPage<PageProps> = ({ shoppingList }) => {
     }).then((res) => res.json());
     setIsUpdateLoading(false);
   };
-
-  // if (shoppingListLoading !== LoadingStates.SUCCESS) {
-  //   return (
-  //     <Layout>
-  //       <Flex direction="column" w="100%">
-  //         <Heading fontSize="2xl" mb={6}>Laddar...</Heading>
-  //       </Flex>
-  //     </Layout>
-  //   );
-  // }
 
   return (
     <Layout>

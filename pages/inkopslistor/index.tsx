@@ -11,7 +11,6 @@ import {
   fetchAllShoppingLists,
   selectShoppingLists,
   selectShoppingListsLoading,
-  clearShoppingList,
 } from '../../features/shopping-list/shopping-list-duck';
 import SkeletonCards from '../../features/shopping-list/shopping-list-card-skeletons';
 
@@ -22,11 +21,9 @@ const PageShoppingList: NextPage = () => {
   const shoppingLists = useAppSelector(selectShoppingLists);
 
   useEffect(() => {
-    dispatch(fetchAllShoppingLists());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(clearShoppingList());
+    if (shoppingLists.length < 1) {
+      dispatch(fetchAllShoppingLists());
+    }
   }, [dispatch]);
 
   if (loading) {
