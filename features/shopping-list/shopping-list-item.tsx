@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
 import {
   Flex,
   Text,
@@ -6,13 +7,15 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
+const AnimatedFlex = motion(Flex);
+
 interface Props {
   title: string;
   value: string;
   id: string;
-  initialChecked?: boolean;
   updateItem: (itemId: string, checked: boolean) => void;
   isDisabled: boolean;
+  isChecked: boolean;
 }
 
 const ShoppingListItem: React.FC<Props> = ({
@@ -20,21 +23,23 @@ const ShoppingListItem: React.FC<Props> = ({
   value,
   id,
   updateItem,
-  initialChecked,
   isDisabled,
+  isChecked,
 }) => {
-  const [isChecked, setIsChecked] = useState<boolean>(initialChecked);
   const checkedTitleColor = useColorModeValue('gray.600', 'gray.400');
   const unCheckedTitleColor = useColorModeValue('gray.800', 'gray.100');
 
   const toggleItem = useCallback(() => {
-    setIsChecked((prev) => !prev);
     updateItem(id, !isChecked);
   }, [updateItem, isChecked, id]);
 
   return (
-    <Flex
-      p={4}
+    <AnimatedFlex
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      // layoutId={`list-item-${id}`}
+      p={3}
       bg={useColorModeValue('gray.200', 'gray.900')}
       w="100%"
       rounded="md"
@@ -57,12 +62,8 @@ const ShoppingListItem: React.FC<Props> = ({
           {title}
         </Text>
       </Flex>
-    </Flex>
+    </AnimatedFlex>
   );
-};
-
-ShoppingListItem.defaultProps = {
-  initialChecked: false,
 };
 
 export default ShoppingListItem;

@@ -23,6 +23,7 @@ import {
 import {
   ClipboardListIcon, ShoppingBagIcon, BookOpenIcon,
 } from '@heroicons/react/solid';
+import { MOBILE_NAVIGATION_HEIGHT } from '../../constants';
 
 interface TabItemProps {
   href: string;
@@ -67,7 +68,7 @@ const TabMenu: React.FC = () => {
       w="100%"
       bg={useColorModeValue('gray.50', 'gray.900')}
       color={useColorModeValue('gray.600', 'gray.50')}
-      minH="60px"
+      minH={MOBILE_NAVIGATION_HEIGHT}
       py={2}
       px={4}
       align="center"

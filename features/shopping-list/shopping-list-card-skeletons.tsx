@@ -23,7 +23,7 @@ const ShoppingListCardSkeleton = () => (
       justify="space-around"
       marginLeft={4}
     >
-      <Skeleton w="100%" mb={2}>
+      <Skeleton w="30%" mb={2}>
         <Text fontWeight={700}>
           Hello world!
         </Text>

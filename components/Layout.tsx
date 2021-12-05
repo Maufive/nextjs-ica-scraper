@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Flex, useColorModeValue } from '@chakra-ui/react';
 import Navigation from './Header/Header';
+import { MOBILE_NAVIGATION_HEIGHT } from '../constants';
 
 type Props = {
   children: ReactNode;
@@ -13,7 +14,7 @@ const Layout: React.FC<Props> = ({ children }) => (
     minH="100vh"
   >
     <Navigation />
-    <Flex p={{ base: 2, md: 4 }}>{children}</Flex>
+    <Flex p={{ base: 2, md: 4 }} pb={{ base: MOBILE_NAVIGATION_HEIGHT, lg: 0 }}>{children}</Flex>
   </Flex>
 );
 
