@@ -21,9 +21,9 @@ const UploadRecipePage: React.FC = () => {
         title: 'Receptet har sparats',
         description: 'Du kan nu lägga till receptet till din Matkasse',
         status: 'success',
-        variant: 'left-accent',
         duration: 9000,
         isClosable: true,
+        position: 'top',
       });
     }
     if (loading === 'duplicate') {
@@ -31,9 +31,9 @@ const UploadRecipePage: React.FC = () => {
         title: 'Receptet finns redan',
         description: 'Prova igen med ett annat recept',
         status: 'warning',
-        variant: 'left-accent',
         duration: 9000,
         isClosable: true,
+        position: 'top',
       });
     }
   }, [loading, toast]);

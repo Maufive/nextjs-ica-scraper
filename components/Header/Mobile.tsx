@@ -156,7 +156,10 @@ const MobileHeader: React.FC = () => {
                   src={session.user.image}
                 />
               </MenuButton>
-              <MenuList alignItems="center">
+              <MenuList
+                alignItems="center"
+                bg={useColorModeValue('gray.100', 'gray.800')}
+              >
                 <br />
                 <Center>
                   <Avatar
