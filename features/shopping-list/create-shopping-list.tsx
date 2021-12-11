@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, {
-  useCallback, useRef, useMemo, useEffect,
+  useCallback, useMemo, useEffect,
 } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSession } from 'next-auth/client';
@@ -73,9 +73,8 @@ const CreateShoppingList: React.FC<Props> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
-  const initialRef = useRef();
   const [session] = useSession();
   const toast = useToast();
   const {
@@ -151,7 +150,6 @@ const CreateShoppingList: React.FC<Props> = ({
         onClose={onClose}
         isOpen={isOpen}
         motionPreset="slideInBottom"
-        initialFocusRef={initialRef}
       >
         <ModalOverlay />
         <ModalContent
@@ -169,12 +167,12 @@ const CreateShoppingList: React.FC<Props> = ({
           <ModalBody py={4}>
             <Input
               mb={6}
-              ref={initialRef}
               placeholder="Namn på din inköpslista..."
               w="100%"
               isRequired
               defaultValue={`${capitalizeFirstLetter(formattedDate)} ${getRandomEmoji()}`}
               {...register('shoppingListTitle', { required: true })}
+              autoFocus
             />
             <FormErrorMessage>
               {errors.name && errors.name.message}
@@ -220,7 +218,7 @@ const CreateShoppingList: React.FC<Props> = ({
               colorScheme="green"
               isActive
               type="submit"
-              isLoading={isSubmitting}
+              isLoading={createShoppingListLoading === LoadingStates.PENDING}
             >
               Skapa inköpslista
             </Button>
