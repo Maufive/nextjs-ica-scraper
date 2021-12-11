@@ -13,21 +13,20 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import {
-  ClockIcon, StarIcon,
+  ClockIcon,
 } from '@heroicons/react/solid';
+import Ratings from '../../components/ratings';
 
 const AnimatedFlex = motion(Flex);
 
 const variants = {
   show: {
-    y: 0,
     opacity: 1,
     transition: {
       y: { stiffness: 600, velocity: -100 },
     },
   },
   initial: {
-    y: 50,
     opacity: 0,
     transition: {
       y: { stiffness: 600 },
@@ -81,15 +80,7 @@ const Card: React.FC<CardProps> = ({
       <Stack p={{ base: 2, lg: 4 }} minH="150px">
         <Flex direction="column">
           <HStack>
-            <Icon as={StarIcon} color="yellow.400" w="4" h="4" />
-            <Text
-              color={useColorModeValue('gray.800', 'gray.300')}
-              textTransform="uppercase"
-              fontWeight={500}
-              fontSize="xs"
-            >
-              {`${rating} / 5`}
-            </Text>
+            <Ratings value={Number(rating)} max={5} />
             <Text
               color={useColorModeValue('gray.600', 'gray.500')}
               fontWeight={400}
