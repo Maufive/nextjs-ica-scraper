@@ -66,7 +66,6 @@ const Card: React.FC<CardProps> = ({
     >
       <Box
         h="200px"
-        bg="gray.100"
         pos="relative"
         overflow="hidden"
         roundedTop="md"

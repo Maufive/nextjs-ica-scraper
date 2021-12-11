@@ -120,6 +120,7 @@ const MobileHeader: React.FC = () => {
         px={{ base: 2 }}
         align="center"
       >
+        <Flex flex={{ base: 1 }} />
         <Flex flex={{ base: 1 }}>
           <Link href="/" passHref>
             <Text
