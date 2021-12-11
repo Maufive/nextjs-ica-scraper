@@ -98,7 +98,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
 
   return (
     <Stack w="100%" pos="relative">
-      <Box direction="column" mb={6}>
+      <Box direction="column" mb={6} px={{ base: 2, md: 4 }}>
         <Heading mb={4} fontSize={{ base: '2xl', md: '3xl' }}>Skapa din Matkasse</Heading>
         <RecipeCountPicker
           count={recipeCount}

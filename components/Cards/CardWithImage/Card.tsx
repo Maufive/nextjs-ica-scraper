@@ -13,8 +13,9 @@ import {
   Button,
 } from '@chakra-ui/react';
 import {
-  ClockIcon, RefreshIcon, StarIcon, LockOpenIcon, LockClosedIcon,
+  ClockIcon, RefreshIcon, LockOpenIcon, LockClosedIcon,
 } from '@heroicons/react/solid';
+import Ratings from '../../ratings';
 
 const AnimatedFlex = motion(Flex);
 
@@ -54,23 +55,21 @@ const Card: React.FC<CardProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       flexDirection="column"
-      flex="0 0 300px"
+      flex="0 0 280px"
       bg={useColorModeValue('gray.50', 'gray.900')}
-      boxShadow={{ base: '2xl', lg: 'md' }}
+      boxShadow="md"
       rounded="md"
-      p={{ base: 2, lg: 4 }}
       overflow="hidden"
       css={{
         scrollSnapAlign: 'start',
       }}
     >
       <Box
-        h="210px"
+        h="200px"
         bg="gray.100"
-        mt={-6}
-        mx={-6}
-        mb={4}
         pos="relative"
+        overflow="hidden"
+        roundedTop="md"
         onClick={() => onClick(id)}
       >
         <Image
@@ -80,18 +79,14 @@ const Card: React.FC<CardProps> = ({
           priority
         />
       </Box>
-      <Stack minH="100px" onClick={() => onClick(id)}>
+      <Stack
+        minH="100px"
+        onClick={() => onClick(id)}
+        p={{ base: 2, md: 4 }}
+      >
         <Flex direction="column">
           <HStack>
-            <Icon as={StarIcon} color="yellow.400" w="4" h="4" />
-            <Text
-              color={useColorModeValue('gray.800', 'gray.300')}
-              textTransform="uppercase"
-              fontWeight={500}
-              fontSize="xs"
-            >
-              {`${rating} / 5`}
-            </Text>
+            <Ratings value={Number(rating)} max={5} />
             <Text
               color={useColorModeValue('gray.600', 'gray.500')}
               fontWeight={400}
@@ -121,7 +116,11 @@ const Card: React.FC<CardProps> = ({
           {title}
         </Heading>
       </Stack>
-      <HStack mt={6} align="center" spacing={6}>
+      <HStack
+        align="center"
+        spacing={6}
+        p={{ base: 4, md: 6 }}
+      >
         <Button
           size="sm"
           onClick={() => toggleLockRecipe(id)}

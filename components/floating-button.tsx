@@ -13,8 +13,8 @@ const DesktopButton: React.FC<Props> = ({ isActive, onClick }) => (
   <Box
     pos="fixed"
     zIndex="2"
-    right="20px"
-    bottom="20px"
+    right="10px"
+    bottom="70px"
   >
     <IconButton
       size="lg"
@@ -34,8 +34,8 @@ const MobileButton: React.FC<Props> = ({ isActive, onClick }) => (
   <Box
     pos="fixed"
     zIndex="2"
-    right="20px"
-    bottom="75px"
+    right="10px"
+    bottom="70px"
   >
     <IconButton
       size="lg"
