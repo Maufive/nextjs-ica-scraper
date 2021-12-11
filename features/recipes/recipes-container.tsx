@@ -2,26 +2,10 @@ import React from 'react';
 import {
   Text,
   Stack,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  Icon,
 } from '@chakra-ui/react';
-import { SearchIcon } from '@heroicons/react/solid';
 import RecipeCardGroup from './recipe-card-group';
 import { Recipe } from '../../types';
-
-const SearchInput: React.FC = () => (
-  <InputGroup colorScheme="green">
-    <InputLeftElement
-      pointerEvents="none"
-
-    >
-      <Icon as={SearchIcon} color="gray.300" />
-    </InputLeftElement>
-    <Input placeholder="Sök recept eller ingrediens" />
-  </InputGroup>
-);
+import SearchContainer from '../search/search-container';
 
 const GroupTitle: React.FC = ({ children }) => (
   <Text
@@ -31,7 +15,6 @@ const GroupTitle: React.FC = ({ children }) => (
     textTransform="uppercase"
   >
     {children}
-
   </Text>
 );
 
@@ -48,12 +31,12 @@ const RecipesContainer: React.FC<Props> = ({
 
   return (
     <Stack w="100%" pos="relative" spacing={6}>
-      <SearchInput />
-      <Stack>
+      <SearchContainer />
+      <Stack paddingLeft={{ base: 2, md: 4 }}>
         <GroupTitle>Under 30 minuter</GroupTitle>
         <RecipeCardGroup recipes={quickRecipes} />
       </Stack>
-      <Stack>
+      <Stack paddingLeft={{ base: 2, md: 4 }}>
         <GroupTitle>Nya recept</GroupTitle>
         <RecipeCardGroup recipes={newRecipes} />
       </Stack>
