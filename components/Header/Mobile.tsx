@@ -96,7 +96,7 @@ const TabMenu: React.FC = () => {
       <TabItem
         href="/recept"
         label="Recept"
-        isActive={pathname === '/recept'}
+        isActive={pathname.includes('/recept')}
         icon={BookOpenIcon}
       />
     </Stack>
