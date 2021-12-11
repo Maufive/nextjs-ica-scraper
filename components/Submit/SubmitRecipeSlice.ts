@@ -4,7 +4,8 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../state/store';
-import { Recipe } from '../../types/index';
+import { Recipe } from '../../types';
+import { API_BASE_URL } from '../../constants';
 
 export type RecipeState = {
   recipe: Recipe | {};
@@ -22,9 +23,8 @@ export const submitNewRecipe = createAsyncThunk('submit/submitNewRecipe', async 
   const body = { url };
 
   try {
-    const ASDF = 'http://localhost:3333/api/recipe'; // TODO FIX ME
-    // const realUrl = 'https://ica-scraper.herokuapp.com/api/recipe'
-    const response = await fetch(ASDF, {
+    const apiUrl = `${API_BASE_URL}recipe`;
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

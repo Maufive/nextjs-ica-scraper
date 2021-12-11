@@ -173,7 +173,9 @@ const MobileHeader: React.FC = () => {
                 </Center>
                 <br />
                 <MenuDivider />
-                <Link href="/ladda-upp" passHref><MenuItem><p>Lägg till recept</p></MenuItem></Link>
+                <Link href="/ladda-upp" passHref>
+                  <MenuItem>Lägg till recept</MenuItem>
+                </Link>
                 <MenuItem onClick={() => signOut()}><p>Logout</p></MenuItem>
               </MenuList>
             </Menu>
