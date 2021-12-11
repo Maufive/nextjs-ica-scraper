@@ -49,7 +49,7 @@ const PageShoppingList: NextPage = () => {
 
   return (
     <Layout>
-      <VStack w="100%">
+      <VStack w="100%" px={{ base: 2, md: 4 }}>
         {shoppingListsLoading === LoadingStates.PENDING && (
           <SkeletonCards />
         )}

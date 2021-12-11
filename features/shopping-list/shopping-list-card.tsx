@@ -29,7 +29,7 @@ const ShoppingListCard: React.FC<Props> = ({
       align="center"
       px={4}
       py={4}
-      rounded="sm"
+      rounded="md"
       bg={useColorModeValue('gray.100', 'gray.900')}
     >
       <Center rounded="full" bg="green.100" p={2}>

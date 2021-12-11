@@ -42,7 +42,7 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title, 
   const showCheckedItems: boolean = checkedItems.length > 0;
 
   return (
-    <Flex direction="column" w="100%">
+    <Flex direction="column" w="100%" px={{ base: 2, md: 4 }}>
       <Heading fontSize="2xl" mb={6}>{title}</Heading>
       {showUncheckedItems && (
         <Flex direction="column" w="100%" mb={5}>
@@ -85,7 +85,7 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title, 
             <Heading size="md" mr={2}>
               Handlat
             </Heading>
-            <Text fontSize="sm" color={useColorModeValue('gray.400', 'gray.400')}>
+            <Text fontSize="md" color={useColorModeValue('gray.400', 'gray.400')}>
               {`(${checkedItems.length}) st`}
             </Text>
           </Flex>
@@ -124,14 +124,13 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title, 
                 bg={useColorModeValue('gray.100', 'gray.900')}
                 p={1}
               >
-                <Flex p={2} flex="1">
-                  <Text fontSize="sm">{recipe.title}</Text>
-                </Flex>
                 <Box
                   h="60px"
                   w="60px"
                   bg="gray.100"
                   pos="relative"
+                  overflow="hidden"
+                  roundedLeft="md"
                 >
                   <Image
                     src={recipe.imageSrc}
@@ -140,6 +139,9 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title, 
                     priority
                   />
                 </Box>
+                <Flex px={4} py={2} flex="1">
+                  <Text fontSize="sm">{recipe.title}</Text>
+                </Flex>
               </Flex>
             </Link>
           ))}
