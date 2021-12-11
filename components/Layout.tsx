@@ -14,7 +14,7 @@ const Layout: React.FC<Props> = ({ children }) => (
     minH="100vh"
   >
     <Navigation />
-    <Flex p={{ base: 2, md: 4 }} pb={{ base: MOBILE_NAVIGATION_HEIGHT, lg: 0 }}>{children}</Flex>
+    <Flex pb={{ base: MOBILE_NAVIGATION_HEIGHT, lg: 0 }}>{children}</Flex>
   </Flex>
 );
 
