@@ -35,7 +35,7 @@ const Ratings: React.FC<Props> = ({ value, max }) => {
         bottom="0"
         position="absolute"
         zIndex="1"
-        bg="white"
+        bg="black"
         mixBlendMode="color"
         css={{ width: `${100 - percentage}%` }}
       />

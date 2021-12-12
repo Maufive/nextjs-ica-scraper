@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import {
   Box,
   Heading,
@@ -17,8 +16,6 @@ import {
   ClockIcon, RefreshIcon, LockOpenIcon, LockClosedIcon,
 } from '@heroicons/react/solid';
 import Ratings from '../../ratings';
-
-const AnimatedFlex = motion(Flex);
 
 export interface CardProps {
   title: string;
@@ -50,9 +47,7 @@ const Card: React.FC<CardProps> = ({
   }, [onClickFetchNewRecipe]);
 
   return (
-    <AnimatedFlex
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <Flex
       flexDirection="column"
       flex="0 0 280px"
       bg={useColorModeValue('gray.50', 'gray.900')}
@@ -146,7 +141,7 @@ const Card: React.FC<CardProps> = ({
           Slumpa
         </Button>
       </HStack>
-    </AnimatedFlex>
+    </Flex>
   );
 };
 

@@ -1,28 +1,16 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   HStack,
 } from '@chakra-ui/react';
 import Card from './recipe-card';
 import { Recipe } from '../../types';
 
-const AnimatedStack = motion(HStack);
-
-const variants = {
-  show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.3 },
-  },
-  initial: {
-    transition: { staggerChildren: 0.05, staggerDirection: -1 },
-  },
-};
-
 interface Props {
   recipes: Recipe[];
 }
 
 const RecipeCardGroup: React.FC<Props> = ({ recipes }) => (
-  <AnimatedStack
+  <HStack
     flexWrap="nowrap"
     overflowX="auto"
     spacing={4}
@@ -31,9 +19,6 @@ const RecipeCardGroup: React.FC<Props> = ({ recipes }) => (
     css={{
       scrollSnapType: 'x mandatory',
     }}
-    variants={variants}
-    animate="show"
-    initial="initial"
   >
     {recipes.map((recipe) => (
       <Card
@@ -46,7 +31,7 @@ const RecipeCardGroup: React.FC<Props> = ({ recipes }) => (
         imageSrc={recipe.imageSrc}
       />
     ))}
-  </AnimatedStack>
+  </HStack>
 );
 
 export default RecipeCardGroup;

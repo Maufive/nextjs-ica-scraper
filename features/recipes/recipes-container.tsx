@@ -21,27 +21,29 @@ const GroupTitle: React.FC = ({ children }) => (
 interface Props {
   quickRecipes: Recipe[];
   newRecipes: Recipe[];
+  everydayRecipes: Recipe[];
 }
 
 const RecipesContainer: React.FC<Props> = ({
   quickRecipes,
   newRecipes,
-}) => {
-  console.log(newRecipes);
-
-  return (
-    <Stack w="100%" pos="relative" spacing={6}>
-      <SearchContainer />
-      <Stack paddingLeft={{ base: 2, md: 4 }}>
-        <GroupTitle>Under 30 minuter</GroupTitle>
-        <RecipeCardGroup recipes={quickRecipes} />
-      </Stack>
-      <Stack paddingLeft={{ base: 2, md: 4 }}>
-        <GroupTitle>Nya recept</GroupTitle>
-        <RecipeCardGroup recipes={newRecipes} />
-      </Stack>
+  everydayRecipes,
+}) => (
+  <Stack w="100%" pos="relative" spacing={6}>
+    <SearchContainer />
+    <Stack paddingLeft={{ base: 2, md: 4 }}>
+      <GroupTitle>Under 30 minuter</GroupTitle>
+      <RecipeCardGroup recipes={quickRecipes} />
     </Stack>
-  );
-};
+    <Stack paddingLeft={{ base: 2, md: 4 }}>
+      <GroupTitle>Vardagsmat</GroupTitle>
+      <RecipeCardGroup recipes={everydayRecipes} />
+    </Stack>
+    <Stack paddingLeft={{ base: 2, md: 4 }}>
+      <GroupTitle>Nya recept</GroupTitle>
+      <RecipeCardGroup recipes={newRecipes} />
+    </Stack>
+  </Stack>
+);
 
 export default RecipesContainer;

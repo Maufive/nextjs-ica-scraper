@@ -18,16 +18,19 @@ const REQUIRED_RECIPE_PROPS = {
 interface PageProps {
   quickRecipes: Recipe[];
   newRecipes: Recipe[];
+  everydayRecipes: Recipe[];
 }
 
 const RecipePage: NextPage<PageProps> = ({
   quickRecipes,
   newRecipes,
+  everydayRecipes,
 }) => (
   <Layout>
     <RecipesContainer
       quickRecipes={quickRecipes}
       newRecipes={newRecipes}
+      everydayRecipes={everydayRecipes}
     />
   </Layout>
 );
@@ -43,11 +46,18 @@ export const getStaticProps: GetStaticProps = async () => {
     select: REQUIRED_RECIPE_PROPS,
     orderBy: { createdAt: 'desc' },
   });
+  const everydayRecipes = await prisma.recipe.findMany({
+    take: INITIAL_RECIPE_COUNT,
+    where: { categories: { has: 'Vardag' } },
+    orderBy: { createdAt: 'asc' },
+    select: REQUIRED_RECIPE_PROPS,
+  });
 
   return {
     props: {
       quickRecipes,
       newRecipes,
+      everydayRecipes,
     },
   };
 };

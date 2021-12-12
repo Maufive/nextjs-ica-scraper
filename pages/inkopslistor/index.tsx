@@ -2,7 +2,9 @@
 import React, { useEffect } from 'react';
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/client';
-import { VStack, Heading, Text } from '@chakra-ui/react';
+import {
+  VStack, Heading, Text,
+} from '@chakra-ui/react';
 import Layout from '../../components/Layout';
 import ShoppingListCard from '../../features/shopping-list/shopping-list-card';
 import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
@@ -49,7 +51,13 @@ const PageShoppingList: NextPage = () => {
 
   return (
     <Layout>
-      <VStack w="100%" px={{ base: 2, md: 4 }}>
+      <VStack
+        align="flex-start"
+        w="100%"
+        px={{ base: 2, md: 4 }}
+        py={6}
+      >
+        <Heading fontSize="2xl" marginBottom={2}>Mina inköpslistor</Heading>
         {shoppingListsLoading === LoadingStates.PENDING && (
           <SkeletonCards />
         )}

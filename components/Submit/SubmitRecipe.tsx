@@ -30,20 +30,15 @@ const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) 
 
   return (
     <Flex
-      align="center"
       justify="center"
-      bg={useColorModeValue('gray.50', 'gray.900')}
+      bg={useColorModeValue('gray.50', 'gray.800')}
       width={{ base: '100%', md: '40rem' }}
-      boxShadow="xl"
-      rounded="lg"
       p={6}
       direction="column"
     >
 
       <Heading
         as="h2"
-        fontSize={{ base: 'xl', sm: '2xl' }}
-        textAlign="center"
         mb={5}
       >
         Lägg till ett recept
