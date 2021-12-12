@@ -29,25 +29,10 @@ import FloatingButton from '../../components/floating-button';
 import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
 import { createShoppingList, selectCreateShoppingListLoading, LoadingStates } from './shopping-list-duck';
 import { Recipe, Ingredient } from '../../types/index';
-
-const EMOJIS = [
-  '🧀', '🥦', '🍅',
-  '🌶', '🥒', '🍔',
-  '🥗', '🌮', '🥪',
-  '🍋', '🍎', '🍐',
-  '🍉', '🥬', '🥔',
-  '🥕', '🥘', '🥙',
-  '🍲', '🌯', '🍓',
-];
-
-function getRandomEmoji() {
-  const index = Math.floor(Math.random() * EMOJIS.length);
-  return EMOJIS[index];
-}
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+import {
+  capitalizeFirstLetter,
+  getRandomEmoji,
+} from '../../utils';
 
 interface Props {
   isCreateListAllowed: boolean;

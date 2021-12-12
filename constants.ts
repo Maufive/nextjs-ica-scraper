@@ -20,3 +20,13 @@ export const INITIAL_RECIPE_COUNT = 3;
 export const MOBILE_NAVIGATION_HEIGHT = '60px';
 
 export const API_BASE_URL = 'https://ica-scraper.herokuapp.com/api/';
+
+export const EMOJIS = [
+  '🧀', '🥦', '🍅',
+  '🌶', '🥒', '🍔',
+  '🥗', '🌮', '🥪',
+  '🍋', '🍎', '🍐',
+  '🍉', '🥬', '🥔',
+  '🥕', '🥘', '🥙',
+  '🍲', '🌯', '🍓',
+];

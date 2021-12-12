@@ -19,9 +19,10 @@ import {
   MenuDivider,
   Avatar,
   Button,
+  IconButton,
 } from '@chakra-ui/react';
 import {
-  ClipboardListIcon, ShoppingBagIcon, BookOpenIcon,
+  ClipboardListIcon, ShoppingBagIcon, BookOpenIcon, ChevronLeftIcon,
 } from '@heroicons/react/solid';
 import { MOBILE_NAVIGATION_HEIGHT } from '../../constants';
 
@@ -105,6 +106,8 @@ const TabMenu: React.FC = () => {
 
 const MobileHeader: React.FC = () => {
   const [session] = useSession();
+  const router = useRouter();
+  const hasQueryId = !!router.query?.id;
 
   const handleSignInClick = () => {
     signIn();
@@ -113,14 +116,23 @@ const MobileHeader: React.FC = () => {
   return (
     <Box width="100%">
       <Flex
-        bg={useColorModeValue('gray.50', 'gray.800')}
+        bg={useColorModeValue('gray.50', 'gray.900')}
         color={useColorModeValue('gray.600', 'gray.50')}
-        minH="60px"
-        py={{ base: 2 }}
-        px={{ base: 2 }}
+        px={2}
+        py={3}
         align="center"
       >
-        <Flex flex={{ base: 1 }} />
+        <Flex flex={{ base: 1 }}>
+          <IconButton
+            icon={<Icon as={ChevronLeftIcon} w={6} h={6} />}
+            aria-label="Gå tillbaka"
+            colorScheme={hasQueryId && 'green'}
+            variant="link"
+            isActive={hasQueryId}
+            isDisabled={!hasQueryId}
+            onClick={() => router.back()}
+          />
+        </Flex>
         <Flex flex={{ base: 1 }}>
           <Link href="/" passHref>
             <Text
@@ -186,6 +198,7 @@ const MobileHeader: React.FC = () => {
               size="sm"
               fontWeight={700}
               colorScheme="green"
+              variant="link"
               isActive
             >
               Logga in

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   Box,
@@ -29,7 +30,6 @@ export interface CardProps {
   id: string;
   rating: string;
   ratings: string;
-  onClick: (id: string) => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -42,10 +42,9 @@ const Card: React.FC<CardProps> = ({
   id,
   rating,
   ratings,
-  onClick,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const handleOnClick = useCallback(() => {
+  const handeClickFetchNew = useCallback(() => {
     onClickFetchNewRecipe(id);
     setIsLoading(true);
   }, [onClickFetchNewRecipe]);
@@ -64,57 +63,59 @@ const Card: React.FC<CardProps> = ({
         scrollSnapAlign: 'start',
       }}
     >
-      <Box
-        h="200px"
-        pos="relative"
-        overflow="hidden"
-        roundedTop="md"
-        onClick={() => onClick(id)}
-      >
-        <Image
-          src={imageSrc}
-          layout="fill"
-          objectFit="cover"
-          priority
-        />
-      </Box>
-      <Stack
-        minH="100px"
-        onClick={() => onClick(id)}
-        p={{ base: 2, md: 4 }}
-      >
-        <Flex direction="column">
-          <HStack>
-            <Ratings value={Number(rating)} max={5} />
-            <Text
-              color={useColorModeValue('gray.600', 'gray.500')}
-              fontWeight={400}
-              fontSize="xs"
-              marginLeft="0.25rem !important"
-            >
-              {`(${ratings})`}
-            </Text>
-          </HStack>
-          <HStack>
-            <Icon as={ClockIcon} color="green.500" w="4" h="4" />
-            <Text
-              color="green.500"
-              textTransform="uppercase"
-              fontWeight={800}
-              fontSize="xs"
-            >
-              {time}
-            </Text>
-          </HStack>
-        </Flex>
-        <Heading
-          color={useColorModeValue('gray.700', 'gray.100')}
-          fontSize="lg"
-          noOfLines={[2, 2, 1]}
+      <Link passHref href={`/recept/${id}`}>
+        <Box
+          h="200px"
+          pos="relative"
+          overflow="hidden"
+          roundedTop="md"
         >
-          {title}
-        </Heading>
-      </Stack>
+          <Image
+            src={imageSrc}
+            layout="fill"
+            objectFit="cover"
+            priority
+          />
+        </Box>
+      </Link>
+      <Link passHref href={`/recept/${id}`}>
+        <Stack
+          minH="100px"
+          p={{ base: 2, md: 4 }}
+        >
+          <Flex direction="column">
+            <HStack>
+              <Ratings value={Number(rating)} max={5} />
+              <Text
+                color={useColorModeValue('gray.600', 'gray.500')}
+                fontWeight={400}
+                fontSize="xs"
+                marginLeft="0.25rem !important"
+              >
+                {`(${ratings})`}
+              </Text>
+            </HStack>
+            <HStack>
+              <Icon as={ClockIcon} color="green.500" w="4" h="4" />
+              <Text
+                color="green.500"
+                textTransform="uppercase"
+                fontWeight={800}
+                fontSize="xs"
+              >
+                {time}
+              </Text>
+            </HStack>
+          </Flex>
+          <Heading
+            color={useColorModeValue('gray.700', 'gray.100')}
+            fontSize="lg"
+            noOfLines={[2, 2, 1]}
+          >
+            {title}
+          </Heading>
+        </Stack>
+      </Link>
       <HStack
         align="center"
         spacing={6}
@@ -134,7 +135,7 @@ const Card: React.FC<CardProps> = ({
         </Button>
         <Button
           size="sm"
-          onClick={handleOnClick}
+          onClick={handeClickFetchNew}
           leftIcon={<Icon as={RefreshIcon} />}
           aria-label="Slumpa recept"
           variant="ghost"

@@ -9,7 +9,6 @@ interface Props {
   lockedRecipeIds: string[];
   handleClickLockRecipe: (id: string) => void;
   handleFetchNewRecipe: (id: string) => void;
-  handleClickRecipe: (id: string) => void;
 }
 
 const GroceryBagCards: React.FC<Props> = ({
@@ -17,7 +16,6 @@ const GroceryBagCards: React.FC<Props> = ({
   lockedRecipeIds,
   handleClickLockRecipe,
   handleFetchNewRecipe,
-  handleClickRecipe,
 }) => (
   <Stack paddingLeft={{ base: 2, md: 4 }}>
     <HStack
@@ -46,7 +44,6 @@ const GroceryBagCards: React.FC<Props> = ({
           isLocked={lockedRecipeIds?.includes(recipe.id)}
           toggleLockRecipe={handleClickLockRecipe}
           onClickFetchNewRecipe={handleFetchNewRecipe}
-          onClick={handleClickRecipe}
         />
       ))}
     </HStack>

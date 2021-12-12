@@ -27,8 +27,7 @@ const ShoppingListCard: React.FC<Props> = ({
     <Flex
       width="100%"
       align="center"
-      px={4}
-      py={4}
+      p={4}
       rounded="md"
       bg={useColorModeValue('gray.100', 'gray.900')}
     >

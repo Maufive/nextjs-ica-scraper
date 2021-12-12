@@ -17,7 +17,6 @@ import {
   selectLockedRecipeIds,
 } from './grocery-bag-duck';
 import GroceryBagModal from './grocery-bag-filters-modal';
-import RecipeDetailsModal from '../../components/modal/recipe-details-modal';
 import CreateList from '../shopping-list/create-shopping-list';
 import { Session } from '../../types';
 import GroceryBagCards from './grocery-bag-cards';
@@ -33,15 +32,9 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   const filters = useAppSelector(selectFilters);
   const recipes = useAppSelector(selectRecipes);
   const lockedRecipeIds = useAppSelector(selectLockedRecipeIds);
-  const [recipeDetails, setRecipeDetails] = useState(null);
   const [recipeCount, setRecipeCount] = useState<number>(INITIAL_RECIPE_COUNT);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenRecipeDetails,
-    onOpen: onOpenRecipeDetails,
-    onClose: onCloseRecipeDetails,
-  } = useDisclosure();
 
   const onClickFetchManyRecipes = useCallback(() => {
     const idsToReplace = recipes
@@ -79,17 +72,6 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
     dispatch(setLockedRecipeIds([...lockedRecipeIds, id]));
   }, [dispatch, lockedRecipeIds]);
 
-  const handleClickRecipe = useCallback((id: string) => {
-    const details = recipes.find((recipe) => recipe.id === id);
-    setRecipeDetails(details);
-    onOpenRecipeDetails();
-  }, [recipes]);
-
-  const onCloseRecipeDetailsCb = useCallback(() => {
-    setRecipeDetails(null);
-    onCloseRecipeDetails();
-  }, []);
-
   const isCreateListAllowed = useMemo(() => {
     const isAllRecipesLocked = lockedRecipeIds.length === recipeCount;
     const isUserLoggedIn = !!session?.user;
@@ -109,7 +91,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
             aria-label="Slumpa alla"
             onClick={onClickFetchManyRecipes}
             leftIcon={<Icon as={RefreshIcon} />}
-            variant="solid"
+            variant="ghost"
             colorScheme="green"
             isActive={recipes?.length !== lockedRecipeIds.length}
             isDisabled={recipes?.length === lockedRecipeIds.length}
@@ -122,7 +104,8 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
           <Button
             aria-label="Filter"
             leftIcon={<Icon as={FilterIcon} />}
-            variant="solid"
+            variant="ghost"
+            colorScheme="green"
             onClick={() => onOpen()}
             marginRight={4}
           >
@@ -134,18 +117,12 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
           onClickSaveFilters={onClickSaveFilters}
           filters={filters}
         />
-        <RecipeDetailsModal
-          isOpen={isOpenRecipeDetails}
-          onClose={onCloseRecipeDetailsCb}
-          details={recipeDetails}
-        />
       </Box>
       <GroceryBagCards
         recipes={recipes}
         lockedRecipeIds={lockedRecipeIds}
         handleClickLockRecipe={handleClickLockRecipe}
         handleFetchNewRecipe={handleFetchNewRecipe}
-        handleClickRecipe={handleClickRecipe}
       />
       <CreateList
         isCreateListAllowed={isCreateListAllowed}
