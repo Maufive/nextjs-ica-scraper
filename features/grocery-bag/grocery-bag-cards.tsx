@@ -17,13 +17,13 @@ const GroceryBagCards: React.FC<Props> = ({
   handleClickLockRecipe,
   handleFetchNewRecipe,
 }) => (
-  <Stack paddingLeft={{ base: 2, md: 4 }}>
+  <Stack>
     <HStack
       flexWrap="nowrap"
       overflowX="auto"
       spacing={4}
       minH={{ base: '50vh', md: '60vh', lg: '50vh' }}
-      align="flex-start"
+      align="stretch"
       paddingBottom={4}
       css={{
         scrollSnapType: 'x mandatory',

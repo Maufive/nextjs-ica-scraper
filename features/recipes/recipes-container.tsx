@@ -31,15 +31,15 @@ const RecipesContainer: React.FC<Props> = ({
 }) => (
   <Stack w="100%" pos="relative" spacing={6}>
     <SearchContainer />
-    <Stack paddingLeft={{ base: 2, md: 4 }}>
+    <Stack>
       <GroupTitle>Under 30 minuter</GroupTitle>
       <RecipeCardGroup recipes={quickRecipes} />
     </Stack>
-    <Stack paddingLeft={{ base: 2, md: 4 }}>
+    <Stack>
       <GroupTitle>Vardagsmat</GroupTitle>
       <RecipeCardGroup recipes={everydayRecipes} />
     </Stack>
-    <Stack paddingLeft={{ base: 2, md: 4 }}>
+    <Stack>
       <GroupTitle>Nya recept</GroupTitle>
       <RecipeCardGroup recipes={newRecipes} />
     </Stack>

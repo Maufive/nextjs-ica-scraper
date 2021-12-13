@@ -56,13 +56,12 @@ const Card: React.FC<CardProps> = ({
       variants={variants}
       flex="0 0 200px"
       overflow="hidden"
-      css={{
-        scrollSnapAlign: 'start',
-      }}
+      marginLeft={2}
       flexDirection="column"
       bg={useColorModeValue('gray.50', 'gray.900')}
       boxShadow="md"
       rounded="md"
+      _last={{ marginRight: 'var(--chakra-space-2)' }}
     >
       <Box
         h="130px"

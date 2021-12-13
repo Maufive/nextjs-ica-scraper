@@ -53,19 +53,17 @@ const Card: React.FC<CardProps> = ({
     <AnimatedFlex
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      marginLeft={2}
       flexDirection="column"
-      flex="0 0 280px"
+      flex="0 0 250px"
       bg={useColorModeValue('gray.50', 'gray.900')}
       boxShadow="md"
       rounded="md"
       overflow="hidden"
-      css={{
-        scrollSnapAlign: 'start',
-      }}
     >
       <Link passHref href={`/recept/${id}`}>
         <Box
-          h="200px"
+          h="180px"
           pos="relative"
           overflow="hidden"
           roundedTop="md"
@@ -80,8 +78,8 @@ const Card: React.FC<CardProps> = ({
       </Link>
       <Link passHref href={`/recept/${id}`}>
         <Stack
-          minH="100px"
-          p={{ base: 2, md: 4 }}
+          flex={1}
+          p={{ base: 4, md: 6 }}
         >
           <Flex direction="column">
             <HStack>
@@ -118,7 +116,7 @@ const Card: React.FC<CardProps> = ({
       </Link>
       <HStack
         align="center"
-        spacing={6}
+        justify="space-around"
         p={{ base: 4, md: 6 }}
       >
         <Button

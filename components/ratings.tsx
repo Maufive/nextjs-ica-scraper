@@ -10,6 +10,7 @@ interface Props {
 const Ratings: React.FC<Props> = ({ value, max }) => {
   /* Calculate how much of the stars should be "filled" */
   const percentage = Math.round((value / max) * 100);
+  const keys = Array.from(Array(10).keys());
 
   return (
     <Box
@@ -20,15 +21,14 @@ const Ratings: React.FC<Props> = ({ value, max }) => {
       {Array.from(Array(max).keys()).map((_, i) => (
         <Icon
           as={StarIcon}
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
+          key={keys[i]}
           w={4}
           mr="2px"
           display="flex"
           color="yellow.400"
           _last={{ marginRight: '0px' }}
         />
-      )).reverse()}
+      ))}
       <Box
         top="0"
         right="0"

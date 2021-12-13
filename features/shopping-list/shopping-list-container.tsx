@@ -42,8 +42,13 @@ const ShoppingListContainer: React.FC<Props> = ({ shoppingList: { items, title, 
   const showCheckedItems: boolean = checkedItems.length > 0;
 
   return (
-    <Flex direction="column" w="100%" px={{ base: 2, md: 4 }}>
-      <Heading fontSize="2xl" mb={6}>{title}</Heading>
+    <Flex
+      direction="column"
+      w="100%"
+      px={{ base: 2, md: 4 }}
+      py={4}
+    >
+      <Heading fontSize="2xl" mb={4}>{title}</Heading>
       {showUncheckedItems && (
         <Flex direction="column" w="100%" mb={5}>
           <Text
