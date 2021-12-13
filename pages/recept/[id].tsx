@@ -39,7 +39,7 @@ const RecipePage: NextPage<PageProps> = ({ recipe }) => (
             <Ratings
               value={Number(recipe.rating)}
               max={5}
-              id={id}
+              id={recipe.id}
             />
             <Text
               color={useColorModeValue('gray.600', 'gray.500')}
