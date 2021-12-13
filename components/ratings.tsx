@@ -5,12 +5,13 @@ import { StarIcon } from '@heroicons/react/solid';
 interface Props {
   value: number;
   max: number;
+  id: string;
 }
 
-const Ratings: React.FC<Props> = ({ value, max }) => {
+const Ratings: React.FC<Props> = ({ value, max, id }) => {
   /* Calculate how much of the stars should be "filled" */
   const percentage = Math.round((value / max) * 100);
-  const keys = Array.from(Array(10).keys());
+  // const randomNumbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * 4));
 
   return (
     <Box
@@ -21,7 +22,8 @@ const Ratings: React.FC<Props> = ({ value, max }) => {
       {Array.from(Array(max).keys()).map((_, i) => (
         <Icon
           as={StarIcon}
-          key={keys[i]}
+          // eslint-disable-next-line react/no-array-index-key
+          key={`${id}-${i}`}
           w={4}
           mr="2px"
           display="flex"

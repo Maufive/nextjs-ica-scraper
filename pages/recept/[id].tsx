@@ -36,7 +36,11 @@ const RecipePage: NextPage<PageProps> = ({ recipe }) => (
         <Heading>{recipe.title}</Heading>
         <Stack direction="row" align="center">
           <HStack>
-            <Ratings value={Number(recipe.rating)} max={5} />
+            <Ratings
+              value={Number(recipe.rating)}
+              max={5}
+              id={id}
+            />
             <Text
               color={useColorModeValue('gray.600', 'gray.500')}
               fontWeight={400}

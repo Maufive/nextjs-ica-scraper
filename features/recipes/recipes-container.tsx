@@ -13,6 +13,7 @@ const GroupTitle: React.FC = ({ children }) => (
     fontSize="sm"
     fontWeight="700"
     textTransform="uppercase"
+    px={{ base: 2, md: 4 }}
   >
     {children}
   </Text>
@@ -29,7 +30,7 @@ const RecipesContainer: React.FC<Props> = ({
   newRecipes,
   everydayRecipes,
 }) => (
-  <Stack w="100%" pos="relative" spacing={6}>
+  <Stack w="100%" pos="relative" spacing={4}>
     <SearchContainer />
     <Stack>
       <GroupTitle>Under 30 minuter</GroupTitle>

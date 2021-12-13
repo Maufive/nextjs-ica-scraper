@@ -79,7 +79,11 @@ const Card: React.FC<CardProps> = ({
       <Stack p={{ base: 2, lg: 4 }} minH="150px">
         <Flex direction="column">
           <HStack>
-            <Ratings value={Number(rating)} max={5} />
+            <Ratings
+              value={Number(rating)}
+              max={5}
+              id={id}
+            />
             <Text
               color={useColorModeValue('gray.600', 'gray.500')}
               fontWeight={400}

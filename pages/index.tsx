@@ -56,9 +56,11 @@ const Home: React.FC = () => (
                 Skapa matkasse
               </Button>
             </Link>
-            <Button variant="link" colorScheme="blue" size="sm">
-              Recept
-            </Button>
+            <Link passHref href="/recept">
+              <Button variant="link" colorScheme="blue" size="sm">
+                Recept
+              </Button>
+            </Link>
           </Stack>
         </Stack>
       </Container>
