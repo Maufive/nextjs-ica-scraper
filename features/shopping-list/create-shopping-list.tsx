@@ -123,9 +123,17 @@ const CreateShoppingList: React.FC<Props> = ({
 
   useEffect(() => {
     if (createShoppingListLoading === LoadingStates.SUCCESS) {
+      toast({
+        title: 'Inköpslistan har skapats',
+        description: 'Du hittar din inköpslistsa i menyn',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
       onClose();
     }
-  }, [dispatch, createShoppingListLoading]);
+  }, [dispatch, toast, createShoppingListLoading]);
 
   return (
     <>

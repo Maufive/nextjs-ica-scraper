@@ -15,6 +15,7 @@ import {
   setFilters,
   setLockedRecipeIds,
   selectLockedRecipeIds,
+  selectFetchManyRecipesLoading,
 } from './grocery-bag-duck';
 import GroceryBagModal from './grocery-bag-filters-modal';
 import CreateList from '../shopping-list/create-shopping-list';
@@ -22,6 +23,7 @@ import { Session } from '../../types';
 import GroceryBagCards from './grocery-bag-cards';
 import RecipeCountPicker from './grocery-bag-recipe-count-picker';
 import { INITIAL_RECIPE_COUNT } from '../../constants';
+import { LoadingStates } from '../shopping-list/shopping-list-duck';
 
 interface GroceryBagContainerProps {
   session: Session | null;
@@ -31,6 +33,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   const dispatch = useAppDispatch();
   const filters = useAppSelector(selectFilters);
   const recipes = useAppSelector(selectRecipes);
+  const recipesLoading = useAppSelector(selectFetchManyRecipesLoading);
   const lockedRecipeIds = useAppSelector(selectLockedRecipeIds);
   const [recipeCount, setRecipeCount] = useState<number>(INITIAL_RECIPE_COUNT);
 
@@ -82,7 +85,6 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
     <Stack w="100%" pos="relative">
       <Box
         direction="column"
-        mb={6}
         px={{ base: 2, md: 4 }}
         py={4}
       >
@@ -105,6 +107,7 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
             colorScheme="green"
             isActive={recipes?.length !== lockedRecipeIds.length}
             isDisabled={recipes?.length === lockedRecipeIds.length}
+            isLoading={recipesLoading === LoadingStates.PENDING}
           >
             Slumpa
             <Text fontWeight={500} fontSize="sm" marginLeft={2}>

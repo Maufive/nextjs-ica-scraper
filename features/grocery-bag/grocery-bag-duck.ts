@@ -109,6 +109,9 @@ export const groceryBagSlice = createSlice({
         state.recipes = newState;
         state.fetchSingleRecipeLoading = LoadingStates.SUCCESS;
       })
+      .addCase(fetchManyRecipes.pending, (state) => {
+        state.fetchManyRecipesLoading = LoadingStates.PENDING;
+      })
       .addCase(fetchManyRecipes.fulfilled, (state, { payload: { idsToReplace, recipes } }) => {
         const currentRecipes = [...state.recipes];
         const prunedRecipes = currentRecipes.filter((recipe: Recipe) => !idsToReplace.includes(recipe.id));
