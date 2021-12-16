@@ -2,16 +2,23 @@ import React from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Image from 'next/image';
 import {
-  Stack, Box,
-  Heading, Text,
-  useColorModeValue, HStack,
-  Icon, VStack, Flex, Link,
+  Stack,
+  Box,
+  Heading,
+  Text,
+  useColorModeValue,
+  HStack,
+  Icon,
+  VStack,
+  Flex,
+  Link,
 } from '@chakra-ui/react';
 import { ClockIcon, ExternalLinkIcon } from '@heroicons/react/solid';
 import Layout from '../../components/Layout';
 import prisma from '../../lib/prisma';
 import { Recipe } from '../../types';
 import Ratings from '../../components/ratings';
+import AddToShoppingList from '../../features/recipes/recipe-add-to-shopping-list-modal';
 
 interface PageProps {
   recipe: Recipe;
@@ -19,7 +26,7 @@ interface PageProps {
 
 const RecipePage: NextPage<PageProps> = ({ recipe }) => (
   <Layout>
-    <Stack w="100%">
+    <Stack w="100%" paddingBottom={4}>
       <Box
         h="250px"
         pos="relative"
@@ -105,19 +112,23 @@ const RecipePage: NextPage<PageProps> = ({ recipe }) => (
               bg={useColorModeValue('gray.100', 'gray.900')}
             >
               {i.quantity && (
-              <Text
-                fontWeight={600}
-                marginRight={1}
-                color={useColorModeValue('gray.900', 'gray.50')}
-              >
-                {i.quantity}
-              </Text>
+                <Text
+                  fontWeight={600}
+                  marginRight={1}
+                  color={useColorModeValue('gray.900', 'gray.50')}
+                >
+                  {i.quantity}
+                </Text>
               )}
               <Text color={useColorModeValue('gray.900', 'gray.300')}>{i.name}</Text>
             </Flex>
           ))}
         </VStack>
       </Box>
+      <AddToShoppingList
+        ingredients={recipe.ingredients}
+        recipeId={recipe.id}
+      />
     </Stack>
   </Layout>
 );

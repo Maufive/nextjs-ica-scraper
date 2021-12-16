@@ -133,7 +133,7 @@ const CreateShoppingList: React.FC<Props> = ({
       });
       onClose();
     }
-  }, [dispatch, toast, createShoppingListLoading]);
+  }, [toast, createShoppingListLoading]);
 
   return (
     <>
@@ -195,9 +195,7 @@ const CreateShoppingList: React.FC<Props> = ({
                     </Checkbox>
                     {i.quantity && (
                       <Text color="gray.500">
-                        (
-                        {i.quantity}
-                        )
+                        {`(${i.quantity})`}
                       </Text>
                     )}
                   </Flex>

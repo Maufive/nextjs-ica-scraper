@@ -4,7 +4,13 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../state/store';
-import { ShoppingList } from '../../types';
+import { ShoppingList, ShoppingListItem } from '../../types';
+
+interface UpdateShoppingListProps {
+  shoppingListId: string;
+  recipeIds: string[];
+  itemsToAdd: ShoppingListItem[];
+}
 
 export const LoadingStates = {
   PENDING: 'pending',
@@ -17,12 +23,14 @@ export type ShoppingListState = {
   createShoppingListLoading: string;
   shoppingLists: ShoppingList[] | null;
   shoppingListsLoading: string;
+  updateShoppingListLoading: string;
 };
 
 const initialState: ShoppingListState = {
   createShoppingListLoading: LoadingStates.IDLE,
   shoppingLists: [],
   shoppingListsLoading: LoadingStates.IDLE,
+  updateShoppingListLoading: LoadingStates.IDLE,
 };
 
 export const fetchAllShoppingLists = createAsyncThunk('shoppingLists/fetchAllShoppingLists', async () => {
@@ -51,6 +59,20 @@ export const createShoppingList = createAsyncThunk('shoppingLists/createShopping
   }
 });
 
+export const updateShoppingList = createAsyncThunk('shoppingLists/updateShoppingList',
+  async ({ shoppingListId, itemsToAdd, recipeIds }: UpdateShoppingListProps) => {
+    try {
+      const url = '/api/shoppingLists/update';
+      const data = { shoppingListId, recipeIds, itemsToAdd };
+      await fetch(url, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }).then((res) => res.json());
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
 export const shoppingLists = createSlice({
   name: 'shopping-lists',
   initialState,
@@ -72,6 +94,12 @@ export const shoppingLists = createSlice({
       })
       .addCase(createShoppingList.fulfilled, (state) => {
         state.createShoppingListLoading = 'success';
+      })
+      .addCase(updateShoppingList.pending, (state) => {
+        state.updateShoppingListLoading = 'pending';
+      })
+      .addCase(updateShoppingList.fulfilled, (state) => {
+        state.updateShoppingListLoading = 'success';
       });
   },
 });
@@ -79,11 +107,13 @@ export const shoppingLists = createSlice({
 const selectShoppingLists = (state: RootState) => state.shoppingListsReducer.shoppingLists;
 const selectShoppingListsLoading = (state: RootState) => state.shoppingListsReducer.shoppingListsLoading;
 const selectCreateShoppingListLoading = (state: RootState) => state.shoppingListsReducer.createShoppingListLoading;
+const selectUpdateShoppingListLoading = (state: RootState) => state.shoppingListsReducer.updateShoppingListLoading;
 
 export {
   selectShoppingLists,
   selectShoppingListsLoading,
   selectCreateShoppingListLoading,
+  selectUpdateShoppingListLoading,
 };
 
 export default shoppingLists.reducer;
