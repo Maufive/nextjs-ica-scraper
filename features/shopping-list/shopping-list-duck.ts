@@ -24,6 +24,7 @@ export type ShoppingListState = {
   shoppingLists: ShoppingList[] | null;
   shoppingListsLoading: string;
   updateShoppingListLoading: string;
+  deleteShoppingListLoading: string;
 };
 
 const initialState: ShoppingListState = {
@@ -31,6 +32,7 @@ const initialState: ShoppingListState = {
   shoppingLists: [],
   shoppingListsLoading: LoadingStates.IDLE,
   updateShoppingListLoading: LoadingStates.IDLE,
+  deleteShoppingListLoading: LoadingStates.IDLE,
 };
 
 export const fetchAllShoppingLists = createAsyncThunk('shoppingLists/fetchAllShoppingLists', async () => {
@@ -73,6 +75,19 @@ export const updateShoppingList = createAsyncThunk('shoppingLists/updateShopping
     }
   });
 
+export const deleteShoppingList = createAsyncThunk('shoppingLists/deleteShoppingList',
+  async (id: string) => {
+    try {
+      const url = `/api/shoppingLists/delete?id=${id}`;
+      await fetch(url, {
+        method: 'DELETE',
+      }).then((res) => res.json());
+      return { id };
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
 export const shoppingLists = createSlice({
   name: 'shopping-lists',
   initialState,
@@ -100,6 +115,13 @@ export const shoppingLists = createSlice({
       })
       .addCase(updateShoppingList.fulfilled, (state) => {
         state.updateShoppingListLoading = 'success';
+      })
+      .addCase(deleteShoppingList.pending, (state) => {
+        state.deleteShoppingListLoading = LoadingStates.PENDING;
+      })
+      .addCase(deleteShoppingList.fulfilled, (state, { payload: { id } }) => {
+        state.deleteShoppingListLoading = LoadingStates.SUCCESS;
+        state.shoppingLists = state.shoppingLists.filter((list) => list.id !== id);
       });
   },
 });
@@ -108,12 +130,14 @@ const selectShoppingLists = (state: RootState) => state.shoppingListsReducer.sho
 const selectShoppingListsLoading = (state: RootState) => state.shoppingListsReducer.shoppingListsLoading;
 const selectCreateShoppingListLoading = (state: RootState) => state.shoppingListsReducer.createShoppingListLoading;
 const selectUpdateShoppingListLoading = (state: RootState) => state.shoppingListsReducer.updateShoppingListLoading;
+const selectDeleteShoppingListLoading = (state: RootState) => state.shoppingListsReducer.deleteShoppingListLoading;
 
 export {
   selectShoppingLists,
   selectShoppingListsLoading,
   selectCreateShoppingListLoading,
   selectUpdateShoppingListLoading,
+  selectDeleteShoppingListLoading,
 };
 
 export default shoppingLists.reducer;

@@ -1,9 +1,11 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/client';
 import {
-  VStack, Heading, Text,
+  VStack,
+  Heading,
+  Text,
+  useToast,
 } from '@chakra-ui/react';
 import Layout from '../../components/Layout';
 import ShoppingListCard from '../../features/shopping-list/shopping-list-card';
@@ -13,6 +15,7 @@ import {
   fetchAllShoppingLists,
   selectShoppingLists,
   selectShoppingListsLoading,
+  selectDeleteShoppingListLoading,
 } from '../../features/shopping-list/shopping-list-duck';
 import SkeletonCards from '../../features/shopping-list/shopping-list-card-skeletons';
 
@@ -20,13 +23,25 @@ const PageShoppingList: NextPage = () => {
   const [session, loading] = useSession();
   const dispatch = useAppDispatch();
   const shoppingListsLoading = useAppSelector(selectShoppingListsLoading);
+  const deleteListLoading = useAppSelector(selectDeleteShoppingListLoading);
   const shoppingLists = useAppSelector(selectShoppingLists);
+  const toast = useToast();
 
   useEffect(() => {
-    if (shoppingLists.length < 1) {
-      dispatch(fetchAllShoppingLists());
-    }
+    dispatch(fetchAllShoppingLists());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (deleteListLoading === LoadingStates.SUCCESS) {
+      toast({
+        title: 'Inköpslistan har tagits bort',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [dispatch, deleteListLoading, toast]);
 
   if (loading) {
     return (
@@ -65,7 +80,6 @@ const PageShoppingList: NextPage = () => {
           <ShoppingListCard
             key={list.id}
             title={list.title}
-            // eslint-disable-next-line no-underscore-dangle
             itemCount={list._count.items}
             id={list.id}
           />

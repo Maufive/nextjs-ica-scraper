@@ -4,17 +4,15 @@ import {
   Icon,
   Flex,
   Text,
-  IconButton,
   useColorModeValue,
   Center,
 } from '@chakra-ui/react';
-import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import { ClipboardListIcon } from '@heroicons/react/outline';
+import ShoppingListDeleteModal from './shopping-list-card-delete-modal';
 
 interface Props {
   title: string;
   itemCount: number;
-  //   onClickDots?: () => void;
   id: string;
 }
 
@@ -23,45 +21,41 @@ const ShoppingListCard: React.FC<Props> = ({
   itemCount,
   id,
 }) => (
-  <Link href={`/inkopslistor/${id}`} passHref>
-    <Flex
-      width="100%"
-      align="center"
-      p={4}
-      rounded="md"
-      bg={useColorModeValue('gray.100', 'gray.900')}
-    >
-      <Center rounded="full" bg="green.100" p={2}>
-        <Icon as={ClipboardListIcon} color="green.600" bg="green.100" w={6} h={6} rounded="full" />
-      </Center>
-      <Flex
-        flex="2"
-        flexDirection="column"
-        align="flex-start"
-        justify="space-around"
-        marginLeft={4}
-      >
-        <Text fontWeight={700}>
-          {title}
-        </Text>
-        <Text
-          fontWeight={500}
-          fontSize="sm"
-          margin="0"
-          color={useColorModeValue('gray.500', 'gray.400')}
+  <Flex
+    width="100%"
+    align="center"
+    p={4}
+    rounded="md"
+    bg={useColorModeValue('gray.100', 'gray.900')}
+  >
+    <Link href={`/inkopslistor/${id}`} passHref>
+      <>
+        <Center rounded="full" bg="green.100" p={2}>
+          <Icon as={ClipboardListIcon} color="green.600" bg="green.100" w={6} h={6} rounded="full" />
+        </Center>
+        <Flex
+          flex="2"
+          flexDirection="column"
+          align="flex-start"
+          justify="space-around"
+          marginLeft={4}
         >
-          {`${itemCount} varor`}
-        </Text>
-      </Flex>
-      <IconButton
-        size="md"
-                // onClick={() => toggleLockRecipe(id)}
-        icon={<Icon as={DotsHorizontalIcon} />}
-        aria-label="Submeny för inköpslista"
-        variant="ghost"
-      />
-    </Flex>
-  </Link>
+          <Text fontWeight={700}>
+            {title}
+          </Text>
+          <Text
+            fontWeight={500}
+            fontSize="sm"
+            margin="0"
+            color={useColorModeValue('gray.500', 'gray.400')}
+          >
+            {`${itemCount} varor`}
+          </Text>
+        </Flex>
+      </>
+    </Link>
+    <ShoppingListDeleteModal id={id} />
+  </Flex>
 );
 
 export default ShoppingListCard;
