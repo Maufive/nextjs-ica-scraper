@@ -102,19 +102,19 @@ export const shoppingLists = createSlice({
         state.shoppingListsLoading = LoadingStates.SUCCESS;
       })
       .addCase(createShoppingList.pending, (state) => {
-        state.createShoppingListLoading = 'pending';
+        state.createShoppingListLoading = LoadingStates.PENDING;
       })
       .addCase(createShoppingList.rejected, (state) => {
-        state.createShoppingListLoading = 'failed';
+        state.createShoppingListLoading = LoadingStates.FAILED;
       })
       .addCase(createShoppingList.fulfilled, (state) => {
-        state.createShoppingListLoading = 'success';
+        state.createShoppingListLoading = LoadingStates.SUCCESS;
       })
       .addCase(updateShoppingList.pending, (state) => {
-        state.updateShoppingListLoading = 'pending';
+        state.updateShoppingListLoading = LoadingStates.PENDING;
       })
       .addCase(updateShoppingList.fulfilled, (state) => {
-        state.updateShoppingListLoading = 'success';
+        state.updateShoppingListLoading = LoadingStates.SUCCESS;
       })
       .addCase(deleteShoppingList.pending, (state) => {
         state.deleteShoppingListLoading = LoadingStates.PENDING;

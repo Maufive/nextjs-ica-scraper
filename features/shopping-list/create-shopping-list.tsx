@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, {
-  useCallback, useMemo, useEffect,
+  useCallback,
+  useMemo,
+  useEffect,
 } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSession } from 'next-auth/client';
@@ -27,7 +29,12 @@ import {
 } from '@chakra-ui/react';
 import FloatingButton from '../../components/floating-button';
 import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
-import { createShoppingList, selectCreateShoppingListLoading, LoadingStates } from './shopping-list-duck';
+import {
+  createShoppingList,
+  selectCreateShoppingListLoading,
+  LoadingStates,
+} from './shopping-list-duck';
+import { setLockedRecipeIds } from '../grocery-bag/grocery-bag-duck';
 import { Recipe, Ingredient } from '../../types/index';
 import {
   capitalizeFirstLetter,
@@ -85,7 +92,7 @@ const CreateShoppingList: React.FC<Props> = ({
     if (!session?.user) {
       toast({
         title: 'Inloggning krävs.',
-        description: 'Du måste vara inloggad för att skapa en inköpslista',
+        description: 'Du måste vara inloggad för att skapa en inköpslista.',
         status: 'info',
         duration: 9000,
         isClosable: true,
@@ -119,13 +126,14 @@ const CreateShoppingList: React.FC<Props> = ({
     };
 
     dispatch(createShoppingList(shoppingList));
+    dispatch(setLockedRecipeIds([]));
   }, [ingredients, dispatch]);
 
   useEffect(() => {
     if (createShoppingListLoading === LoadingStates.SUCCESS) {
       toast({
         title: 'Inköpslistan har skapats',
-        description: 'Du hittar din inköpslista i menyn i botten av sidan.',
+        description: 'Du hittar din inköpslista i menyn för Inköpslistor.',
         status: 'success',
         duration: 9000,
         isClosable: true,
