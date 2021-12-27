@@ -1,35 +1,31 @@
 import React, { useEffect } from 'react';
-import { NextPage } from 'next';
-import { useSession } from 'next-auth/client';
+import { NextPage, GetServerSideProps } from 'next';
+import { useSession, getSession } from 'next-auth/client';
 import {
   VStack,
   Heading,
   Text,
   useToast,
 } from '@chakra-ui/react';
+import prisma from '../../lib/prisma';
 import Layout from '../../components/Layout';
 import ShoppingListCard from '../../features/shopping-list/shopping-list-card';
 import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
 import {
   LoadingStates,
-  fetchAllShoppingLists,
-  selectShoppingLists,
-  selectShoppingListsLoading,
   selectDeleteShoppingListLoading,
 } from '../../features/shopping-list/shopping-list-duck';
-import SkeletonCards from '../../features/shopping-list/shopping-list-card-skeletons';
+import { ShoppingList } from '../../types';
 
-const PageShoppingList: NextPage = () => {
+interface PageProps {
+  shoppingLists: ShoppingList[];
+}
+
+const PageShoppingList: NextPage<PageProps> = ({ shoppingLists }) => {
   const [session, loading] = useSession();
   const dispatch = useAppDispatch();
-  const shoppingListsLoading = useAppSelector(selectShoppingListsLoading);
   const deleteListLoading = useAppSelector(selectDeleteShoppingListLoading);
-  const shoppingLists = useAppSelector(selectShoppingLists);
   const toast = useToast();
-
-  useEffect(() => {
-    dispatch(fetchAllShoppingLists());
-  }, [dispatch]);
 
   useEffect(() => {
     if (deleteListLoading === LoadingStates.SUCCESS) {
@@ -73,10 +69,7 @@ const PageShoppingList: NextPage = () => {
         py={6}
       >
         <Heading fontSize="2xl" marginBottom={2}>Mina inköpslistor</Heading>
-        {shoppingListsLoading === LoadingStates.PENDING && (
-          <SkeletonCards />
-        )}
-        {shoppingListsLoading === LoadingStates.SUCCESS && shoppingLists.map((list) => (
+        {shoppingLists.map((list) => (
           <ShoppingListCard
             key={list.id}
             title={list.title}
@@ -87,6 +80,37 @@ const PageShoppingList: NextPage = () => {
       </VStack>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = await getSession({ req });
+
+  if (!session) {
+    res.statusCode = 403;
+    return { props: { shoppingLists: [] } };
+  }
+
+  const result = await prisma.shoppingList.findMany({
+    where: {
+      author: { email: session.user.email },
+    },
+    include: {
+      _count: {
+        select: {
+          items: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  return {
+    props: {
+      shoppingLists: JSON.parse(JSON.stringify(result)),
+    },
+  };
 };
 
 export default PageShoppingList;
