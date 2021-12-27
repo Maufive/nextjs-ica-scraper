@@ -5,7 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../state/store';
 import { Recipe, Filters } from '../../types/index';
-import { GROCERY_BAG_INITIAL_FILTERS } from '../../constants';
+import { GROCERY_BAG_INITIAL_FILTERS, INITIAL_RECIPE_COUNT } from '../../constants';
 
 const LoadingStates = {
   PENDING: 'pending',
@@ -22,6 +22,7 @@ export type GroceryBagState = {
   fetchManyRecipesError: string | null;
   filters: Filters;
   lockedRecipeIds: string[];
+  recipeCount: number;
 };
 
 const initialState: GroceryBagState = {
@@ -32,6 +33,7 @@ const initialState: GroceryBagState = {
   fetchManyRecipesError: null,
   filters: GROCERY_BAG_INITIAL_FILTERS,
   lockedRecipeIds: [],
+  recipeCount: INITIAL_RECIPE_COUNT,
 };
 
 export const fetchManyRecipes = createAsyncThunk('recipe/fetchManyRecipes', async (filters: Filters) => {
@@ -86,6 +88,9 @@ export const groceryBagSlice = createSlice({
     setRecipes: (state, { payload }) => {
       state.recipes = payload;
     },
+    setRecipeCount: (state, { payload }) => {
+      state.recipeCount = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -127,6 +132,7 @@ export const {
   setFilters,
   setLockedRecipeIds,
   setRecipes,
+  setRecipeCount,
 } = groceryBagSlice.actions;
 
 const selectRecipes = (state: RootState) => state.groceryBag.recipes || [];
@@ -134,6 +140,7 @@ const selectFetchManyRecipesLoading = (state: RootState) => state.groceryBag.fet
 const selectFetchSingleRecipeLoading = (state: RootState) => state.groceryBag.fetchSingleRecipeLoading;
 const selectFilters = (state: RootState) => state.groceryBag.filters;
 const selectLockedRecipeIds = (state: RootState) => state.groceryBag.lockedRecipeIds;
+const selectRecipeCount = (state: RootState) => state.groceryBag.recipeCount;
 
 export {
   selectRecipes,
@@ -141,6 +148,7 @@ export {
   selectFetchSingleRecipeLoading,
   selectFilters,
   selectLockedRecipeIds,
+  selectRecipeCount,
 };
 
 export default groceryBagSlice.reducer;

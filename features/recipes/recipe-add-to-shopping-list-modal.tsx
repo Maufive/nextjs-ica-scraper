@@ -114,7 +114,7 @@ const AddToShoppingListModal: React.FC<Props> = ({ ingredients, recipeId }) => {
     <>
       <Box px={{ base: 2, md: 4 }}>
         <Button
-          w={{ base: '100%', lg: '200px' }}
+          w={{ base: '100%' }}
           isActive={!!session?.user}
           colorScheme="green"
           onClick={onOpen}

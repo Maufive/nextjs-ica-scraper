@@ -81,7 +81,7 @@ const SubmitRecipe: React.FC<SubmitRecipeProps> = ({ handleSubmit, isLoading }) 
             w="100%"
             type={isLoading === 'success' ? 'button' : 'submit'}
           >
-            {isLoading === 'success' ? <Icon as={CheckIcon} /> : 'Submit'}
+            {isLoading === 'success' ? <Icon as={CheckIcon} /> : 'Lägg till'}
           </Button>
         </FormControl>
       </Stack>

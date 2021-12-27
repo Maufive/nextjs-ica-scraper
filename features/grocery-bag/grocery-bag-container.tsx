@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import React, {
-  useCallback, useState, useMemo,
+  useCallback, useMemo,
 } from 'react';
 import {
-  Stack, Box, Icon, Button, useDisclosure, Text, HStack, Heading,
+  Icon, Button, useDisclosure, Text, Stack, Flex, Container, useMediaQuery,
 } from '@chakra-ui/react';
 import { FilterIcon, RefreshIcon } from '@heroicons/react/solid';
 import { useAppSelector, useAppDispatch } from '../../state/redux-hooks';
@@ -16,13 +16,14 @@ import {
   setLockedRecipeIds,
   selectLockedRecipeIds,
   selectFetchManyRecipesLoading,
+  selectRecipeCount,
+  setRecipeCount,
 } from './grocery-bag-duck';
-import GroceryBagModal from './grocery-bag-filters-modal';
+import GroceryBagFilterModal from './grocery-bag-filters-modal';
 import CreateList from '../shopping-list/create-shopping-list';
 import { Session } from '../../types';
 import GroceryBagCards from './grocery-bag-cards';
 import RecipeCountPicker from './grocery-bag-recipe-count-picker';
-import { INITIAL_RECIPE_COUNT } from '../../constants';
 import { LoadingStates } from '../shopping-list/shopping-list-duck';
 
 interface GroceryBagContainerProps {
@@ -35,9 +36,9 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
   const recipes = useAppSelector(selectRecipes);
   const recipesLoading = useAppSelector(selectFetchManyRecipesLoading);
   const lockedRecipeIds = useAppSelector(selectLockedRecipeIds);
-  const [recipeCount, setRecipeCount] = useState<number>(INITIAL_RECIPE_COUNT);
-
+  const recipeCount = useAppSelector(selectRecipeCount);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isSmaller] = useMediaQuery('(max-width: 480px)');
 
   const onClickFetchManyRecipes = useCallback(() => {
     const idsToReplace = recipes
@@ -81,69 +82,83 @@ const GroceryBag: React.FC<GroceryBagContainerProps> = ({ session }) => {
     return isAllRecipesLocked && isUserLoggedIn;
   }, [session, lockedRecipeIds, recipeCount]);
 
+  const handleChangeRecipeCount = useCallback((count: number) => {
+    dispatch(setRecipeCount(count));
+  }, [dispatch]);
+
   return (
-    <Stack w="100%" pos="relative">
-      <Box
-        direction="column"
-        px={{ base: 2, md: 4 }}
+    <Container
+      w="100%"
+      pos="relative"
+      p={0}
+      maxW={{ lg: '800px', xl: '1200px' }}
+    >
+      <Stack
+        direction={{ base: 'column', lg: 'row' }}
+        alignItems={{ lg: 'flex-end' }}
+        w="100%"
+        spacing={4}
+        px={{ base: 2, lg: 0 }}
         py={4}
+        marginBottom={6}
       >
-        <Heading
-          mb={4}
-          fontSize={{ base: '2xl', md: '3xl' }}
-        >
-          Skapa din Matkasse
-        </Heading>
         <RecipeCountPicker
           count={recipeCount}
-          setCount={setRecipeCount}
+          handleChangeRecipeCount={handleChangeRecipeCount}
         />
-        <HStack spacing={4}>
-          <Button
-            aria-label="Slumpa alla"
-            onClick={onClickFetchManyRecipes}
-            leftIcon={<Icon as={RefreshIcon} />}
-            variant="ghost"
-            colorScheme="green"
-            isActive={recipes?.length !== lockedRecipeIds.length}
-            isDisabled={recipes?.length === lockedRecipeIds.length}
-            isLoading={recipesLoading === LoadingStates.PENDING}
-          >
-            Slumpa
-            <Text fontWeight={500} fontSize="sm" marginLeft={2}>
-              {`(${recipeCount - lockedRecipeIds.length})`}
-            </Text>
-          </Button>
-          <Button
-            aria-label="Filter"
-            leftIcon={<Icon as={FilterIcon} />}
-            variant="ghost"
-            colorScheme="green"
-            onClick={() => onOpen()}
-            marginRight={4}
-          >
-            Filter
-          </Button>
-        </HStack>
-        <GroceryBagModal
-          isOpen={isOpen}
-          onClickSaveFilters={onClickSaveFilters}
-          filters={filters}
+        <Button
+          aria-label="Slumpa alla"
+          onClick={onClickFetchManyRecipes}
+          leftIcon={<Icon as={RefreshIcon} />}
+          variant="solid"
+          size="md"
+          isLoading={recipesLoading === LoadingStates.PENDING}
+        >
+          Slumpa
+          <Text fontWeight={500} fontSize="sm" marginLeft={2}>
+            {`(${recipeCount - lockedRecipeIds.length})`}
+          </Text>
+        </Button>
+        <Button
+          aria-label="Filter"
+          leftIcon={<Icon as={FilterIcon} />}
+          variant="ghost"
+          size="md"
+          onClick={() => onOpen()}
+        >
+          Filter
+        </Button>
+        {!isSmaller && (
+        <CreateList
+          isCreateListAllowed={isCreateListAllowed}
+          recipeCount={recipeCount}
+          lockedRecipeIdsCount={lockedRecipeIds.length}
+          recipes={recipes}
         />
-      </Box>
+        )}
+      </Stack>
+      <GroceryBagFilterModal
+        isOpen={isOpen}
+        onClickSaveFilters={onClickSaveFilters}
+        filters={filters}
+      />
       <GroceryBagCards
         recipes={recipes}
         lockedRecipeIds={lockedRecipeIds}
         handleClickLockRecipe={handleClickLockRecipe}
         handleFetchNewRecipe={handleFetchNewRecipe}
       />
-      <CreateList
-        isCreateListAllowed={isCreateListAllowed}
-        recipeCount={recipeCount}
-        lockedRecipeIdsCount={lockedRecipeIds.length}
-        recipes={recipes}
-      />
-    </Stack>
+      {isSmaller && (
+        <Flex p={4}>
+          <CreateList
+            isCreateListAllowed={isCreateListAllowed}
+            recipeCount={recipeCount}
+            lockedRecipeIdsCount={lockedRecipeIds.length}
+            recipes={recipes}
+          />
+        </Flex>
+      )}
+    </Container>
   );
 };
 

@@ -28,7 +28,7 @@ const RecipePage: NextPage<PageProps> = ({ recipe }) => (
   <Layout>
     <Stack w="100%" paddingBottom={4}>
       <Box
-        h="250px"
+        h={{ base: '250px', lg: '350px' }}
         pos="relative"
         overflow="hidden"
       >

@@ -6,6 +6,7 @@ import {
   Text,
   useColorModeValue,
   Center,
+  Link as LinkStyles,
 } from '@chakra-ui/react';
 import { ClipboardListIcon } from '@heroicons/react/outline';
 import ShoppingListDeleteModal from './shopping-list-card-delete-modal';
@@ -21,14 +22,15 @@ const ShoppingListCard: React.FC<Props> = ({
   itemCount,
   id,
 }) => (
-  <Flex
-    width="100%"
-    align="center"
-    p={4}
-    rounded="md"
-    bg={useColorModeValue('gray.100', 'gray.900')}
-  >
-    <Link href={`/inkopslistor/${id}`} passHref>
+  <Link href={`/inkopslistor/${id}`} passHref>
+    <Flex
+      as={LinkStyles}
+      width="100%"
+      align="center"
+      p={4}
+      rounded="md"
+      bg={useColorModeValue('gray.100', 'gray.900')}
+    >
       <>
         <Center rounded="full" bg="green.100" p={2}>
           <Icon as={ClipboardListIcon} color="green.600" bg="green.100" w={6} h={6} rounded="full" />
@@ -53,9 +55,9 @@ const ShoppingListCard: React.FC<Props> = ({
           </Text>
         </Flex>
       </>
-    </Link>
-    <ShoppingListDeleteModal id={id} />
-  </Flex>
+      <ShoppingListDeleteModal id={id} />
+    </Flex>
+  </Link>
 );
 
 export default ShoppingListCard;

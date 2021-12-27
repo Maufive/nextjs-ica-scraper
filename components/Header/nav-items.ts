@@ -11,17 +11,14 @@ const NAV_ITEMS: Array<NavItem> = [
   {
     label: 'Skapa matkasse',
     href: '/matkasse',
-    promoted: true,
   },
   {
     label: 'Recept',
     href: '/recept',
-    disabled: true,
   },
   {
     label: 'Inköpslistor',
     href: '/inkopslistor',
-    disabled: true,
   },
 
 ];

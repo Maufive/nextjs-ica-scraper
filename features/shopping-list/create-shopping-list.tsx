@@ -26,8 +26,9 @@ import {
   Text,
   Flex,
   FormErrorMessage,
+  Icon,
 } from '@chakra-ui/react';
-import FloatingButton from '../../components/floating-button';
+import { PlusIcon } from '@heroicons/react/solid';
 import { useAppDispatch, useAppSelector } from '../../state/redux-hooks';
 import {
   createShoppingList,
@@ -91,8 +92,8 @@ const CreateShoppingList: React.FC<Props> = ({
   const onClickFloatingButton = useCallback((): void => {
     if (!session?.user) {
       toast({
-        title: 'Inloggning krävs.',
-        description: 'Du måste vara inloggad för att skapa en inköpslista.',
+        title: 'Inloggning krävs',
+        description: 'Du måste vara inloggad för att skapa en matkasse.',
         status: 'info',
         duration: 9000,
         isClosable: true,
@@ -100,8 +101,8 @@ const CreateShoppingList: React.FC<Props> = ({
       });
     } else if (lockedRecipeIdsCount !== recipeCount) {
       toast({
-        title: 'Obekräftade recept.',
-        description: 'Samtliga recept måste vara bekräftade innan en inköpslista kan skapas.',
+        title: `${recipeCount - lockedRecipeIdsCount} olåsta recept`,
+        description: 'Samtliga recept måste vara låsta innan en matkasse kan skapas.',
         status: 'info',
         duration: 9000,
         isClosable: true,
@@ -132,8 +133,8 @@ const CreateShoppingList: React.FC<Props> = ({
   useEffect(() => {
     if (createShoppingListLoading === LoadingStates.SUCCESS) {
       toast({
-        title: 'Inköpslistan har skapats',
-        description: 'Du hittar din inköpslista i menyn för Inköpslistor.',
+        title: 'Matkassen har skapats 🎉',
+        description: 'Du hittar din matkasse i menyn för Inköpslistor.',
         status: 'success',
         duration: 9000,
         isClosable: true,
@@ -145,7 +146,17 @@ const CreateShoppingList: React.FC<Props> = ({
 
   return (
     <>
-      <FloatingButton isActive={isCreateListAllowed} onClick={onClickFloatingButton} />
+      <Button
+        w={{ base: '100%', lg: 'fit-content' }}
+        aria-label="Skapa matkasse"
+        leftIcon={<Icon as={PlusIcon} />}
+        variant="solid"
+        colorScheme="green"
+        isActive={isCreateListAllowed}
+        onClick={onClickFloatingButton}
+      >
+        Skapa matkasse
+      </Button>
       <Modal
         size="xl"
         onClose={onClose}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
   Flex,
@@ -8,8 +9,8 @@ import {
   Stack,
   useColorModeValue,
   useBreakpointValue,
-  useColorMode,
-  Icon,
+  // useColorMode,
+  // Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -18,24 +19,23 @@ import {
   MenuDivider,
   Avatar,
   Box,
-  Popover,
-  PopoverTrigger,
 } from '@chakra-ui/react';
-import {
-  MoonIcon,
-} from '@heroicons/react/solid';
-import { SunIcon } from '@heroicons/react/outline';
+// import {
+//   MoonIcon,
+// } from '@heroicons/react/solid';
+// import { SunIcon } from '@heroicons/react/outline';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import NAV_ITEMS from './nav-items';
 
 const DesktopNav: React.FC = () => {
   const [session] = useSession();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { pathname } = useRouter();
+  // const { colorMode, toggleColorMode } = useColorMode();
 
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
-  const promotedLinkColor = useColorModeValue('green.500', 'green.400');
-  const promotedLinkHoverColor = useColorModeValue('green.400', 'green.300');
+  const activeColor = useColorModeValue('green.500', 'green.400');
+  const activeHoverColor = useColorModeValue('green.400', 'green.300');
 
   const handleSignInClick = () => {
     signIn();
@@ -70,33 +70,33 @@ const DesktopNav: React.FC = () => {
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <Stack direction="row" spacing={4} align="center">
-              {NAV_ITEMS.map((navItem) => (
-                <Link key={navItem.label} href={navItem.disabled ? '/' : navItem.href} passHref>
-                  <Box>
-                    <Popover trigger="hover" placement="bottom-start">
-                      <PopoverTrigger>
-                        <LinkStyles
-                          p={2}
-                          fontSize="sm"
-                          fontWeight={navItem.promoted ? 600 : 500}
-                          color={navItem.promoted ? promotedLinkColor : linkColor}
-                          _hover={{
-                            textDecoration: 'none',
-                            color: navItem.promoted ? promotedLinkHoverColor : linkHoverColor,
-                          }}
-                        >
-                          {navItem.label}
-                        </LinkStyles>
-                      </PopoverTrigger>
-                    </Popover>
-                  </Box>
-                </Link>
-              ))}
+              {NAV_ITEMS.map((navItem) => {
+                const isActive = pathname.includes(navItem.href);
+                return (
+                  <Link key={navItem.label} href={navItem.href} passHref>
+                    <LinkStyles
+                      p={2}
+                      fontSize="sm"
+                      fontWeight={isActive ? 600 : 500}
+                      color={isActive ? activeColor : linkColor}
+                      borderBottom={isActive ? 1 : 0}
+                      borderStyle="solid"
+                      borderColor="green.400"
+                      _hover={{
+                        textDecoration: 'none',
+                        color: isActive ? activeHoverColor : linkHoverColor,
+                      }}
+                    >
+                      {navItem.label}
+                    </LinkStyles>
+                  </Link>
+                );
+              })}
             </Stack>
           </Flex>
         </Flex>
 
-        <Flex mr="6" display={{ base: 'none', md: 'inline-flex' }}>
+        {/* <Flex mr="6" display={{ base: 'none', md: 'inline-flex' }}>
           <Button
             onClick={toggleColorMode}
             variant="ghost"
@@ -105,7 +105,7 @@ const DesktopNav: React.FC = () => {
           >
             {colorMode === 'light' ? <Icon as={MoonIcon} /> : <Icon as={SunIcon} />}
           </Button>
-        </Flex>
+        </Flex> */}
 
         <Stack
           flex={{ base: 1, md: 0 }}
