@@ -21,7 +21,6 @@ const GroceryBagCards: React.FC<Props> = ({
 }) => (
   <Flex
     flexWrap={{ base: 'nowrap', lg: 'wrap' }}
-    overflowX="auto"
     spacing={4}
     minH={{ base: '50vh', md: '60vh', lg: '50vh' }}
     align="stretch"

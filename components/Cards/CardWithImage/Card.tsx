@@ -53,6 +53,7 @@ const Card: React.FC<CardProps> = ({
     <AnimatedFlex
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      whileHover={{ scale: 1.05 }}
       marginLeft={4}
       marginBottom={{ lg: 4 }}
       flexDirection="column"
@@ -60,9 +61,9 @@ const Card: React.FC<CardProps> = ({
       bg={useColorModeValue('gray.50', 'gray.900')}
       boxShadow="md"
       rounded="md"
-      overflow="hidden"
       _first={{ marginLeft: 'var(--chakra-space-2)' }}
       _last={{ marginRight: 'var(--chakra-space-2)' }}
+      style={{ cursor: 'pointer' }}
     >
       <Link passHref href={`/recept/${id}`}>
         <Box

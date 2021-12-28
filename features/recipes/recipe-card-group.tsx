@@ -12,7 +12,6 @@ interface Props {
 const RecipeCardGroup: React.FC<Props> = ({ recipes }) => (
   <HStack
     flexWrap="nowrap"
-    overflowX="auto"
     spacing={4}
     align="flex-start"
     paddingBottom={4}

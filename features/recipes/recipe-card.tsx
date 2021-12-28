@@ -53,15 +53,16 @@ const Card: React.FC<CardProps> = ({
 }) => (
   <Link passHref href={`/recept/${id}`}>
     <AnimatedFlex
+      whileHover={{ scale: 1.05 }}
       variants={variants}
       flex="0 0 200px"
-      overflow="hidden"
       marginLeft={2}
       flexDirection="column"
       bg={useColorModeValue('gray.50', 'gray.900')}
       boxShadow="md"
       rounded="md"
       _last={{ marginRight: 'var(--chakra-space-2)' }}
+      style={{ cursor: 'pointer' }}
     >
       <Box
         h="130px"

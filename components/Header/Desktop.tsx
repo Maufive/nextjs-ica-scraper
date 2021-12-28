@@ -33,7 +33,7 @@ const DesktopNav: React.FC = () => {
   // const { colorMode, toggleColorMode } = useColorMode();
 
   const linkColor = useColorModeValue('gray.600', 'gray.200');
-  const linkHoverColor = useColorModeValue('gray.800', 'white');
+  const linkHoverColor = useColorModeValue('gray.800', 'green.300');
   const activeColor = useColorModeValue('green.500', 'green.400');
   const activeHoverColor = useColorModeValue('green.400', 'green.300');
 
