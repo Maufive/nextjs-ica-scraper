@@ -7,10 +7,7 @@ import {
   Link as LinkStyles,
   Button,
   Stack,
-  useColorModeValue,
   useBreakpointValue,
-  // useColorMode,
-  // Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -20,22 +17,12 @@ import {
   Avatar,
   Box,
 } from '@chakra-ui/react';
-// import {
-//   MoonIcon,
-// } from '@heroicons/react/solid';
-// import { SunIcon } from '@heroicons/react/outline';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import NAV_ITEMS from './nav-items';
 
 const DesktopNav: React.FC = () => {
   const [session] = useSession();
   const { pathname } = useRouter();
-  // const { colorMode, toggleColorMode } = useColorMode();
-
-  const linkColor = useColorModeValue('gray.600', 'gray.200');
-  const linkHoverColor = useColorModeValue('gray.800', 'green.300');
-  const activeColor = useColorModeValue('green.500', 'green.400');
-  const activeHoverColor = useColorModeValue('green.400', 'green.300');
 
   const handleSignInClick = () => {
     signIn();
@@ -44,8 +31,8 @@ const DesktopNav: React.FC = () => {
   return (
     <Box width="100%">
       <Flex
-        bg={useColorModeValue('gray.100', 'gray.800')}
-        color={useColorModeValue('gray.600', 'gray.50')}
+        bg="gray.800"
+        color="gray.50"
         minH="60px"
         py={{ base: 2 }}
         px={{ base: 4 }}
@@ -62,7 +49,7 @@ const DesktopNav: React.FC = () => {
               textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
               fontFamily="heading"
               fontWeight="700"
-              color={useColorModeValue('gray.800', 'gray.50')}
+              color="gray.50"
             >
               Veckohandla
             </Text>
@@ -78,13 +65,13 @@ const DesktopNav: React.FC = () => {
                       p={2}
                       fontSize="sm"
                       fontWeight={isActive ? 600 : 500}
-                      color={isActive ? activeColor : linkColor}
+                      color={isActive ? 'green.400' : 'gray.200'}
                       borderBottom={isActive ? 1 : 0}
                       borderStyle="solid"
                       borderColor="green.400"
                       _hover={{
                         textDecoration: 'none',
-                        color: isActive ? activeHoverColor : linkHoverColor,
+                        color: isActive ? 'green.300' : 'green.200',
                       }}
                     >
                       {navItem.label}
@@ -95,18 +82,6 @@ const DesktopNav: React.FC = () => {
             </Stack>
           </Flex>
         </Flex>
-
-        {/* <Flex mr="6" display={{ base: 'none', md: 'inline-flex' }}>
-          <Button
-            onClick={toggleColorMode}
-            variant="ghost"
-            colorScheme={colorMode === 'light' && 'purple'}
-            isActive={colorMode === 'light'}
-          >
-            {colorMode === 'light' ? <Icon as={MoonIcon} /> : <Icon as={SunIcon} />}
-          </Button>
-        </Flex> */}
-
         <Stack
           flex={{ base: 1, md: 0 }}
           justify="flex-end"
@@ -141,8 +116,14 @@ const DesktopNav: React.FC = () => {
                 </Center>
                 <br />
                 <MenuDivider />
-                <Link href="/ladda-upp" passHref><MenuItem><p>Lägg till recept</p></MenuItem></Link>
-                <MenuItem onClick={() => signOut()}><p>Logga ut</p></MenuItem>
+                <Link href="/ladda-upp" passHref>
+                  <MenuItem>
+                    <p>Lägg till recept</p>
+                  </MenuItem>
+                </Link>
+                <MenuItem onClick={() => signOut()}>
+                  <p>Logga ut</p>
+                </MenuItem>
               </MenuList>
             </Menu>
           ) : (
