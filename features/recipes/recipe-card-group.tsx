@@ -15,6 +15,7 @@ const RecipeCardGroup: React.FC<Props> = ({ recipes }) => (
     spacing={4}
     align="flex-start"
     paddingBottom={4}
+    overflowX="scroll"
     css={{
       scrollSnapType: 'x mandatory',
     }}

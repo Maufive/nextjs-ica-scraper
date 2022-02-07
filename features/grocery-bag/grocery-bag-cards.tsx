@@ -25,6 +25,7 @@ const GroceryBagCards: React.FC<Props> = ({
     minH={{ base: '50vh', md: '60vh', lg: '50vh' }}
     align="stretch"
     paddingBottom={4}
+    overflowX="scroll"
     css={{
       scrollSnapType: 'x mandatory',
     }}
